@@ -1,0 +1,1794 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SynQ Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&family=Material+Icons+Outlined" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  /* ======== Theme Variables ======== */
+  :root {
+    --page-bg: #f5f5f5;
+    --page-text: #212121;
+    --page-text-secondary: #616161;
+    --page-text-tertiary: #757575;
+    --page-text-muted: #9e9e9e;
+    --page-surface: #fafafa;
+    --page-surface-alt: #f5f5f5;
+    --page-border: #e0e0e0;
+    --page-border-subtle: #eeeeee;
+    --page-brand: #005aff;
+    --page-brand-subtle: #c1d7ff;
+    --page-brand-bg: #f2f6ff;
+    --page-brand-text: #0048cc;
+    --page-purple: #8450c6;
+    --page-blue-border: #91b8ff;
+    --page-icon-color: #616161;
+  }
+  [data-theme="dark"] {
+    --page-bg: #212121;
+    --page-text: #fafafa;
+    --page-text-secondary: #eeeeee;
+    --page-text-tertiary: #e0e0e0;
+    --page-text-muted: #bdbdbd;
+    --page-surface: #424242;
+    --page-surface-alt: #303030;
+    --page-border: #616161;
+    --page-border-subtle: #424242;
+    --page-brand: #005aff;
+    --page-brand-subtle: #001132;
+    --page-brand-bg: #001132;
+    --page-brand-text: #6098ff;
+    --page-purple: #c79ffa;
+    --page-blue-border: #3079ff;
+    --page-icon-color: #eeeeee;
+  }
+
+  body {
+    font-family: Inter, 'Noto Sans JP', sans-serif;
+    background: var(--page-bg);
+    color: var(--page-text);
+    line-height: 1.6;
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ======== Sidebar ======== */
+  .sidebar {
+    width: 260px;
+    min-width: 260px;
+    background: var(--page-surface);
+    border-right: 1px solid var(--page-border);
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    overflow-y: auto;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+  }
+  .sidebar-header {
+    padding: 24px 20px 20px;
+    border-bottom: 1px solid var(--page-border);
+  }
+  .sidebar-logo { font-size: 15px; font-weight: 700; color: var(--page-brand); letter-spacing: -0.02em; margin-bottom: 2px; }
+  .sidebar-sub { font-size: 11px; color: var(--page-text-muted); }
+  .sidebar-nav { flex: 1; padding: 12px 0; overflow-y: auto; }
+
+  .nav-group-toggle {
+    display: flex; align-items: center; justify-content: space-between;
+    width: 100%; padding: 8px 20px; font-size: 12px; font-weight: 600;
+    color: var(--page-text-tertiary); text-transform: uppercase; letter-spacing: 0.04em;
+    background: none; border: none; cursor: pointer; text-align: left; transition: color 0.15s;
+  }
+  .nav-group-toggle:hover { color: var(--page-text); }
+  .nav-group-toggle .chevron { width: 16px; height: 16px; transition: transform 0.2s; flex-shrink: 0; }
+  .nav-group.collapsed .chevron { transform: rotate(-90deg); }
+  .nav-group.collapsed .nav-items { display: none; }
+  .nav-items { padding: 0 0 8px; }
+  .nav-item {
+    display: block; padding: 5px 20px 5px 32px; font-size: 13px; font-weight: 400;
+    color: var(--page-text-secondary); text-decoration: none; transition: all 0.12s; border-left: 2px solid transparent;
+  }
+  .nav-item:hover { color: var(--page-brand-text); background: var(--page-brand-bg); }
+  .nav-item.active { color: var(--page-brand-text); font-weight: 500; border-left-color: var(--page-brand); background: var(--page-brand-bg); }
+
+  /* ======== Main ======== */
+  .main-wrapper { margin-left: 260px; flex: 1; min-width: 0; }
+  .main-header { background: var(--page-brand); color: #f5f5f5; padding: 28px 40px; display: flex; justify-content: space-between; align-items: center; }
+  .main-header-text {}
+  .main-header h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+  .main-header p { font-size: 13px; opacity: 0.8; margin-top: 4px; }
+  main { max-width: 960px; padding: 40px; }
+  section { margin-bottom: 48px; }
+  h2 { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 8px; padding-bottom: 8px; border-bottom: 2px solid var(--page-brand); }
+  h3 { font-size: 16px; font-weight: 600; margin: 24px 0 12px; color: var(--page-text-secondary); }
+  .sub-desc { font-size: 13px; color: var(--page-text-tertiary); margin-bottom: 16px; }
+
+  /* ======== Theme Toggle ======== */
+  .theme-toggle {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 8px; padding: 6px 12px; cursor: pointer;
+    font-size: 13px; font-weight: 500; color: #f5f5f5;
+    transition: background 0.15s;
+  }
+  .theme-toggle:hover { background: rgba(255,255,255,0.25); }
+  .theme-toggle .material-icons-outlined { font-size: 18px; }
+
+  /* ======== Colors ======== */
+  .color-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; margin-bottom: 24px; }
+  .color-swatch {
+    aspect-ratio: 1; border-radius: 8px; display: flex; flex-direction: column;
+    align-items: center; justify-content: flex-end; padding: 6px 2px; font-size: 10px;
+    border: 1px solid rgba(0,0,0,0.08); min-height: 72px;
+  }
+  .color-swatch .scale { font-weight: 600; }
+  .color-swatch .hex { opacity: 0.7; font-size: 9px; }
+  .color-label { font-size: 13px; font-weight: 600; text-transform: capitalize; margin-bottom: 6px; color: #757575; }
+
+  .semantic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; margin-bottom: 16px; }
+  .semantic-item { border: 1px solid var(--page-border); border-radius: 8px; overflow: hidden; background: var(--page-surface); }
+  .semantic-color { height: 48px; border-bottom: 1px solid var(--page-border); }
+  .semantic-info { padding: 8px; font-size: 11px; }
+  .semantic-info .name { font-weight: 600; font-size: 12px; }
+  .semantic-info .ref { color: var(--page-text-muted); margin-top: 2px; }
+  .semantic-info .dark-ref { color: var(--page-text-muted); margin-top: 2px; font-style: italic; font-size: 10px; }
+
+  /* ======== Typography ======== */
+  .type-sample { background: var(--page-surface); border: 1px solid var(--page-border); border-radius: 8px; padding: 20px 24px; margin-bottom: 8px; display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+  .type-meta { font-size: 11px; color: var(--page-text-muted); white-space: nowrap; text-align: right; min-width: 200px; }
+
+  /* ======== Spacing ======== */
+  .space-row { display: flex; align-items: center; gap: 16px; margin-bottom: 6px; }
+  .space-label { font-size: 12px; font-weight: 500; width: 80px; text-align: right; color: var(--page-text-tertiary); }
+  .space-bar { height: 24px; background: var(--page-brand-subtle); border-radius: 4px; border: 1px solid var(--page-blue-border); }
+  .space-val { font-size: 11px; color: var(--page-text-muted); }
+
+  /* ======== Radius / Shadow / Elevation ======== */
+  .radius-grid, .shadow-grid, .elevation-grid { display: flex; gap: 24px; flex-wrap: wrap; }
+  .radius-item, .shadow-item, .elevation-item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .radius-box { width: 80px; height: 80px; background: var(--page-brand-subtle); border: 2px solid var(--page-brand); }
+  .radius-label, .shadow-label, .elevation-label { font-size: 12px; font-weight: 500; }
+  .radius-val, .shadow-val, .elevation-ref { font-size: 11px; color: var(--page-text-muted); }
+  .shadow-box { width: 100px; height: 100px; background: var(--page-surface); border-radius: 8px; }
+  .shadow-val { max-width: 120px; text-align: center; font-size: 10px; }
+  .elevation-box { width: 120px; height: 80px; background: var(--page-surface); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; color: var(--page-text-tertiary); }
+  .elevation-label { font-weight: 600; }
+
+  /* ======== Layout / Component dimensions ======== */
+  .layout-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; }
+  .layout-item { background: var(--page-surface); border: 1px solid var(--page-border); border-radius: 8px; padding: 12px; text-align: center; }
+  .layout-item .name { font-size: 12px; font-weight: 600; }
+  .layout-item .val { font-size: 20px; font-weight: 700; color: var(--page-brand); margin: 4px 0; }
+  .layout-item .ref { font-size: 10px; color: var(--page-text-muted); }
+
+  /* ======== Border / Opacity ======== */
+  .bw-grid, .opacity-grid { display: flex; gap: 24px; flex-wrap: wrap; }
+  .bw-item, .opacity-item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .bw-line { width: 80px; background: var(--page-brand); }
+  .bw-label, .opacity-label { font-size: 12px; font-weight: 500; }
+  .opacity-box { width: 60px; height: 60px; background: var(--page-brand); border-radius: 8px; }
+
+  /* ======== Buttons ======== */
+  .button-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; }
+  .btn { padding: 10px 24px; border-radius: 8px; font-size: 14px; font-weight: 500; border: none; cursor: pointer; transition: background 0.15s; font-family: inherit; }
+  .btn-sm { padding: 6px 16px; font-size: 12px; height: 32px; }
+  .btn-lg { padding: 12px 32px; font-size: 14px; height: 48px; }
+
+  /* ======== Status / Badge ======== */
+  .status-grid { display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
+  .status-badge { padding: 6px 16px; border-radius: 9999px; font-size: 13px; font-weight: 500; }
+  .badge-sm { padding: 2px 8px; font-size: 11px; border-radius: 4px; }
+  .badge-md { padding: 4px 10px; font-size: 12px; border-radius: 4px; }
+
+  /* ======== Table ======== */
+  .demo-table { width: 100%; border-collapse: collapse; font-size: 14px; border-radius: 8px; overflow: hidden; border: 1px solid var(--page-border-subtle); }
+  .demo-table th { text-align: left; padding: 12px 16px; font-weight: 600; font-size: 12px; }
+  .demo-table td { padding: 12px 16px; border-top: 1px solid var(--page-border-subtle); }
+
+  /* ======== Progress ======== */
+  .progress-track { height: 8px; border-radius: 4px; overflow: hidden; max-width: 400px; }
+  .progress-fill { height: 100%; border-radius: 4px; }
+
+  /* ======== Icons ======== */
+  .icon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; margin-bottom: 24px; }
+  .icon-item { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 4px; background: var(--page-surface); border: 1px solid var(--page-border); border-radius: 8px; }
+  .icon-item .material-icons-outlined { font-size: 24px; color: var(--page-icon-color); }
+  .icon-item .icon-name { font-size: 10px; color: var(--page-text-muted); text-align: center; word-break: break-all; }
+
+  /* ======== Component Cards ======== */
+  .comp-card { background: var(--page-surface); border: 1px solid var(--page-border); border-radius: 12px; padding: 24px; margin-bottom: 16px; }
+  .comp-card h3 { margin: 0 0 4px; color: var(--page-text); font-size: 18px; }
+  .comp-card .comp-desc { font-size: 13px; color: var(--page-text-tertiary); margin-bottom: 16px; }
+  .comp-card .comp-meta { display: flex; gap: 24px; flex-wrap: wrap; font-size: 12px; color: var(--page-text-muted); margin-bottom: 16px; }
+  .comp-preview { background: var(--page-surface-alt); border: 1px solid var(--page-border); border-radius: 8px; padding: 24px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .comp-props { margin-top: 16px; }
+  .comp-props summary { font-size: 12px; font-weight: 600; color: var(--page-text-tertiary); cursor: pointer; }
+  .comp-props table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 8px; }
+  .comp-props th { text-align: left; padding: 6px 8px; font-weight: 600; background: var(--page-surface-alt); border-bottom: 1px solid var(--page-border); }
+  .comp-props td { padding: 6px 8px; border-bottom: 1px solid var(--page-surface-alt); }
+  .comp-props .prop-name { font-weight: 500; color: var(--page-brand-text); }
+  .comp-props .prop-type { color: var(--page-purple); }
+  .comp-props .prop-default { color: var(--page-text-muted); }
+
+  /* ======== Alert ======== */
+  .alert-demo { border-radius: 8px; padding: 16px; display: flex; gap: 12px; align-items: flex-start; margin-bottom: 8px; border-left: 3px solid; }
+  .alert-demo .material-icons-outlined { font-size: 20px; }
+
+  /* ======== Input ======== */
+  .input-demo { height: 40px; padding: 0 12px; border: 1px solid var(--page-border-subtle); border-radius: 8px; font-size: 14px; font-family: inherit; background: var(--page-surface); color: var(--page-text); outline: none; transition: border-color 0.15s; width: 240px; }
+  .input-demo:focus { border-color: var(--page-brand); box-shadow: 0 0 0 2px #b682f9; }
+  .input-demo.input-error { border-color: #ff7474; }
+
+  /* ======== Toast ======== */
+  .toast-demo { display: inline-flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 8px; font-size: 14px; box-shadow: 0px 4px 6px rgba(0,0,0,0.1); background: var(--page-surface); }
+
+  @media (max-width: 800px) {
+    .sidebar { display: none; }
+    .main-wrapper { margin-left: 0; }
+    .color-grid { grid-template-columns: repeat(5, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ======== Sidebar ======== -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">SynQ Design System</div>
+    <div class="sidebar-sub">Design Tokens & Components</div>
+  </div>
+  <nav class="sidebar-nav">
+
+    <div class="nav-group" data-group="primitives">
+      <button class="nav-group-toggle" onclick="toggleGroup(this)">
+        Primitives
+        <svg class="chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg>
+      </button>
+      <div class="nav-items">
+        <a class="nav-item" href="#primitive-colors">Colors</a>
+        <a class="nav-item" href="#spacing">Spacing</a>
+        <a class="nav-item" href="#typography-primitives">Font</a>
+        <a class="nav-item" href="#radius">Radius</a>
+        <a class="nav-item" href="#shadow">Shadow</a>
+        <a class="nav-item" href="#border-width">Border Width</a>
+        <a class="nav-item" href="#opacity">Opacity</a>
+      </div>
+    </div>
+
+    <div class="nav-group" data-group="semantic-colors">
+      <button class="nav-group-toggle" onclick="toggleGroup(this)">
+        Semantic Colors
+        <svg class="chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg>
+      </button>
+      <div class="nav-items">
+        <a class="nav-item" href="#semantic-text">Text</a>
+        <a class="nav-item" href="#semantic-bg">Background</a>
+        <a class="nav-item" href="#semantic-border">Border</a>
+      </div>
+    </div>
+
+    <div class="nav-group" data-group="semantic-dimensions">
+      <button class="nav-group-toggle" onclick="toggleGroup(this)">
+        Semantic Dimensions
+        <svg class="chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg>
+      </button>
+      <div class="nav-items">
+        <a class="nav-item" href="#typography">Typography</a>
+        <a class="nav-item" href="#layout-spacing">Layout</a>
+        <a class="nav-item" href="#component-dimensions">Component</a>
+        <a class="nav-item" href="#elevation">Elevation</a>
+      </div>
+    </div>
+
+    <div class="nav-group" data-group="icons">
+      <button class="nav-group-toggle" onclick="toggleGroup(this)">
+        Icons
+        <svg class="chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg>
+      </button>
+      <div class="nav-items">
+        <a class="nav-item" href="#icons-navigation">Navigation</a>
+        <a class="nav-item" href="#icons-action">Action</a>
+        <a class="nav-item" href="#icons-status">Status</a>
+        <a class="nav-item" href="#icons-inspection">Inspection</a>
+        <a class="nav-item" href="#icons-user">User</a>
+        <a class="nav-item" href="#icons-data">Data</a>
+        <a class="nav-item" href="#icons-misc">Misc</a>
+      </div>
+    </div>
+
+    <div class="nav-group" data-group="inputs">
+      <button class="nav-group-toggle" onclick="toggleGroup(this)">
+        Inputs
+        <svg class="chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg>
+      </button>
+      <div class="nav-items">
+        <a class="nav-item" href="#comp-autocomplete">Autocomplete</a>
+        <a class="nav-item" href="#comp-button">Button</a>
+        <a class="nav-item" href="#comp-button-group">ButtonGroup</a>
+        <a class="nav-item" href="#comp-checkbox">Checkbox</a>
+        <a class="nav-item" href="#comp-fab">Fab</a>
+        <a class="nav-item" href="#comp-form-field">FormField</a>
+        <a class="nav-item" href="#comp-input">Input</a>
+        <a class="nav-item" href="#comp-radio">Radio</a>
+        <a class="nav-item" href="#comp-rating">Rating</a>
+        <a class="nav-item" href="#comp-select">Select</a>
+        <a class="nav-item" href="#comp-slider">Slider</a>
+        <a class="nav-item" href="#comp-toggle">Toggle</a>
+        <a class="nav-item" href="#comp-toggle-button">ToggleButton</a>
+      </div>
+    </div>
+
+    <div class="nav-group" data-group="data-display">
+      <button class="nav-group-toggle" onclick="toggleGroup(this)">
+        Data Display
+        <svg class="chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg>
+      </button>
+      <div class="nav-items">
+        <a class="nav-item" href="#comp-avatar">Avatar</a>
+        <a class="nav-item" href="#comp-badge">Badge</a>
+        <a class="nav-item" href="#comp-chip">Chip</a>
+        <a class="nav-item" href="#comp-divider">Divider</a>
+        <a class="nav-item" href="#comp-list">List</a>
+        <a class="nav-item" href="#comp-skeleton">Skeleton</a>
+        <a class="nav-item" href="#comp-status-label">StatusLabel</a>
+        <a class="nav-item" href="#comp-table">Table</a>
+        <a class="nav-item" href="#comp-text">Text</a>
+        <a class="nav-item" href="#comp-tooltip">Tooltip</a>
+      </div>
+    </div>
+
+    <div class="nav-group" data-group="feedback">
+      <button class="nav-group-toggle" onclick="toggleGroup(this)">
+        Feedback
+        <svg class="chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg>
+      </button>
+      <div class="nav-items">
+        <a class="nav-item" href="#comp-alert">Alert</a>
+        <a class="nav-item" href="#comp-backdrop">Backdrop</a>
+        <a class="nav-item" href="#comp-modal">Modal</a>
+        <a class="nav-item" href="#comp-progress">Progress</a>
+        <a class="nav-item" href="#comp-toast">Toast</a>
+      </div>
+    </div>
+
+    <div class="nav-group" data-group="surfaces">
+      <button class="nav-group-toggle" onclick="toggleGroup(this)">
+        Surfaces
+        <svg class="chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg>
+      </button>
+      <div class="nav-items">
+        <a class="nav-item" href="#comp-accordion">Accordion</a>
+        <a class="nav-item" href="#comp-app-bar">AppBar</a>
+        <a class="nav-item" href="#comp-card">Card</a>
+      </div>
+    </div>
+
+    <div class="nav-group" data-group="navigation">
+      <button class="nav-group-toggle" onclick="toggleGroup(this)">
+        Navigation
+        <svg class="chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg>
+      </button>
+      <div class="nav-items">
+        <a class="nav-item" href="#comp-bottom-navigation">BottomNavigation</a>
+        <a class="nav-item" href="#comp-breadcrumbs">Breadcrumbs</a>
+        <a class="nav-item" href="#comp-drawer">Drawer</a>
+        <a class="nav-item" href="#comp-link">Link</a>
+        <a class="nav-item" href="#comp-menu">Menu</a>
+        <a class="nav-item" href="#comp-pagination">Pagination</a>
+        <a class="nav-item" href="#comp-speed-dial">SpeedDial</a>
+        <a class="nav-item" href="#comp-stepper">Stepper</a>
+        <a class="nav-item" href="#comp-tabs">Tabs</a>
+      </div>
+    </div>
+
+    <div class="nav-group" data-group="layout">
+      <button class="nav-group-toggle" onclick="toggleGroup(this)">
+        Layout
+        <svg class="chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg>
+      </button>
+      <div class="nav-items">
+        <a class="nav-item" href="#comp-container">Container</a>
+        <a class="nav-item" href="#comp-grid">Grid</a>
+        <a class="nav-item" href="#comp-image-list">ImageList</a>
+        <a class="nav-item" href="#comp-stack">Stack</a>
+      </div>
+    </div>
+
+    <div class="nav-group" data-group="utils">
+      <button class="nav-group-toggle" onclick="toggleGroup(this)">
+        Utils
+        <svg class="chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg>
+      </button>
+      <div class="nav-items">
+        <a class="nav-item" href="#comp-popover">Popover</a>
+      </div>
+    </div>
+
+    <div class="nav-group" data-group="product-components">
+      <button class="nav-group-toggle" onclick="toggleGroup(this)">
+        Product
+        <svg class="chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg>
+      </button>
+      <div class="nav-items">
+        <a class="nav-item" href="#comp-dashboard-widget">DashboardWidget</a>
+        <a class="nav-item" href="#comp-inspection-card">InspectionCard</a>
+        <a class="nav-item" href="#comp-inspection-row">InspectionRow</a>
+      </div>
+    </div>
+
+  </nav>
+</aside>
+
+<!-- ======== Main ======== -->
+<div class="main-wrapper">
+  <div class="main-header">
+    <div class="main-header-text">
+      <h1>SynQ Design System</h1>
+      <p>Design Tokens, Icons & Components</p>
+    </div>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="テーマ切替">
+      <span class="material-icons-outlined" id="themeIcon">dark_mode</span>
+      <span id="themeLabel">Dark</span>
+    </button>
+  </div>
+  <main>
+
+<!-- ================================================================ -->
+<!-- PRIMITIVE COLORS                                                  -->
+<!-- ================================================================ -->
+<section id="primitive-colors">
+  <h2>Primitive Colors</h2>
+  <p class="sub-desc">color.{hue}.{scale} — 7 hues, 10 steps (50-900)</p>
+
+  <div class="color-label">Gray</div>
+  <div class="color-grid">
+    <div class="color-swatch" style="background:#fafafa;color:#212121"><span class="scale">50</span><span class="hex">#fafafa</span></div>
+    <div class="color-swatch" style="background:#f5f5f5;color:#212121"><span class="scale">100</span><span class="hex">#f5f5f5</span></div>
+    <div class="color-swatch" style="background:#eeeeee;color:#212121"><span class="scale">200</span><span class="hex">#eeeeee</span></div>
+    <div class="color-swatch" style="background:#e0e0e0;color:#212121"><span class="scale">300</span><span class="hex">#e0e0e0</span></div>
+    <div class="color-swatch" style="background:#bdbdbd;color:#212121"><span class="scale">400</span><span class="hex">#bdbdbd</span></div>
+    <div class="color-swatch" style="background:#9e9e9e;color:#fafafa"><span class="scale">500</span><span class="hex">#9e9e9e</span></div>
+    <div class="color-swatch" style="background:#757575;color:#fafafa"><span class="scale">600</span><span class="hex">#757575</span></div>
+    <div class="color-swatch" style="background:#616161;color:#fafafa"><span class="scale">700</span><span class="hex">#616161</span></div>
+    <div class="color-swatch" style="background:#424242;color:#fafafa"><span class="scale">800</span><span class="hex">#424242</span></div>
+    <div class="color-swatch" style="background:#212121;color:#fafafa"><span class="scale">900</span><span class="hex">#212121</span></div>
+  </div>
+
+  <div class="color-label">Blue (Brand)</div>
+  <div class="color-grid">
+    <div class="color-swatch" style="background:#f2f6ff;color:#212121"><span class="scale">50</span><span class="hex">#f2f6ff</span></div>
+    <div class="color-swatch" style="background:#c1d7ff;color:#212121"><span class="scale">100</span><span class="hex">#c1d7ff</span></div>
+    <div class="color-swatch" style="background:#91b8ff;color:#212121"><span class="scale">200</span><span class="hex">#91b8ff</span></div>
+    <div class="color-swatch" style="background:#6098ff;color:#212121"><span class="scale">300</span><span class="hex">#6098ff</span></div>
+    <div class="color-swatch" style="background:#3079ff;color:#fafafa"><span class="scale">400</span><span class="hex">#3079ff</span></div>
+    <div class="color-swatch" style="background:#005aff;color:#fafafa"><span class="scale">500</span><span class="hex">#005aff</span></div>
+    <div class="color-swatch" style="background:#0048cc;color:#fafafa"><span class="scale">600</span><span class="hex">#0048cc</span></div>
+    <div class="color-swatch" style="background:#003699;color:#fafafa"><span class="scale">700</span><span class="hex">#003699</span></div>
+    <div class="color-swatch" style="background:#002466;color:#fafafa"><span class="scale">800</span><span class="hex">#002466</span></div>
+    <div class="color-swatch" style="background:#001132;color:#fafafa"><span class="scale">900</span><span class="hex">#001132</span></div>
+  </div>
+
+  <div class="color-label">Green</div>
+  <div class="color-grid">
+    <div class="color-swatch" style="background:#f4faf7;color:#212121"><span class="scale">50</span></div>
+    <div class="color-swatch" style="background:#ccebdc;color:#212121"><span class="scale">100</span></div>
+    <div class="color-swatch" style="background:#a4dbc0;color:#212121"><span class="scale">200</span></div>
+    <div class="color-swatch" style="background:#7ccba5;color:#212121"><span class="scale">300</span></div>
+    <div class="color-swatch" style="background:#54bb89;color:#fafafa"><span class="scale">400</span></div>
+    <div class="color-swatch" style="background:#2CAC6E;color:#fafafa"><span class="scale">500</span></div>
+    <div class="color-swatch" style="background:#238958;color:#fafafa"><span class="scale">600</span></div>
+    <div class="color-swatch" style="background:#1a6742;color:#fafafa"><span class="scale">700</span></div>
+    <div class="color-swatch" style="background:#11442c;color:#fafafa"><span class="scale">800</span></div>
+    <div class="color-swatch" style="background:#082215;color:#fafafa"><span class="scale">900</span></div>
+  </div>
+
+  <div class="color-label">Red</div>
+  <div class="color-grid">
+    <div class="color-swatch" style="background:#fafafa6f6;color:#212121"><span class="scale">50</span></div>
+    <div class="color-swatch" style="background:#ffd5d5;color:#212121"><span class="scale">100</span></div>
+    <div class="color-swatch" style="background:#ffb5b5;color:#212121"><span class="scale">200</span></div>
+    <div class="color-swatch" style="background:#ff9494;color:#212121"><span class="scale">300</span></div>
+    <div class="color-swatch" style="background:#ff7474;color:#fafafa"><span class="scale">400</span></div>
+    <div class="color-swatch" style="background:#FF5454;color:#fafafa"><span class="scale">500</span></div>
+    <div class="color-swatch" style="background:#cc4343;color:#fafafa"><span class="scale">600</span></div>
+    <div class="color-swatch" style="background:#993232;color:#fafafa"><span class="scale">700</span></div>
+    <div class="color-swatch" style="background:#662121;color:#fafafa"><span class="scale">800</span></div>
+    <div class="color-swatch" style="background:#321010;color:#fafafa"><span class="scale">900</span></div>
+  </div>
+
+  <div class="color-label">Yellow</div>
+  <div class="color-grid">
+    <div class="color-swatch" style="background:#fefbf2;color:#212121"><span class="scale">50</span></div>
+    <div class="color-swatch" style="background:#faedc1;color:#212121"><span class="scale">100</span></div>
+    <div class="color-swatch" style="background:#f6e091;color:#212121"><span class="scale">200</span></div>
+    <div class="color-swatch" style="background:#f2d260;color:#212121"><span class="scale">300</span></div>
+    <div class="color-swatch" style="background:#eec430;color:#212121"><span class="scale">400</span></div>
+    <div class="color-swatch" style="background:#EBB700;color:#212121"><span class="scale">500</span></div>
+    <div class="color-swatch" style="background:#bc9200;color:#fafafa"><span class="scale">600</span></div>
+    <div class="color-swatch" style="background:#8d6d00;color:#fafafa"><span class="scale">700</span></div>
+    <div class="color-swatch" style="background:#5e4900;color:#fafafa"><span class="scale">800</span></div>
+    <div class="color-swatch" style="background:#2e2400;color:#fafafa"><span class="scale">900</span></div>
+  </div>
+
+  <div class="color-label">Orange</div>
+  <div class="color-grid">
+    <div class="color-swatch" style="background:#fafafa8f4;color:#212121"><span class="scale">50</span></div>
+    <div class="color-swatch" style="background:#ffdecb;color:#212121"><span class="scale">100</span></div>
+    <div class="color-swatch" style="background:#ffc4a2;color:#212121"><span class="scale">200</span></div>
+    <div class="color-swatch" style="background:#ffaa79;color:#212121"><span class="scale">300</span></div>
+    <div class="color-swatch" style="background:#ff9050;color:#fafafa"><span class="scale">400</span></div>
+    <div class="color-swatch" style="background:#FF7628;color:#fafafa"><span class="scale">500</span></div>
+    <div class="color-swatch" style="background:#cc5e20;color:#fafafa"><span class="scale">600</span></div>
+    <div class="color-swatch" style="background:#994618;color:#fafafa"><span class="scale">700</span></div>
+    <div class="color-swatch" style="background:#662f10;color:#fafafa"><span class="scale">800</span></div>
+    <div class="color-swatch" style="background:#321707;color:#fafafa"><span class="scale">900</span></div>
+  </div>
+
+  <div class="color-label">Purple</div>
+  <div class="color-grid">
+    <div class="color-swatch" style="background:#faf7fe;color:#212121"><span class="scale">50</span></div>
+    <div class="color-swatch" style="background:#e9dafd;color:#212121"><span class="scale">100</span></div>
+    <div class="color-swatch" style="background:#d8bcfb;color:#212121"><span class="scale">200</span></div>
+    <div class="color-swatch" style="background:#c79ffa;color:#212121"><span class="scale">300</span></div>
+    <div class="color-swatch" style="background:#b682f9;color:#fafafa"><span class="scale">400</span></div>
+    <div class="color-swatch" style="background:#A565F8;color:#fafafa"><span class="scale">500</span></div>
+    <div class="color-swatch" style="background:#8450c6;color:#fafafa"><span class="scale">600</span></div>
+    <div class="color-swatch" style="background:#633c94;color:#fafafa"><span class="scale">700</span></div>
+    <div class="color-swatch" style="background:#422863;color:#fafafa"><span class="scale">800</span></div>
+    <div class="color-swatch" style="background:#201431;color:#fafafa"><span class="scale">900</span></div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- SPACING                                                           -->
+<!-- ================================================================ -->
+<section id="spacing">
+  <h2>Spacing</h2>
+  <p class="sub-desc">space.{value} — px</p>
+  <div class="space-row"><span class="space-label">space.0</span><div class="space-bar" style="width:0px;border:1px dashed #bdbdbd;background:transparent"></div><span class="space-val">0</span></div>
+  <div class="space-row"><span class="space-label">space.2</span><div class="space-bar" style="width:2px"></div><span class="space-val">2</span></div>
+  <div class="space-row"><span class="space-label">space.4</span><div class="space-bar" style="width:4px"></div><span class="space-val">4</span></div>
+  <div class="space-row"><span class="space-label">space.8</span><div class="space-bar" style="width:8px"></div><span class="space-val">8</span></div>
+  <div class="space-row"><span class="space-label">space.12</span><div class="space-bar" style="width:12px"></div><span class="space-val">12</span></div>
+  <div class="space-row"><span class="space-label">space.16</span><div class="space-bar" style="width:16px"></div><span class="space-val">16</span></div>
+  <div class="space-row"><span class="space-label">space.20</span><div class="space-bar" style="width:20px"></div><span class="space-val">20</span></div>
+  <div class="space-row"><span class="space-label">space.24</span><div class="space-bar" style="width:24px"></div><span class="space-val">24</span></div>
+  <div class="space-row"><span class="space-label">space.32</span><div class="space-bar" style="width:32px"></div><span class="space-val">32</span></div>
+  <div class="space-row"><span class="space-label">space.40</span><div class="space-bar" style="width:40px"></div><span class="space-val">40</span></div>
+  <div class="space-row"><span class="space-label">space.48</span><div class="space-bar" style="width:48px"></div><span class="space-val">48</span></div>
+  <div class="space-row"><span class="space-label">space.64</span><div class="space-bar" style="width:64px"></div><span class="space-val">64</span></div>
+</section>
+
+<!-- FONT -->
+<section id="typography-primitives">
+  <h2>Font (Primitive)</h2>
+  <p class="sub-desc">font.family / font.size / font.weight / font.letterSpacing</p>
+  <h3>Font Family</h3>
+  <div class="type-sample"><span style="font-size:16px">Inter, Noto Sans JP, sans-serif</span><span class="type-meta">font.family.base</span></div>
+  <h3>Font Sizes</h3>
+  <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:baseline;margin-bottom:16px">
+    <span style="font-size:12px"><strong>12</strong></span><span style="font-size:14px"><strong>14</strong></span><span style="font-size:16px"><strong>16</strong></span><span style="font-size:20px"><strong>20</strong></span><span style="font-size:24px"><strong>24</strong></span><span style="font-size:32px"><strong>32</strong></span>
+  </div>
+  <h3>Font Weights</h3>
+  <div style="display:flex;gap:32px;flex-wrap:wrap;margin-bottom:16px;font-size:16px">
+    <span style="font-weight:400">Regular (400)</span><span style="font-weight:500">Medium (500)</span><span style="font-weight:600">Semibold (600)</span><span style="font-weight:700">Bold (700)</span>
+  </div>
+</section>
+
+<!-- RADIUS -->
+<section id="radius">
+  <h2>Radius</h2>
+  <div class="radius-grid">
+    <div class="radius-item"><div class="radius-box" style="border-radius:4px"></div><div class="radius-label">radius.4</div><div class="radius-val">4px</div></div>
+    <div class="radius-item"><div class="radius-box" style="border-radius:8px"></div><div class="radius-label">radius.8</div><div class="radius-val">8px</div></div>
+    <div class="radius-item"><div class="radius-box" style="border-radius:12px"></div><div class="radius-label">radius.12</div><div class="radius-val">12px</div></div>
+    <div class="radius-item"><div class="radius-box" style="border-radius:16px"></div><div class="radius-label">radius.16</div><div class="radius-val">16px</div></div>
+  </div>
+</section>
+
+<!-- SHADOW -->
+<section id="shadow">
+  <h2>Shadow</h2>
+  <div class="shadow-grid">
+    <div class="shadow-item"><div class="shadow-box" style="box-shadow:0px 1px 2px rgba(0,0,0,0.05)"></div><div class="shadow-label">shadow.xs</div></div>
+    <div class="shadow-item"><div class="shadow-box" style="box-shadow:0px 1px 3px rgba(0,0,0,0.1)"></div><div class="shadow-label">shadow.sm</div></div>
+    <div class="shadow-item"><div class="shadow-box" style="box-shadow:0px 4px 6px rgba(0,0,0,0.1)"></div><div class="shadow-label">shadow.md</div></div>
+    <div class="shadow-item"><div class="shadow-box" style="box-shadow:0px 10px 15px rgba(0,0,0,0.15)"></div><div class="shadow-label">shadow.lg</div></div>
+    <div class="shadow-item"><div class="shadow-box" style="box-shadow:0px 20px 25px rgba(0,0,0,0.2)"></div><div class="shadow-label">shadow.xl</div></div>
+  </div>
+</section>
+
+<!-- BORDER WIDTH -->
+<section id="border-width">
+  <h2>Border Width</h2>
+  <div class="bw-grid">
+    <div class="bw-item"><div class="bw-line" style="height:0px;border-top:1px dashed #bdbdbd"></div><div class="bw-label">0</div></div>
+    <div class="bw-item"><div class="bw-line" style="height:1px"></div><div class="bw-label">1</div></div>
+    <div class="bw-item"><div class="bw-line" style="height:2px"></div><div class="bw-label">2</div></div>
+    <div class="bw-item"><div class="bw-line" style="height:4px"></div><div class="bw-label">4</div></div>
+  </div>
+</section>
+
+<!-- OPACITY -->
+<section id="opacity">
+  <h2>Opacity</h2>
+  <div class="opacity-grid">
+    <div class="opacity-item"><div class="opacity-box" style="opacity:0"></div><div class="opacity-label">0</div></div>
+    <div class="opacity-item"><div class="opacity-box" style="opacity:0.25"></div><div class="opacity-label">25</div></div>
+    <div class="opacity-item"><div class="opacity-box" style="opacity:0.5"></div><div class="opacity-label">50</div></div>
+    <div class="opacity-item"><div class="opacity-box" style="opacity:0.75"></div><div class="opacity-label">75</div></div>
+    <div class="opacity-item"><div class="opacity-box" style="opacity:1"></div><div class="opacity-label">100</div></div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- SEMANTIC COLORS                                                   -->
+<!-- ================================================================ -->
+<section id="semantic-text">
+  <h2>Semantic Colors — Text</h2>
+  <p class="sub-desc">text.{role} — Light / Dark の対比</p>
+  <div class="semantic-grid">
+    <div class="semantic-item"><div class="semantic-color" style="background:#212121"></div><div class="semantic-info"><div class="name">text.primary</div><div class="ref">gray.900 #212121</div><div class="dark-ref">Dark: gray.50 #fafafa</div></div></div>
+    <div class="semantic-item"><div class="semantic-color" style="background:#616161"></div><div class="semantic-info"><div class="name">text.secondary</div><div class="ref">gray.700 #616161</div><div class="dark-ref">Dark: gray.200 #eeeeee</div></div></div>
+    <div class="semantic-item"><div class="semantic-color" style="background:#757575"></div><div class="semantic-info"><div class="name">text.tertiary</div><div class="ref">gray.600 #757575</div><div class="dark-ref">Dark: gray.300 #e0e0e0</div></div></div>
+    <div class="semantic-item"><div class="semantic-color" style="background:#bdbdbd"></div><div class="semantic-info"><div class="name">text.disabled</div><div class="ref">gray.400 #bdbdbd</div><div class="dark-ref">Dark: gray.500 #9e9e9e</div></div></div>
+    <div class="semantic-item"><div class="semantic-color" style="background:#fafafa;border-bottom-color:#e0e0e0"></div><div class="semantic-info"><div class="name">text.inverse</div><div class="ref">gray.50 #fafafa</div><div class="dark-ref">Dark: gray.900 #212121</div></div></div>
+    <div class="semantic-item"><div class="semantic-color" style="background:#0048cc"></div><div class="semantic-info"><div class="name">text.brand</div><div class="ref">blue.600 #0048cc</div><div class="dark-ref">Dark: blue.300 #6098ff</div></div></div>
+    <div class="semantic-item"><div class="semantic-color" style="background:#0048cc"></div><div class="semantic-info"><div class="name">text.link</div><div class="ref">blue.600 #0048cc</div><div class="dark-ref">Dark: blue.300 #6098ff</div></div></div>
+    <div class="semantic-item"><div class="semantic-color" style="background:#1a6742"></div><div class="semantic-info"><div class="name">text.success</div><div class="ref">green.700 #1a6742</div><div class="dark-ref">Dark: green.300 #7ccba5</div></div></div>
+    <div class="semantic-item"><div class="semantic-color" style="background:#8d6d00"></div><div class="semantic-info"><div class="name">text.warning</div><div class="ref">yellow.700 #8d6d00</div><div class="dark-ref">Dark: yellow.300 #f2d260</div></div></div>
+    <div class="semantic-item"><div class="semantic-color" style="background:#993232"></div><div class="semantic-info"><div class="name">text.error</div><div class="ref">red.700 #993232</div><div class="dark-ref">Dark: red.300 #ff9494</div></div></div>
+    <div class="semantic-item"><div class="semantic-color" style="background:#994618"></div><div class="semantic-info"><div class="name">text.accent</div><div class="ref">orange.700 #994618</div><div class="dark-ref">Dark: orange.300 #ffaa79</div></div></div>
+  </div>
+</section>
+
+<section id="semantic-bg">
+  <h2>Semantic Colors — Background</h2>
+  <div class="semantic-grid">
+    <div class="semantic-item"><div class="semantic-color" style="background:#f5f5f5"></div><div class="semantic-info"><div class="name">bg.default</div><div class="ref">gray.100 #f5f5f5</div><div class="dark-ref">Dark: gray.900 #212121</div></div></div>
+    <div class="semantic-item"><div class="semantic-color" style="background:#eeeeee"></div><div class="semantic-info"><div class="name">bg.subtle</div><div class="ref">gray.200 #eeeeee</div><div class="dark-ref">Dark: gray.800 #424242</div></div></div>
+    <div class="semantic-item"><div class="semantic-color" style="background:#e0e0e0"></div><div class="semantic-info"><div class="name">bg.muted</div><div class="ref">gray.300 #e0e0e0</div><div class="dark-ref">Dark: gray.700 #616161</div></div></div>
+    <div class="semantic-item"><div class="semantic-color" style="background:#fafafa"></div><div class="semantic-info"><div class="name">bg.surface</div><div class="ref">gray.50 #fafafa</div><div class="dark-ref">Dark: gray.800 #424242</div></div></div>
+    <div class="semantic-item"><div class="semantic-color" style="background:#eeeeee"></div><div class="semantic-info"><div class="name">bg.surface-hover</div><div class="ref">gray.200 #eeeeee</div><div class="dark-ref">Dark: gray.700 #616161</div></div></div>
+    <div class="semantic-item"><div class="semantic-color" style="background:#212121"></div><div class="semantic-info"><div class="name">bg.inverse</div><div class="ref">gray.900 #212121</div><div class="dark-ref">Dark: gray.50 #fafafa</div></div></div>
+    <div class="semantic-item"><div class="semantic-color" style="background:#005aff"></div><div class="semantic-info"><div class="name">bg.brand</div><div class="ref">blue.500 #005aff</div><div class="dark-ref">Dark: blue.400 #3079ff</div></div></div>
+    <div class="semantic-item"><div class="semantic-color" style="background:#c1d7ff"></div><div class="semantic-info"><div class="name">bg.brandSubtle</div><div class="ref">blue.100 #c1d7ff</div><div class="dark-ref">Dark: blue.900 #001132</div></div></div>
+    <div class="semantic-item"><div class="semantic-color" style="background:#ccebdc"></div><div class="semantic-info"><div class="name">bg.successSubtle</div><div class="ref">green.100 #ccebdc</div><div class="dark-ref">Dark: green.900 #082215</div></div></div>
+    <div class="semantic-item"><div class="semantic-color" style="background:#faedc1"></div><div class="semantic-info"><div class="name">bg.warningSubtle</div><div class="ref">yellow.100 #faedc1</div><div class="dark-ref">Dark: yellow.900 #2e2400</div></div></div>
+    <div class="semantic-item"><div class="semantic-color" style="background:#ffd5d5"></div><div class="semantic-info"><div class="name">bg.errorSubtle</div><div class="ref">red.100 #ffd5d5</div><div class="dark-ref">Dark: red.900 #321010</div></div></div>
+    <div class="semantic-item"><div class="semantic-color" style="background:#ffdecb"></div><div class="semantic-info"><div class="name">bg.accentSubtle</div><div class="ref">orange.100 #ffdecb</div><div class="dark-ref">Dark: orange.900 #321707</div></div></div>
+    <div class="semantic-item"><div class="semantic-color" style="background:#e9dafd"></div><div class="semantic-info"><div class="name">bg.selection</div><div class="ref">purple.100 #e9dafd</div><div class="dark-ref">Dark: purple.900 #201431</div></div></div>
+  </div>
+</section>
+
+<section id="semantic-border">
+  <h2>Semantic Colors — Border</h2>
+  <div class="semantic-grid">
+    <div class="semantic-item"><div class="semantic-color" style="background:#e0e0e0"></div><div class="semantic-info"><div class="name">border.default</div><div class="ref">gray.300 #e0e0e0</div><div class="dark-ref">Dark: gray.700 #616161</div></div></div>
+    <div class="semantic-item"><div class="semantic-color" style="background:#bdbdbd"></div><div class="semantic-info"><div class="name">border.strong</div><div class="ref">gray.400 #bdbdbd</div><div class="dark-ref">Dark: gray.500 #9e9e9e</div></div></div>
+    <div class="semantic-item"><div class="semantic-color" style="background:#005aff"></div><div class="semantic-info"><div class="name">border.brand</div><div class="ref">blue.500 #005aff</div><div class="dark-ref">Dark: blue.400 #3079ff</div></div></div>
+    <div class="semantic-item"><div class="semantic-color" style="background:#54bb89"></div><div class="semantic-info"><div class="name">border.success</div><div class="ref">green.400 #54bb89</div><div class="dark-ref">Dark: green.400 #54bb89</div></div></div>
+    <div class="semantic-item"><div class="semantic-color" style="background:#eec430"></div><div class="semantic-info"><div class="name">border.warning</div><div class="ref">yellow.400 #eec430</div><div class="dark-ref">Dark: yellow.400 #eec430</div></div></div>
+    <div class="semantic-item"><div class="semantic-color" style="background:#ff7474"></div><div class="semantic-info"><div class="name">border.error</div><div class="ref">red.400 #ff7474</div><div class="dark-ref">Dark: red.400 #ff7474</div></div></div>
+    <div class="semantic-item"><div class="semantic-color" style="background:#ff9050"></div><div class="semantic-info"><div class="name">border.accent</div><div class="ref">orange.400 #ff9050</div><div class="dark-ref">Dark: orange.400 #ff9050</div></div></div>
+    <div class="semantic-item"><div class="semantic-color" style="background:#b682f9"></div><div class="semantic-info"><div class="name">border.focus</div><div class="ref">purple.400 #b682f9</div><div class="dark-ref">Dark: purple.300 #c79ffa</div></div></div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- SEMANTIC DIMENSIONS                                               -->
+<!-- ================================================================ -->
+<section id="typography">
+  <h2>Typography (Semantic)</h2>
+  <div class="type-sample"><span style="font-size:32px;font-weight:700;line-height:40px;letter-spacing:-0.02em">headingLg</span><span class="type-meta">32 / bold / lh:40 / tight</span></div>
+  <div class="type-sample"><span style="font-size:24px;font-weight:700;line-height:32px;letter-spacing:-0.02em">headingMd</span><span class="type-meta">24 / bold / lh:32 / tight</span></div>
+  <div class="type-sample"><span style="font-size:20px;font-weight:600;line-height:28px;letter-spacing:-0.02em">headingSm</span><span class="type-meta">20 / semibold / lh:28 / tight</span></div>
+  <div class="type-sample"><span style="font-size:16px;font-weight:400;line-height:24px">bodyLg — 本文テキスト</span><span class="type-meta">16 / regular / lh:24</span></div>
+  <div class="type-sample"><span style="font-size:14px;font-weight:400;line-height:20px">bodyMd — 本文テキスト</span><span class="type-meta">14 / regular / lh:20</span></div>
+  <div class="type-sample"><span style="font-size:12px;font-weight:400;line-height:16px">bodySm — 本文テキスト</span><span class="type-meta">12 / regular / lh:16</span></div>
+  <div class="type-sample"><span style="font-size:14px;font-weight:500;line-height:20px">labelMd — ラベル</span><span class="type-meta">14 / medium / lh:20</span></div>
+  <div class="type-sample"><span style="font-size:12px;font-weight:500;line-height:16px">labelSm — ラベル</span><span class="type-meta">12 / medium / lh:16</span></div>
+</section>
+
+<section id="layout-spacing">
+  <h2>Layout (Semantic)</h2>
+  <div class="layout-grid">
+    <div class="layout-item"><div class="name">spaceXs</div><div class="val">4</div><div class="ref">space.4</div></div>
+    <div class="layout-item"><div class="name">spaceSm</div><div class="val">8</div><div class="ref">space.8</div></div>
+    <div class="layout-item"><div class="name">spaceMd</div><div class="val">16</div><div class="ref">space.16</div></div>
+    <div class="layout-item"><div class="name">spaceLg</div><div class="val">24</div><div class="ref">space.24</div></div>
+    <div class="layout-item"><div class="name">spaceXl</div><div class="val">32</div><div class="ref">space.32</div></div>
+    <div class="layout-item"><div class="name">sectionGap</div><div class="val">40</div><div class="ref">space.40</div></div>
+    <div class="layout-item"><div class="name">containerPadding</div><div class="val">24</div><div class="ref">space.24</div></div>
+  </div>
+</section>
+
+<section id="component-dimensions">
+  <h2>Component Dimensions</h2>
+  <h3>Padding</h3>
+  <div class="layout-grid">
+    <div class="layout-item"><div class="name">paddingXs</div><div class="val">4</div></div>
+    <div class="layout-item"><div class="name">paddingSm</div><div class="val">8</div></div>
+    <div class="layout-item"><div class="name">paddingMd</div><div class="val">12</div></div>
+    <div class="layout-item"><div class="name">paddingLg</div><div class="val">16</div></div>
+  </div>
+  <h3>Gap</h3>
+  <div class="layout-grid">
+    <div class="layout-item"><div class="name">gapXs</div><div class="val">4</div></div>
+    <div class="layout-item"><div class="name">gapSm</div><div class="val">8</div></div>
+    <div class="layout-item"><div class="name">gapMd</div><div class="val">12</div></div>
+    <div class="layout-item"><div class="name">gapLg</div><div class="val">16</div></div>
+  </div>
+  <h3>Radius</h3>
+  <div class="layout-grid">
+    <div class="layout-item"><div class="name">radiusSm</div><div class="val">4</div></div>
+    <div class="layout-item"><div class="name">radiusMd</div><div class="val">8</div></div>
+    <div class="layout-item"><div class="name">radiusLg</div><div class="val">12</div></div>
+  </div>
+</section>
+
+<section id="elevation">
+  <h2>Elevation</h2>
+  <div class="elevation-grid">
+    <div class="elevation-item"><div class="elevation-box" style="box-shadow:0px 1px 3px rgba(0,0,0,0.1)">Card</div><div class="elevation-label">elevation.card</div><div class="elevation-ref">shadow.sm</div></div>
+    <div class="elevation-item"><div class="elevation-box" style="box-shadow:0px 4px 6px rgba(0,0,0,0.1)">Dropdown</div><div class="elevation-label">elevation.dropdown</div><div class="elevation-ref">shadow.md</div></div>
+    <div class="elevation-item"><div class="elevation-box" style="box-shadow:0px 10px 15px rgba(0,0,0,0.15)">Modal</div><div class="elevation-label">elevation.modal</div><div class="elevation-ref">shadow.lg</div></div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- ICONS                                                             -->
+<!-- ================================================================ -->
+<section id="icons-navigation">
+  <h2>Icons — Navigation</h2>
+  <p class="sub-desc">Material Icons Outlined</p>
+  <div class="icon-grid">
+    <div class="icon-item"><span class="material-icons-outlined">arrow_back</span><div class="icon-name">arrow_back</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">arrow_forward</span><div class="icon-name">arrow_forward</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">chevron_left</span><div class="icon-name">chevron_left</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">chevron_right</span><div class="icon-name">chevron_right</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">expand_more</span><div class="icon-name">expand_more</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">expand_less</span><div class="icon-name">expand_less</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">menu</span><div class="icon-name">menu</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">close</span><div class="icon-name">close</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">home</span><div class="icon-name">home</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">settings</span><div class="icon-name">settings</div></div>
+  </div>
+</section>
+
+<section id="icons-action">
+  <h2>Icons — Action</h2>
+  <div class="icon-grid">
+    <div class="icon-item"><span class="material-icons-outlined">add</span><div class="icon-name">add</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">edit</span><div class="icon-name">edit</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">delete</span><div class="icon-name">delete</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">save</span><div class="icon-name">save</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">search</span><div class="icon-name">search</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">filter_list</span><div class="icon-name">filter_list</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">sort</span><div class="icon-name">sort</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">refresh</span><div class="icon-name">refresh</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">download</span><div class="icon-name">download</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">upload</span><div class="icon-name">upload</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">share</span><div class="icon-name">share</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">content_copy</span><div class="icon-name">content_copy</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">more_vert</span><div class="icon-name">more_vert</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">more_horiz</span><div class="icon-name">more_horiz</div></div>
+  </div>
+</section>
+
+<section id="icons-status">
+  <h2>Icons — Status</h2>
+  <div class="icon-grid">
+    <div class="icon-item"><span class="material-icons-outlined" style="color:#1a6742">check_circle</span><div class="icon-name">check_circle</div></div>
+    <div class="icon-item"><span class="material-icons-outlined" style="color:#993232">cancel</span><div class="icon-name">cancel</div></div>
+    <div class="icon-item"><span class="material-icons-outlined" style="color:#8d6d00">warning</span><div class="icon-name">warning</div></div>
+    <div class="icon-item"><span class="material-icons-outlined" style="color:#0048cc">info</span><div class="icon-name">info</div></div>
+    <div class="icon-item"><span class="material-icons-outlined" style="color:#993232">error</span><div class="icon-name">error</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">pending</span><div class="icon-name">pending</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">schedule</span><div class="icon-name">schedule</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">hourglass_empty</span><div class="icon-name">hourglass_empty</div></div>
+  </div>
+</section>
+
+<section id="icons-inspection">
+  <h2>Icons — Inspection</h2>
+  <div class="icon-grid">
+    <div class="icon-item"><span class="material-icons-outlined">assignment</span><div class="icon-name">assignment</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">checklist</span><div class="icon-name">checklist</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">fact_check</span><div class="icon-name">fact_check</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">task_alt</span><div class="icon-name">task_alt</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">build</span><div class="icon-name">build</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">engineering</span><div class="icon-name">engineering</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">domain</span><div class="icon-name">domain</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">apartment</span><div class="icon-name">apartment</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">layers</span><div class="icon-name">layers</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">camera_alt</span><div class="icon-name">camera_alt</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">photo_library</span><div class="icon-name">photo_library</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">note_add</span><div class="icon-name">note_add</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">description</span><div class="icon-name">description</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">qr_code_scanner</span><div class="icon-name">qr_code_scanner</div></div>
+  </div>
+</section>
+
+<section id="icons-user">
+  <h2>Icons — User</h2>
+  <div class="icon-grid">
+    <div class="icon-item"><span class="material-icons-outlined">person</span><div class="icon-name">person</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">group</span><div class="icon-name">group</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">badge</span><div class="icon-name">badge</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">notifications</span><div class="icon-name">notifications</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">notifications_active</span><div class="icon-name">notifications_active</div></div>
+  </div>
+</section>
+
+<section id="icons-data">
+  <h2>Icons — Data</h2>
+  <div class="icon-grid">
+    <div class="icon-item"><span class="material-icons-outlined">dashboard</span><div class="icon-name">dashboard</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">bar_chart</span><div class="icon-name">bar_chart</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">pie_chart</span><div class="icon-name">pie_chart</div></div>
+    <div class="icon-item"><span class="material-icons-outlined" style="color:#1a6742">trending_up</span><div class="icon-name">trending_up</div></div>
+    <div class="icon-item"><span class="material-icons-outlined" style="color:#993232">trending_down</span><div class="icon-name">trending_down</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">trending_flat</span><div class="icon-name">trending_flat</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">calendar_today</span><div class="icon-name">calendar_today</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">access_time</span><div class="icon-name">access_time</div></div>
+  </div>
+</section>
+
+<section id="icons-misc">
+  <h2>Icons — Misc</h2>
+  <div class="icon-grid">
+    <div class="icon-item"><span class="material-icons-outlined">visibility</span><div class="icon-name">visibility</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">visibility_off</span><div class="icon-name">visibility_off</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">lock</span><div class="icon-name">lock</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">lock_open</span><div class="icon-name">lock_open</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">help_outline</span><div class="icon-name">help_outline</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">open_in_new</span><div class="icon-name">open_in_new</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">attach_file</span><div class="icon-name">attach_file</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">cloud_upload</span><div class="icon-name">cloud_upload</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">cloud_done</span><div class="icon-name">cloud_done</div></div>
+    <div class="icon-item"><span class="material-icons-outlined">wifi_off</span><div class="icon-name">wifi_off</div></div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- INPUTS                                                             -->
+<!-- ================================================================ -->
+<div style="margin:48px 0 24px;padding:16px 24px;background:#f2f6ff;border-left:4px solid #005aff;border-radius:0 8px 8px 0">
+  <div style="font-size:18px;font-weight:600;color:#005aff;margin-bottom:4px">Inputs</div>
+  <div style="font-size:13px;color:#757575">ユーザーがデータを入力するためのコンポーネント</div>
+</div>
+
+<section id="comp-autocomplete">
+  <h2>Autocomplete</h2>
+  <p class="sub-desc">テキスト入力しながら候補をフィルタリングして選択</p>
+  <div class="comp-card">
+    <div class="comp-preview" style="gap:16px">
+      <div style="position:relative;width:280px">
+        <div style="background:#fafafa;border:2px solid #005aff;border-radius:8px;padding:8px 36px 8px 12px;font-size:14px;color:#212121">田中<span style="color:#9e9e9e">|</span></div>
+        <span class="material-icons-outlined" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);color:#757575;font-size:20px">search</span>
+        <div style="position:absolute;top:100%;left:0;right:0;background:#fafafa;border:1px solid #e0e0e0;border-radius:0 0 8px 8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);z-index:10">
+          <div style="padding:8px 12px;font-size:14px;background:#f2f6ff;color:#005aff">田中太郎</div>
+          <div style="padding:8px 12px;font-size:14px">田中花子</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="comp-button">
+  <h2>Button</h2>
+  <p class="sub-desc">主要なユーザーアクションに使用するインタラクティブ要素</p>
+  <div class="comp-card">
+    <div class="comp-preview">
+      <button class="btn btn-sm" style="background:#005aff;color:#f5f5f5">Primary SM</button>
+      <button class="btn" style="background:#005aff;color:#f5f5f5">Primary MD</button>
+      <button class="btn btn-lg" style="background:#005aff;color:#f5f5f5">Primary LG</button>
+    </div>
+    <div class="comp-preview" style="margin-top:8px">
+      <button class="btn" style="background:#005aff;color:#f5f5f5">Primary</button>
+      <button class="btn" style="background:#e0e0e0;color:#212121">Secondary</button>
+      <button class="btn" style="background:#FF5454;color:#f5f5f5">Danger</button>
+      <button class="btn" style="background:#005aff;color:#f5f5f5;opacity:0.5;cursor:not-allowed">Disabled</button>
+    </div>
+  </div>
+</section>
+
+<section id="comp-checkbox">
+  <h2>Checkbox</h2>
+  <p class="sub-desc">複数の選択肢から0個以上を選ぶ</p>
+  <div class="comp-card">
+    <div class="comp-preview" style="gap:24px">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><span style="width:20px;height:20px;border:2px solid #eeeeee;border-radius:4px;display:inline-block"></span><span style="font-size:14px">未チェック</span></label>
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><span style="width:20px;height:20px;background:#005aff;border:2px solid #005aff;border-radius:4px;display:inline-flex;align-items:center;justify-content:center"><span class="material-icons-outlined" style="font-size:16px;color:#fafafa">check</span></span><span style="font-size:14px">チェック済み</span></label>
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><span style="width:20px;height:20px;background:#005aff;border:2px solid #005aff;border-radius:4px;display:inline-flex;align-items:center;justify-content:center"><span class="material-icons-outlined" style="font-size:16px;color:#fafafa">remove</span></span><span style="font-size:14px">indeterminate</span></label>
+      <label style="display:flex;align-items:center;gap:8px;opacity:0.5;cursor:not-allowed"><span style="width:20px;height:20px;border:2px solid #eeeeee;border-radius:4px;display:inline-block"></span><span style="font-size:14px">Disabled</span></label>
+    </div>
+  </div>
+</section>
+
+<section id="comp-form-field">
+  <h2>FormField</h2>
+  <p class="sub-desc">ラベル + 入力 + ヘルプ/エラーメッセージのラッパー</p>
+  <div class="comp-card">
+    <div class="comp-preview" style="flex-direction:column;align-items:flex-start;gap:20px">
+      <div><label style="font-size:14px;font-weight:500;display:block;margin-bottom:4px">検査項目名 <span style="color:#993232">*</span></label><input class="input-demo" placeholder="例: 配筋検査" /><div style="font-size:12px;color:#757575;margin-top:4px">必須項目です</div></div>
+      <div><label style="font-size:14px;font-weight:500;display:block;margin-bottom:4px">担当者 <span style="color:#993232">*</span></label><input class="input-demo input-error" value="" /><div style="font-size:12px;color:#993232;margin-top:4px">担当者を選択してください</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="comp-input">
+  <h2>Input</h2>
+  <p class="sub-desc">テキスト入力フィールド</p>
+  <div class="comp-card">
+    <div class="comp-preview">
+      <input class="input-demo" placeholder="Default" />
+      <input class="input-demo input-error" value="Error state" />
+      <input class="input-demo" disabled placeholder="Disabled" style="opacity:0.5;background:#e0e0e0" />
+    </div>
+  </div>
+</section>
+
+<section id="comp-radio">
+  <h2>Radio</h2>
+  <p class="sub-desc">複数の選択肢から1つだけ選ぶ排他的な選択</p>
+  <div class="comp-card">
+    <div class="comp-preview" style="flex-direction:column;gap:12px;align-items:flex-start">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><span style="width:20px;height:20px;border:2px solid #005aff;border-radius:50%;display:inline-flex;align-items:center;justify-content:center"><span style="width:10px;height:10px;background:#005aff;border-radius:50%;display:inline-block"></span></span><span style="font-size:14px">OK</span></label>
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><span style="width:20px;height:20px;border:2px solid #eeeeee;border-radius:50%;display:inline-block"></span><span style="font-size:14px">NG</span></label>
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><span style="width:20px;height:20px;border:2px solid #eeeeee;border-radius:50%;display:inline-block"></span><span style="font-size:14px">保留</span></label>
+    </div>
+  </div>
+</section>
+
+<section id="comp-select">
+  <h2>Select</h2>
+  <p class="sub-desc">ドロップダウンから1つの選択肢を選ぶ</p>
+  <div class="comp-card">
+    <div class="comp-preview" style="gap:16px">
+      <div style="position:relative;width:240px">
+        <div style="background:#fafafa;border:1px solid #eeeeee;border-radius:8px;padding:8px 36px 8px 12px;font-size:14px;color:#9e9e9e;cursor:pointer">担当者を選択</div>
+        <span class="material-icons-outlined" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);color:#757575;font-size:20px">expand_more</span>
+      </div>
+      <div style="position:relative;width:240px">
+        <div style="background:#fafafa;border:2px solid #005aff;border-radius:8px;padding:7px 36px 7px 12px;font-size:14px;color:#212121">田中太郎</div>
+        <span class="material-icons-outlined" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);color:#757575;font-size:20px">expand_less</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="comp-slider">
+  <h2>Slider</h2>
+  <p class="sub-desc">連続的な範囲から値を選択するスライダー</p>
+  <div class="comp-card">
+    <div style="max-width:400px;padding:16px 0">
+      <div style="position:relative;height:6px;background:#eeeeee;border-radius:3px">
+        <div style="position:absolute;left:0;width:60%;height:100%;background:#005aff;border-radius:3px"></div>
+        <div style="position:absolute;left:60%;top:50%;transform:translate(-50%,-50%);width:20px;height:20px;background:#005aff;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,0.2)"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:#9e9e9e"><span>0</span><span>60</span><span>100</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="comp-toggle">
+  <h2>Toggle</h2>
+  <p class="sub-desc">ON/OFFの切り替えスイッチ。即座に効果が発動する設定に使用</p>
+  <div class="comp-card">
+    <div class="comp-preview" style="gap:32px">
+      <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
+        <span style="width:44px;height:24px;background:#eeeeee;border-radius:9999px;position:relative;display:inline-block"><span style="width:20px;height:20px;background:#fafafa;border-radius:50%;position:absolute;top:2px;left:2px;box-shadow:0 1px 3px rgba(0,0,0,0.2)"></span></span>
+        <span style="font-size:14px">OFF</span>
+      </label>
+      <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
+        <span style="width:44px;height:24px;background:#005aff;border-radius:9999px;position:relative;display:inline-block"><span style="width:20px;height:20px;background:#fafafa;border-radius:50%;position:absolute;top:2px;right:2px;box-shadow:0 1px 3px rgba(0,0,0,0.2)"></span></span>
+        <span style="font-size:14px">ON</span>
+      </label>
+      <label style="display:flex;align-items:center;gap:10px;opacity:0.5;cursor:not-allowed">
+        <span style="width:44px;height:24px;background:#eeeeee;border-radius:9999px;position:relative;display:inline-block"><span style="width:20px;height:20px;background:#fafafa;border-radius:50%;position:absolute;top:2px;left:2px;box-shadow:0 1px 3px rgba(0,0,0,0.2)"></span></span>
+        <span style="font-size:14px">Disabled</span>
+      </label>
+    </div>
+  </div>
+</section>
+
+<section id="comp-button-group">
+  <h2>ButtonGroup</h2>
+  <p class="sub-desc">関連するボタンをグループ化して表示</p>
+  <div class="comp-card">
+    <div class="comp-preview" style="flex-direction:column;gap:16px;align-items:flex-start">
+      <div>
+        <div style="font-size:11px;color:#9e9e9e;margin-bottom:6px">contained</div>
+        <div style="display:inline-flex;border-radius:8px;overflow:hidden">
+          <button style="padding:8px 16px;font-size:13px;font-weight:500;background:#005aff;color:#fafafa;border:none;cursor:pointer">日</button>
+          <button style="padding:8px 16px;font-size:13px;font-weight:500;background:#005aff;color:#fafafa;border:none;border-left:1px solid rgba(255,255,255,0.3);cursor:pointer">週</button>
+          <button style="padding:8px 16px;font-size:13px;font-weight:500;background:#005aff;color:#fafafa;border:none;border-left:1px solid rgba(255,255,255,0.3);cursor:pointer">月</button>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;color:#9e9e9e;margin-bottom:6px">outlined</div>
+        <div style="display:inline-flex;border-radius:8px;overflow:hidden;border:1px solid #005aff">
+          <button style="padding:8px 16px;font-size:13px;font-weight:500;background:#fafafa;color:#005aff;border:none;cursor:pointer">日</button>
+          <button style="padding:8px 16px;font-size:13px;font-weight:500;background:#fafafa;color:#005aff;border:none;border-left:1px solid #005aff;cursor:pointer">週</button>
+          <button style="padding:8px 16px;font-size:13px;font-weight:500;background:#fafafa;color:#005aff;border:none;border-left:1px solid #005aff;cursor:pointer">月</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="comp-fab">
+  <h2>Fab (Floating Action Button)</h2>
+  <p class="sub-desc">画面上に浮遊する主要アクションボタン</p>
+  <div class="comp-card">
+    <div class="comp-preview" style="gap:24px;align-items:center">
+      <div style="text-align:center">
+        <div style="width:40px;height:40px;background:#005aff;border-radius:12px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 5px rgba(0,0,0,0.2);cursor:pointer"><span class="material-icons-outlined" style="color:#fafafa;font-size:20px">add</span></div>
+        <div style="font-size:10px;color:#9e9e9e;margin-top:4px">sm</div>
+      </div>
+      <div style="text-align:center">
+        <div style="width:56px;height:56px;background:#005aff;border-radius:16px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 5px rgba(0,0,0,0.2);cursor:pointer"><span class="material-icons-outlined" style="color:#fafafa;font-size:24px">add</span></div>
+        <div style="font-size:10px;color:#9e9e9e;margin-top:4px">md (default)</div>
+      </div>
+      <div style="text-align:center">
+        <div style="height:48px;background:#005aff;border-radius:24px;display:flex;align-items:center;justify-content:center;gap:8px;padding:0 20px;box-shadow:0 3px 5px rgba(0,0,0,0.2);cursor:pointer"><span class="material-icons-outlined" style="color:#fafafa;font-size:20px">add</span><span style="color:#fafafa;font-size:14px;font-weight:500">検査を追加</span></div>
+        <div style="font-size:10px;color:#9e9e9e;margin-top:4px">lg (extended)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="comp-rating">
+  <h2>Rating</h2>
+  <p class="sub-desc">星による評価入力・表示</p>
+  <div class="comp-card">
+    <div class="comp-preview" style="flex-direction:column;gap:12px;align-items:flex-start">
+      <div>
+        <div style="font-size:11px;color:#9e9e9e;margin-bottom:4px">editable (3/5)</div>
+        <div style="display:flex;gap:4px">
+          <span class="material-icons-outlined" style="font-size:28px;color:#FF9800;cursor:pointer">star</span>
+          <span class="material-icons-outlined" style="font-size:28px;color:#FF9800;cursor:pointer">star</span>
+          <span class="material-icons-outlined" style="font-size:28px;color:#FF9800;cursor:pointer">star</span>
+          <span class="material-icons-outlined" style="font-size:28px;color:#eeeeee;cursor:pointer">star_outline</span>
+          <span class="material-icons-outlined" style="font-size:28px;color:#eeeeee;cursor:pointer">star_outline</span>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;color:#9e9e9e;margin-bottom:4px">readOnly (4.5/5)</div>
+        <div style="display:flex;gap:4px;align-items:center">
+          <span class="material-icons-outlined" style="font-size:24px;color:#FF9800">star</span>
+          <span class="material-icons-outlined" style="font-size:24px;color:#FF9800">star</span>
+          <span class="material-icons-outlined" style="font-size:24px;color:#FF9800">star</span>
+          <span class="material-icons-outlined" style="font-size:24px;color:#FF9800">star</span>
+          <span class="material-icons-outlined" style="font-size:24px;color:#FF9800">star_half</span>
+          <span style="font-size:13px;color:#757575;margin-left:4px">4.5</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="comp-toggle-button">
+  <h2>ToggleButton</h2>
+  <p class="sub-desc">排他的または複数選択のボタングループ</p>
+  <div class="comp-card">
+    <div class="comp-preview" style="flex-direction:column;gap:16px;align-items:flex-start">
+      <div>
+        <div style="font-size:11px;color:#9e9e9e;margin-bottom:6px">exclusive（ビュー切替）</div>
+        <div style="display:inline-flex;border:1px solid #eeeeee;border-radius:8px;overflow:hidden">
+          <button style="padding:8px 14px;font-size:18px;background:#c1d7ff;color:#005aff;border:none;cursor:pointer;display:flex;align-items:center"><span class="material-icons-outlined" style="font-size:20px">view_list</span></button>
+          <button style="padding:8px 14px;font-size:18px;background:#fafafa;color:#757575;border:none;border-left:1px solid #eeeeee;cursor:pointer;display:flex;align-items:center"><span class="material-icons-outlined" style="font-size:20px">grid_view</span></button>
+          <button style="padding:8px 14px;font-size:18px;background:#fafafa;color:#757575;border:none;border-left:1px solid #eeeeee;cursor:pointer;display:flex;align-items:center"><span class="material-icons-outlined" style="font-size:20px">map</span></button>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;color:#9e9e9e;margin-bottom:6px">multi-select（フィルター）</div>
+        <div style="display:inline-flex;border:1px solid #eeeeee;border-radius:8px;overflow:hidden">
+          <button style="padding:8px 14px;font-size:12px;background:#c1d7ff;color:#005aff;border:none;cursor:pointer;font-weight:500">配筋</button>
+          <button style="padding:8px 14px;font-size:12px;background:#fafafa;color:#757575;border:none;border-left:1px solid #eeeeee;cursor:pointer">型枠</button>
+          <button style="padding:8px 14px;font-size:12px;background:#c1d7ff;color:#005aff;border:none;border-left:1px solid #eeeeee;cursor:pointer;font-weight:500">コンクリ</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- DATA DISPLAY                                                       -->
+<!-- ================================================================ -->
+<div style="margin:48px 0 24px;padding:16px 24px;background:#f2f6ff;border-left:4px solid #005aff;border-radius:0 8px 8px 0">
+  <div style="font-size:18px;font-weight:600;color:#005aff;margin-bottom:4px">Data Display</div>
+  <div style="font-size:13px;color:#757575">データや情報を表示するためのコンポーネント</div>
+</div>
+
+<section id="comp-avatar">
+  <h2>Avatar</h2>
+  <p class="sub-desc">ユーザーのプロフィール画像またはイニシャルを表示</p>
+  <div class="comp-card">
+    <div class="comp-preview" style="gap:16px">
+      <div style="width:24px;height:24px;background:#eeeeee;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:#757575">XS</div>
+      <div style="width:32px;height:32px;background:#c1d7ff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#0048cc">SM</div>
+      <div style="width:40px;height:40px;background:#005aff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#fafafa">田中</div>
+      <div style="width:56px;height:56px;background:#c1d7ff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:600;color:#0048cc">LG</div>
+      <div style="display:flex;margin-left:16px">
+        <div style="width:32px;height:32px;background:#005aff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#fafafa;border:2px solid #fafafa">田</div>
+        <div style="width:32px;height:32px;background:#54bb89;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#fafafa;border:2px solid #fafafa;margin-left:-8px">鈴</div>
+        <div style="width:32px;height:32px;background:#eeeeee;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#757575;border:2px solid #fafafa;margin-left:-8px">+2</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="comp-badge">
+  <h2>Badge</h2>
+  <p class="sub-desc">ステータスやカテゴリを短いテキストで表す小さなラベル</p>
+  <div class="comp-card">
+    <div class="comp-preview">
+      <span class="badge-md" style="background:#e0e0e0;color:#616161">Default</span>
+      <span class="badge-md" style="background:#c1d7ff;color:#0048cc">Brand</span>
+      <span class="badge-md" style="background:#ccebdc;color:#1a6742">Success</span>
+      <span class="badge-md" style="background:#faedc1;color:#8d6d00">Warning</span>
+      <span class="badge-md" style="background:#ffd5d5;color:#993232">Error</span>
+      <span class="badge-md" style="background:#ffdecb;color:#8450c6">Accent</span>
+    </div>
+  </div>
+</section>
+
+<section id="comp-chip">
+  <h2>Chip</h2>
+  <p class="sub-desc">タグ、フィルター、選択済み項目のコンパクト表示</p>
+  <div class="comp-card">
+    <div class="comp-preview" style="gap:12px">
+      <span style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;background:#e0e0e0;border-radius:9999px;font-size:13px">配筋検査</span>
+      <span style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;background:#c1d7ff;color:#0048cc;border-radius:9999px;font-size:13px">フィルター <span class="material-icons-outlined" style="font-size:16px;cursor:pointer">cancel</span></span>
+      <span style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border:1px solid #eeeeee;border-radius:9999px;font-size:13px">Outlined</span>
+      <span style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;background:#ccebdc;color:#1a6742;border-radius:9999px;font-size:13px">Success</span>
+      <span style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;background:#ffd5d5;color:#993232;border-radius:9999px;font-size:13px">Error</span>
+    </div>
+  </div>
+</section>
+
+<section id="comp-divider">
+  <h2>Divider</h2>
+  <p class="sub-desc">コンテンツ間の視覚的な区切り線</p>
+  <div class="comp-card">
+    <div style="background:#fafafa;border:1px solid #e0e0e0;border-radius:8px;padding:16px 24px">
+      <div style="font-size:14px;margin-bottom:12px">セクション 1</div>
+      <hr style="border:none;border-top:1px solid #e0e0e0;margin:0">
+      <div style="font-size:14px;margin-top:12px">セクション 2</div>
+      <div style="display:flex;align-items:center;gap:12px;margin-top:16px">
+        <hr style="border:none;border-top:1px solid #e0e0e0;flex:1">
+        <span style="font-size:12px;color:#9e9e9e">または</span>
+        <hr style="border:none;border-top:1px solid #e0e0e0;flex:1">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="comp-list">
+  <h2>List</h2>
+  <p class="sub-desc">項目を縦に並べて表示するリストコンテナ</p>
+  <div class="comp-card">
+    <div style="background:#fafafa;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden;max-width:400px">
+      <div style="padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #e0e0e0"><span>配筋検査</span><span class="badge-md" style="background:#ccebdc;color:#1a6742;font-size:11px;padding:2px 8px;border-radius:4px">OK</span></div>
+      <div style="padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #e0e0e0"><span>型枠検査</span><span class="badge-md" style="background:#ffd5d5;color:#993232;font-size:11px;padding:2px 8px;border-radius:4px">NG</span></div>
+      <div style="padding:12px 16px;display:flex;justify-content:space-between;align-items:center;background:#c1d7ff"><span style="font-weight:500">コンクリート打設 (selected)</span><span class="badge-md" style="background:#e0e0e0;color:#757575;font-size:11px;padding:2px 8px;border-radius:4px">未実施</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="comp-skeleton">
+  <h2>Skeleton</h2>
+  <p class="sub-desc">コンテンツ読み込み中のプレースホルダー</p>
+  <div class="comp-card">
+    <div class="comp-preview" style="flex-direction:column;gap:12px;max-width:300px">
+      <div style="height:14px;background:linear-gradient(90deg,#e0e0e0 25%,#f5f5f5 50%,#e0e0e0 75%);border-radius:4px;width:60%"></div>
+      <div style="height:14px;background:linear-gradient(90deg,#e0e0e0 25%,#f5f5f5 50%,#e0e0e0 75%);border-radius:4px;width:80%"></div>
+      <div style="height:14px;background:linear-gradient(90deg,#e0e0e0 25%,#f5f5f5 50%,#e0e0e0 75%);border-radius:4px;width:40%"></div>
+      <div style="display:flex;gap:12px;margin-top:8px">
+        <div style="width:40px;height:40px;background:#e0e0e0;border-radius:50%"></div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:8px"><div style="height:12px;background:#e0e0e0;border-radius:4px;width:70%"></div><div style="height:12px;background:#e0e0e0;border-radius:4px;width:50%"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="comp-status-label">
+  <h2>StatusLabel</h2>
+  <p class="sub-desc">検査結果のステータス表示</p>
+  <div class="comp-card">
+    <div class="comp-preview">
+      <span class="status-badge" style="background:#ccebdc;color:#1a6742">OK</span>
+      <span class="status-badge" style="background:#ffd5d5;color:#993232">NG</span>
+      <span class="status-badge" style="background:#e0e0e0;color:#757575">未実施</span>
+      <span class="status-badge" style="background:#c1d7ff;color:#0048cc">実施中</span>
+    </div>
+  </div>
+</section>
+
+<section id="comp-table">
+  <h2>Table</h2>
+  <p class="sub-desc">構造化データを行列で表示</p>
+  <div class="comp-card">
+    <table class="demo-table">
+      <thead><tr style="background:#e0e0e0;color:#616161"><th>検査項目</th><th>結果</th><th>担当者</th></tr></thead>
+      <tbody>
+        <tr style="background:#f5f5f5"><td>配筋検査 A棟</td><td><span style="background:#ccebdc;color:#1a6742;font-size:12px;padding:3px 10px;border-radius:9999px">OK</span></td><td>田中</td></tr>
+        <tr style="background:#f5f5f5"><td>コンクリート打設 B棟</td><td><span style="background:#ffd5d5;color:#993232;font-size:12px;padding:3px 10px;border-radius:9999px">NG</span></td><td>鈴木</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="comp-text">
+  <h2>Text</h2>
+  <p class="sub-desc">タイポグラフィトークンを適用するテキスト表示コンポーネント</p>
+  <div class="comp-card">
+    <div style="background:#f5f5f5;border:1px solid #e0e0e0;border-radius:8px;padding:24px;display:flex;flex-direction:column;gap:8px">
+      <span style="font-size:32px;font-weight:700;letter-spacing:-0.02em">headingLg</span>
+      <span style="font-size:24px;font-weight:700;letter-spacing:-0.02em">headingMd</span>
+      <span style="font-size:20px;font-weight:600;letter-spacing:-0.02em">headingSm</span>
+      <span style="font-size:16px">bodyLg</span>
+      <span style="font-size:14px">bodyMd</span>
+      <span style="font-size:12px;color:#757575">bodySm</span>
+      <span style="font-size:14px;font-weight:500">labelMd</span>
+      <span style="font-size:12px;font-weight:500">labelSm</span>
+    </div>
+  </div>
+</section>
+
+<section id="comp-tooltip">
+  <h2>Tooltip</h2>
+  <p class="sub-desc">ホバー/フォーカス時に補足情報を表示</p>
+  <div class="comp-card">
+    <div class="comp-preview" style="gap:32px;padding:32px 0">
+      <div style="position:relative;display:inline-block">
+        <div style="position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#212121;color:#f5f5f5;padding:6px 12px;border-radius:4px;font-size:12px;white-space:nowrap">削除する<div style="position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#212121"></div></div>
+        <span class="material-icons-outlined" style="color:#757575;font-size:24px;cursor:pointer">delete</span>
+      </div>
+      <div style="position:relative;display:inline-block">
+        <div style="position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#212121;color:#f5f5f5;padding:6px 12px;border-radius:4px;font-size:12px;white-space:nowrap">共有する<div style="position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#212121"></div></div>
+        <span class="material-icons-outlined" style="color:#757575;font-size:24px;cursor:pointer">share</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- FEEDBACK                                                           -->
+<!-- ================================================================ -->
+<div style="margin:48px 0 24px;padding:16px 24px;background:#f2f6ff;border-left:4px solid #005aff;border-radius:0 8px 8px 0">
+  <div style="font-size:18px;font-weight:600;color:#005aff;margin-bottom:4px">Feedback</div>
+  <div style="font-size:13px;color:#757575">ユーザーにフィードバックを伝えるコンポーネント</div>
+</div>
+
+<section id="comp-alert">
+  <h2>Alert</h2>
+  <p class="sub-desc">ユーザーに重要な情報を伝えるメッセージ領域</p>
+  <div class="comp-card">
+    <div class="alert-demo" style="background:#f2f6ff;border-left-color:#005aff;color:#0048cc"><span class="material-icons-outlined">info</span><div><strong>情報</strong><br><span style="font-weight:400">検査スケジュールが更新されました</span></div></div>
+    <div class="alert-demo" style="background:#f4faf7;border-left-color:#54bb89;color:#1a6742"><span class="material-icons-outlined">check_circle</span><div><strong>成功</strong><br><span style="font-weight:400">検査結果を保存しました</span></div></div>
+    <div class="alert-demo" style="background:#fefbf2;border-left-color:#eec430;color:#8d6d00"><span class="material-icons-outlined">warning</span><div><strong>注意</strong><br><span style="font-weight:400">未完了の検査項目があります</span></div></div>
+    <div class="alert-demo" style="background:#fafafa6f6;border-left-color:#ff7474;color:#993232"><span class="material-icons-outlined">error</span><div><strong>エラー</strong><br><span style="font-weight:400">保存に失敗しました</span></div></div>
+  </div>
+</section>
+
+<section id="comp-modal">
+  <h2>Modal</h2>
+  <p class="sub-desc">画面上にオーバーレイ表示されるダイアログ</p>
+  <div class="comp-card">
+    <div style="position:relative;background:rgba(0,0,0,0.15);border-radius:12px;padding:40px;display:flex;justify-content:center">
+      <div style="background:#fafafa;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,0.2);width:400px;max-width:100%">
+        <div style="padding:16px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #e0e0e0"><span style="font-size:16px;font-weight:600">検査項目を削除</span><span class="material-icons-outlined" style="color:#757575;cursor:pointer;font-size:20px">close</span></div>
+        <div style="padding:24px"><span style="font-size:14px;color:#616161">この操作は取り消せません。本当に削除しますか？</span></div>
+        <div style="padding:16px 24px;display:flex;justify-content:flex-end;gap:8px;border-top:1px solid #e0e0e0">
+          <button class="btn" style="background:#e0e0e0;color:#212121">キャンセル</button>
+          <button class="btn" style="background:#FF5454;color:#f5f5f5">削除する</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="comp-progress">
+  <h2>Progress</h2>
+  <p class="sub-desc">進捗率をバーで視覚的に表示</p>
+  <div class="comp-card">
+    <div style="display:flex;flex-direction:column;gap:16px;max-width:400px">
+      <div><div style="font-size:12px;font-weight:500;margin-bottom:4px">検査進捗 75%</div><div class="progress-track" style="background:#eeeeee"><div class="progress-fill" style="width:75%;background:#005aff"></div></div></div>
+      <div><div style="font-size:12px;font-weight:500;margin-bottom:4px;color:#1a6742">完了 100%</div><div class="progress-track" style="background:#eeeeee"><div class="progress-fill" style="width:100%;background:#2CAC6E"></div></div></div>
+      <div><div style="font-size:12px;font-weight:500;margin-bottom:4px;color:#993232">遅延 30%</div><div class="progress-track" style="background:#eeeeee"><div class="progress-fill" style="width:30%;background:#FF5454"></div></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="comp-toast">
+  <h2>Toast</h2>
+  <p class="sub-desc">一時的な通知メッセージ</p>
+  <div class="comp-card">
+    <div class="comp-preview" style="flex-direction:column;align-items:flex-start;gap:12px">
+      <div class="toast-demo" style="background:#212121;color:#f5f5f5"><span class="material-icons-outlined" style="font-size:18px">info</span>検査項目を削除しました</div>
+      <div class="toast-demo" style="background:#ccebdc;color:#1a6742"><span class="material-icons-outlined" style="font-size:18px">check_circle</span>保存しました</div>
+      <div class="toast-demo" style="background:#ffd5d5;color:#993232"><span class="material-icons-outlined" style="font-size:18px">error</span>保存に失敗しました</div>
+    </div>
+  </div>
+</section>
+
+<section id="comp-backdrop">
+  <h2>Backdrop</h2>
+  <p class="sub-desc">画面全体を覆う半透明のオーバーレイ</p>
+  <div class="comp-card">
+    <div style="position:relative;height:120px;background:#f5f5f5;border-radius:8px;overflow:hidden;border:1px solid #e0e0e0">
+      <div style="padding:16px;font-size:13px;color:#757575">背景コンテンツ（検査一覧など）</div>
+      <div style="position:absolute;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;border-radius:8px">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+          <div style="width:32px;height:32px;border:3px solid #fafafa;border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite"></div>
+          <span style="color:#fafafa;font-size:13px">読み込み中…</span>
+        </div>
+      </div>
+    </div>
+    <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+    <div style="font-size:11px;color:#9e9e9e;margin-top:8px">Modal や全画面ローディングの背景として使用</div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- SURFACES                                                           -->
+<!-- ================================================================ -->
+<div style="margin:48px 0 24px;padding:16px 24px;background:#f2f6ff;border-left:4px solid #005aff;border-radius:0 8px 8px 0">
+  <div style="font-size:18px;font-weight:600;color:#005aff;margin-bottom:4px">Surfaces</div>
+  <div style="font-size:13px;color:#757575">コンテンツを収めるコンテナ</div>
+</div>
+
+<section id="comp-accordion">
+  <h2>Accordion</h2>
+  <p class="sub-desc">展開・折りたたみ可能なコンテンツ領域</p>
+  <div class="comp-card">
+    <div style="max-width:500px">
+      <div style="border:1px solid #e0e0e0;border-radius:8px;overflow:hidden">
+        <div style="padding:16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;background:#fafafa"><span style="font-size:14px;font-weight:500">検査基準の詳細</span><span class="material-icons-outlined" style="font-size:20px;color:#757575;transform:rotate(180deg)">expand_more</span></div>
+        <div style="padding:0 16px 16px;font-size:14px;color:#616161;border-top:1px solid #e0e0e0;padding-top:12px">配筋検査の基準値は建築基準法施行令第73条に基づき...</div>
+      </div>
+      <div style="border:1px solid #e0e0e0;border-radius:8px;overflow:hidden;margin-top:8px">
+        <div style="padding:16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;background:#fafafa"><span style="font-size:14px;font-weight:500">是正手順</span><span class="material-icons-outlined" style="font-size:20px;color:#757575">expand_more</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="comp-card">
+  <h2>Card</h2>
+  <p class="sub-desc">関連する情報をグループ化して表示するコンテナ</p>
+  <div class="comp-card">
+    <div class="comp-preview" style="gap:16px">
+      <div style="background:#fafafa;border:1px solid #e0e0e0;border-radius:12px;padding:16px;box-shadow:0px 1px 3px rgba(0,0,0,0.1);width:180px"><div style="font-size:12px;font-weight:500;color:#757575">Default</div><div style="font-size:24px;font-weight:700;margin:4px 0">75%</div></div>
+      <div style="background:#fafafa;border:1px solid #e0e0e0;border-radius:12px;padding:16px;width:180px"><div style="font-size:12px;font-weight:500;color:#757575">Flat</div><div style="font-size:14px;margin:4px 0">影なしカード</div></div>
+      <div style="background:#fafafa;border:2px solid #005aff;border-radius:12px;padding:16px;box-shadow:0px 1px 3px rgba(0,0,0,0.1);width:180px"><div style="font-size:12px;font-weight:500;color:#005aff">Selected</div><div style="font-size:14px;margin:4px 0">選択状態</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="comp-app-bar">
+  <h2>AppBar</h2>
+  <p class="sub-desc">画面上部に固定表示されるアプリケーションバー</p>
+  <div class="comp-card">
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div>
+        <div style="font-size:11px;color:#9e9e9e;margin-bottom:4px">primary</div>
+        <div style="background:#005aff;color:#fafafa;padding:12px 16px;border-radius:8px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 4px rgba(0,0,0,0.1)">
+          <div style="display:flex;align-items:center;gap:12px"><span class="material-icons-outlined" style="font-size:22px;cursor:pointer">menu</span><span style="font-size:16px;font-weight:600">SynQ Inspection</span></div>
+          <div style="display:flex;gap:12px"><span class="material-icons-outlined" style="font-size:22px;cursor:pointer">search</span><span class="material-icons-outlined" style="font-size:22px;cursor:pointer">notifications</span><div style="width:28px;height:28px;background:rgba(255,255,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;cursor:pointer">T</div></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;color:#9e9e9e;margin-bottom:4px">default (white)</div>
+        <div style="background:#fafafa;color:#212121;padding:12px 16px;border-radius:8px;display:flex;align-items:center;justify-content:space-between;border:1px solid #e0e0e0">
+          <div style="display:flex;align-items:center;gap:12px"><span class="material-icons-outlined" style="font-size:22px;color:#757575;cursor:pointer">arrow_back</span><span style="font-size:16px;font-weight:600">検査詳細</span></div>
+          <div style="display:flex;gap:12px"><span class="material-icons-outlined" style="font-size:22px;color:#757575;cursor:pointer">more_vert</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- NAVIGATION                                                         -->
+<!-- ================================================================ -->
+<div style="margin:48px 0 24px;padding:16px 24px;background:#f2f6ff;border-left:4px solid #005aff;border-radius:0 8px 8px 0">
+  <div style="font-size:18px;font-weight:600;color:#005aff;margin-bottom:4px">Navigation</div>
+  <div style="font-size:13px;color:#757575">画面間・セクション間の移動に使うコンポーネント</div>
+</div>
+
+<section id="comp-breadcrumbs">
+  <h2>Breadcrumbs</h2>
+  <p class="sub-desc">現在のページ位置をパスとして表示</p>
+  <div class="comp-card">
+    <div style="display:flex;align-items:center;gap:6px;font-size:14px">
+      <a style="color:#005aff;text-decoration:none;cursor:pointer">ホーム</a>
+      <span class="material-icons-outlined" style="font-size:16px;color:#9e9e9e">navigate_next</span>
+      <a style="color:#005aff;text-decoration:none;cursor:pointer">検査一覧</a>
+      <span class="material-icons-outlined" style="font-size:16px;color:#9e9e9e">navigate_next</span>
+      <span style="font-weight:500;color:#212121">配筋検査 A棟</span>
+    </div>
+  </div>
+</section>
+
+<section id="comp-drawer">
+  <h2>Drawer</h2>
+  <p class="sub-desc">画面端からスライドインするパネル</p>
+  <div class="comp-card">
+    <div style="display:flex;height:200px;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden">
+      <div style="width:220px;background:#fafafa;border-right:1px solid #e0e0e0;padding:16px;box-shadow:2px 0 8px rgba(0,0,0,0.05)">
+        <div style="font-size:12px;font-weight:600;color:#757575;margin-bottom:12px">NAVIGATION</div>
+        <div style="padding:8px 12px;background:#f2f6ff;color:#005aff;border-radius:6px;font-size:13px;font-weight:500;margin-bottom:4px;display:flex;align-items:center;gap:8px"><span class="material-icons-outlined" style="font-size:18px">dashboard</span>ダッシュボード</div>
+        <div style="padding:8px 12px;font-size:13px;color:#616161;margin-bottom:4px;display:flex;align-items:center;gap:8px"><span class="material-icons-outlined" style="font-size:18px">checklist</span>検査一覧</div>
+        <div style="padding:8px 12px;font-size:13px;color:#616161;display:flex;align-items:center;gap:8px"><span class="material-icons-outlined" style="font-size:18px">settings</span>設定</div>
+      </div>
+      <div style="flex:1;background:#f5f5f5;padding:16px;font-size:13px;color:#9e9e9e">メインコンテンツ</div>
+    </div>
+  </div>
+</section>
+
+<section id="comp-link">
+  <h2>Link</h2>
+  <p class="sub-desc">テキストリンク。ページ遷移や外部リンクに使用</p>
+  <div class="comp-card">
+    <div class="comp-preview" style="gap:24px">
+      <a style="color:#005aff;text-decoration:none;cursor:pointer;font-size:14px">検査一覧へ</a>
+      <a style="color:#005aff;text-decoration:underline;cursor:pointer;font-size:14px">常時下線</a>
+      <a style="color:#005aff;text-decoration:none;cursor:pointer;font-size:14px;display:inline-flex;align-items:center;gap:4px">外部サイト<span class="material-icons-outlined" style="font-size:14px">open_in_new</span></a>
+      <a style="color:#212121;text-decoration:none;cursor:pointer;font-size:14px">Subtle リンク</a>
+    </div>
+  </div>
+</section>
+
+<section id="comp-menu">
+  <h2>Menu</h2>
+  <p class="sub-desc">クリック時に表示される選択肢リスト</p>
+  <div class="comp-card">
+    <div style="position:relative;display:inline-block">
+      <button class="btn" style="background:#e0e0e0;color:#212121;display:flex;align-items:center;gap:4px"><span class="material-icons-outlined" style="font-size:18px">more_vert</span></button>
+      <div style="position:absolute;top:100%;left:0;margin-top:4px;background:#fafafa;border:1px solid #e0e0e0;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);min-width:180px;z-index:10;overflow:hidden">
+        <div style="padding:8px 16px;font-size:14px;display:flex;align-items:center;gap:8px;cursor:pointer"><span class="material-icons-outlined" style="font-size:18px;color:#757575">edit</span>編集</div>
+        <div style="padding:8px 16px;font-size:14px;display:flex;align-items:center;gap:8px;cursor:pointer"><span class="material-icons-outlined" style="font-size:18px;color:#757575">content_copy</span>複製</div>
+        <hr style="border:none;border-top:1px solid #e0e0e0;margin:4px 0">
+        <div style="padding:8px 16px;font-size:14px;display:flex;align-items:center;gap:8px;cursor:pointer;color:#993232"><span class="material-icons-outlined" style="font-size:18px">delete</span>削除</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="comp-pagination">
+  <h2>Pagination</h2>
+  <p class="sub-desc">ページ番号による大量データのページ送り</p>
+  <div class="comp-card">
+    <div style="display:flex;align-items:center;gap:4px">
+      <span style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:8px;cursor:pointer;color:#757575"><span class="material-icons-outlined" style="font-size:20px">navigate_before</span></span>
+      <span style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:8px;cursor:pointer;font-size:14px;background:#005aff;color:#fafafa;font-weight:500">1</span>
+      <span style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:8px;cursor:pointer;font-size:14px;color:#616161">2</span>
+      <span style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:8px;cursor:pointer;font-size:14px;color:#616161">3</span>
+      <span style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:14px;color:#9e9e9e">...</span>
+      <span style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:8px;cursor:pointer;font-size:14px;color:#616161">10</span>
+      <span style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:8px;cursor:pointer;color:#757575"><span class="material-icons-outlined" style="font-size:20px">navigate_next</span></span>
+    </div>
+  </div>
+</section>
+
+<section id="comp-stepper">
+  <h2>Stepper</h2>
+  <p class="sub-desc">複数ステップの進行状況を表示</p>
+  <div class="comp-card">
+    <div style="display:flex;align-items:center;gap:0;max-width:500px">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+        <div style="width:32px;height:32px;background:#005aff;border-radius:50%;display:flex;align-items:center;justify-content:center"><span class="material-icons-outlined" style="font-size:18px;color:#fafafa">check</span></div>
+        <span style="font-size:12px;font-weight:500;color:#005aff">基本情報</span>
+      </div>
+      <div style="flex:1;height:2px;background:#005aff;margin:0 8px 20px"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+        <div style="width:32px;height:32px;background:#005aff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#fafafa">2</div>
+        <span style="font-size:12px;font-weight:500;color:#005aff">検査項目</span>
+      </div>
+      <div style="flex:1;height:2px;background:#eeeeee;margin:0 8px 20px"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+        <div style="width:32px;height:32px;background:#e0e0e0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#757575">3</div>
+        <span style="font-size:12px;color:#757575">確認</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="comp-tabs">
+  <h2>Tabs</h2>
+  <p class="sub-desc">コンテンツをタブで切り替える</p>
+  <div class="comp-card">
+    <div style="border-bottom:1px solid #e0e0e0;display:flex;gap:0;margin-bottom:12px">
+      <span style="padding:10px 16px;font-size:14px;font-weight:500;color:#005aff;border-bottom:2px solid #005aff;cursor:pointer">すべて <span style="background:#005aff;color:#fafafa;font-size:11px;padding:1px 6px;border-radius:9999px;margin-left:4px">24</span></span>
+      <span style="padding:10px 16px;font-size:14px;color:#757575;cursor:pointer">未着手 <span style="background:#e0e0e0;color:#757575;font-size:11px;padding:1px 6px;border-radius:9999px;margin-left:4px">8</span></span>
+      <span style="padding:10px 16px;font-size:14px;color:#757575;cursor:pointer">完了</span>
+    </div>
+    <div style="font-size:13px;color:#9e9e9e;padding:8px 0">タブパネルのコンテンツがここに表示される</div>
+  </div>
+</section>
+
+<section id="comp-bottom-navigation">
+  <h2>BottomNavigation</h2>
+  <p class="sub-desc">モバイル画面下部に固定表示されるナビゲーションバー</p>
+  <div class="comp-card">
+    <div style="max-width:375px;margin:0 auto">
+      <div style="background:#f5f5f5;border:1px solid #e0e0e0;border-radius:12px;overflow:hidden;height:200px;position:relative">
+        <div style="padding:16px;font-size:13px;color:#9e9e9e">画面コンテンツ</div>
+        <div style="position:absolute;bottom:0;left:0;right:0;background:#fafafa;box-shadow:0 -1px 4px rgba(0,0,0,0.08);display:flex;justify-content:space-around;padding:8px 0 12px">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer"><span class="material-icons-outlined" style="font-size:24px;color:#005aff">home</span><span style="font-size:11px;color:#005aff;font-weight:500">ホーム</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;position:relative"><span class="material-icons-outlined" style="font-size:24px;color:#757575">checklist</span><span style="position:absolute;top:-2px;right:-6px;background:#E53935;color:#fafafa;font-size:9px;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:600">3</span><span style="font-size:11px;color:#757575">検査</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer"><span class="material-icons-outlined" style="font-size:24px;color:#757575">description</span><span style="font-size:11px;color:#757575">レポート</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer"><span class="material-icons-outlined" style="font-size:24px;color:#757575">settings</span><span style="font-size:11px;color:#757575">設定</span></div>
+        </div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:#9e9e9e;margin-top:8px">3〜5項目。badge で未読・通知数を表示</div>
+  </div>
+</section>
+
+<section id="comp-speed-dial">
+  <h2>SpeedDial</h2>
+  <p class="sub-desc">FAB をタップすると複数のアクションが展開される</p>
+  <div class="comp-card">
+    <div style="display:flex;gap:40px;align-items:flex-end">
+      <div style="text-align:center">
+        <div style="font-size:11px;color:#9e9e9e;margin-bottom:8px">closed</div>
+        <div style="width:56px;height:56px;background:#005aff;border-radius:16px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 5px rgba(0,0,0,0.2);cursor:pointer"><span class="material-icons-outlined" style="color:#fafafa;font-size:24px">add</span></div>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:11px;color:#9e9e9e;margin-bottom:8px">open</div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="background:#212121;color:#fafafa;font-size:11px;padding:4px 8px;border-radius:4px;white-space:nowrap">検査項目を追加</span>
+            <div style="width:40px;height:40px;background:#fafafa;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 4px rgba(0,0,0,0.15)"><span class="material-icons-outlined" style="font-size:20px;color:#757575">checklist</span></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="background:#212121;color:#fafafa;font-size:11px;padding:4px 8px;border-radius:4px;white-space:nowrap">メモを追加</span>
+            <div style="width:40px;height:40px;background:#fafafa;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 4px rgba(0,0,0,0.15)"><span class="material-icons-outlined" style="font-size:20px;color:#757575">note_add</span></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="background:#212121;color:#fafafa;font-size:11px;padding:4px 8px;border-radius:4px;white-space:nowrap">写真を追加</span>
+            <div style="width:40px;height:40px;background:#fafafa;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 4px rgba(0,0,0,0.15)"><span class="material-icons-outlined" style="font-size:20px;color:#757575">camera_alt</span></div>
+          </div>
+          <div style="width:56px;height:56px;background:#005aff;border-radius:16px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 5px rgba(0,0,0,0.2);cursor:pointer"><span class="material-icons-outlined" style="color:#fafafa;font-size:24px">close</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- LAYOUT                                                             -->
+<!-- ================================================================ -->
+<div style="margin:48px 0 24px;padding:16px 24px;background:#f2f6ff;border-left:4px solid #005aff;border-radius:0 8px 8px 0">
+  <div style="font-size:18px;font-weight:600;color:#005aff;margin-bottom:4px">Layout</div>
+  <div style="font-size:13px;color:#757575">ページ構造・配置を制御するコンポーネント</div>
+</div>
+
+<section id="comp-container">
+  <h2>Container</h2>
+  <p class="sub-desc">コンテンツの最大幅を制限し中央揃えにする</p>
+  <div class="comp-card">
+    <div style="background:#f5f5f5;border:1px dashed #eeeeee;border-radius:8px;padding:16px;text-align:center">
+      <div style="background:#c1d7ff;border-radius:8px;padding:12px;max-width:500px;margin:0 auto;font-size:13px;color:#0048cc">maxWidth: lg (1200px)</div>
+    </div>
+  </div>
+</section>
+
+<section id="comp-grid">
+  <h2>Grid</h2>
+  <p class="sub-desc">12カラムグリッドシステム</p>
+  <div class="comp-card">
+    <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:4px;margin-bottom:8px">
+      <div style="grid-column:span 4;background:#c1d7ff;border-radius:4px;padding:8px;text-align:center;font-size:11px;color:#0048cc">4 cols</div>
+      <div style="grid-column:span 4;background:#c1d7ff;border-radius:4px;padding:8px;text-align:center;font-size:11px;color:#0048cc">4 cols</div>
+      <div style="grid-column:span 4;background:#c1d7ff;border-radius:4px;padding:8px;text-align:center;font-size:11px;color:#0048cc">4 cols</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:4px">
+      <div style="grid-column:span 6;background:#c1d7ff;border-radius:4px;padding:8px;text-align:center;font-size:11px;color:#0048cc">6 cols</div>
+      <div style="grid-column:span 6;background:#c1d7ff;border-radius:4px;padding:8px;text-align:center;font-size:11px;color:#0048cc">6 cols</div>
+    </div>
+  </div>
+</section>
+
+<section id="comp-stack">
+  <h2>Stack</h2>
+  <p class="sub-desc">子要素を垂直または水平に等間隔で並べる</p>
+  <div class="comp-card">
+    <div class="comp-preview" style="gap:24px">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="background:#c1d7ff;border-radius:4px;padding:8px 16px;font-size:12px;color:#0048cc">Item 1</div>
+        <div style="background:#c1d7ff;border-radius:4px;padding:8px 16px;font-size:12px;color:#0048cc">Item 2</div>
+        <div style="background:#c1d7ff;border-radius:4px;padding:8px 16px;font-size:12px;color:#0048cc">Item 3</div>
+        <span style="font-size:11px;color:#9e9e9e">direction: column</span>
+      </div>
+      <div style="display:flex;flex-direction:row;gap:8px;align-items:flex-start">
+        <div style="background:#c1d7ff;border-radius:4px;padding:8px 16px;font-size:12px;color:#0048cc">Item 1</div>
+        <div style="background:#c1d7ff;border-radius:4px;padding:8px 16px;font-size:12px;color:#0048cc">Item 2</div>
+        <div style="background:#c1d7ff;border-radius:4px;padding:8px 16px;font-size:12px;color:#0048cc">Item 3</div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:#9e9e9e;margin-top:4px">左: column / 右: row</div>
+  </div>
+</section>
+
+<section id="comp-image-list">
+  <h2>ImageList</h2>
+  <p class="sub-desc">画像をグリッド状に並べて表示する</p>
+  <div class="comp-card">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+      <div style="position:relative;border-radius:8px;overflow:hidden;aspect-ratio:1;background:#c1d7ff">
+        <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center"><span class="material-icons-outlined" style="font-size:32px;color:#0048cc">image</span></div>
+        <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.6));padding:8px 10px 6px">
+          <div style="color:#fafafa;font-size:11px;font-weight:500">配筋検査</div>
+          <div style="color:rgba(255,255,255,0.7);font-size:10px">2026-03-19</div>
+        </div>
+      </div>
+      <div style="position:relative;border-radius:8px;overflow:hidden;aspect-ratio:1;background:#d4edda">
+        <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center"><span class="material-icons-outlined" style="font-size:32px;color:#1a6742">image</span></div>
+        <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.6));padding:8px 10px 6px">
+          <div style="color:#fafafa;font-size:11px;font-weight:500">型枠検査</div>
+          <div style="color:rgba(255,255,255,0.7);font-size:10px">2026-03-18</div>
+        </div>
+      </div>
+      <div style="position:relative;border-radius:8px;overflow:hidden;aspect-ratio:1;background:#e0e0e0">
+        <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center"><span class="material-icons-outlined" style="font-size:32px;color:#757575">image</span></div>
+      </div>
+      <div style="position:relative;border-radius:8px;overflow:hidden;aspect-ratio:1;background:#fafafa3cd">
+        <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center"><span class="material-icons-outlined" style="font-size:32px;color:#856404">image</span></div>
+      </div>
+      <div style="position:relative;border-radius:8px;overflow:hidden;aspect-ratio:1;background:#ffd5d5">
+        <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center"><span class="material-icons-outlined" style="font-size:32px;color:#993232">image</span></div>
+      </div>
+      <div style="position:relative;border-radius:8px;overflow:hidden;aspect-ratio:1;background:#c1d7ff">
+        <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center"><span class="material-icons-outlined" style="font-size:32px;color:#0048cc">image</span></div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:#9e9e9e;margin-top:8px">variant: standard / quilted / woven / masonry。ImageListItemBar でキャプション表示</div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- UTILS                                                               -->
+<!-- ================================================================ -->
+<div style="margin:48px 0 24px;padding:16px 24px;background:#f2f6ff;border-left:4px solid #005aff;border-radius:0 8px 8px 0">
+  <div style="font-size:18px;font-weight:600;color:#005aff;margin-bottom:4px">Utils</div>
+  <div style="font-size:13px;color:#757575">ユーティリティコンポーネント</div>
+</div>
+
+<section id="comp-popover">
+  <h2>Popover</h2>
+  <p class="sub-desc">任意の要素に紐づけて表示されるフローティングコンテンツ</p>
+  <div class="comp-card">
+    <div style="display:flex;align-items:flex-start;gap:24px">
+      <div style="position:relative">
+        <button style="padding:8px 16px;font-size:13px;background:#005aff;color:#fafafa;border:none;border-radius:8px;cursor:pointer">プロフィール表示</button>
+        <div style="position:absolute;top:calc(100% + 8px);left:0;background:#fafafa;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.15);padding:16px;min-width:200px;z-index:10">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+            <div style="width:40px;height:40px;background:#c1d7ff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#0048cc">田</div>
+            <div><div style="font-size:14px;font-weight:500">田中太郎</div><div style="font-size:12px;color:#757575">検査担当</div></div>
+          </div>
+          <div style="border-top:1px solid #e0e0e0;padding-top:8px;display:flex;gap:8px">
+            <button style="padding:4px 12px;font-size:12px;background:#f2f6ff;color:#005aff;border:1px solid #005aff;border-radius:6px;cursor:pointer">メッセージ</button>
+            <button style="padding:4px 12px;font-size:12px;background:#fafafa;color:#757575;border:1px solid #eeeeee;border-radius:6px;cursor:pointer">詳細</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:#9e9e9e;margin-top:8px">Tooltip より複雑なリッチコンテンツに使用。Escape で閉じる</div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- PRODUCT COMPONENTS                                                -->
+<!-- ================================================================ -->
+<div style="margin:48px 0 24px;padding:16px 24px;background:#f2f6ff;border-left:4px solid #005aff;border-radius:0 8px 8px 0">
+  <div style="font-size:18px;font-weight:600;color:#005aff;margin-bottom:4px">Product Components</div>
+  <div style="font-size:13px;color:#757575">基本コンポーネントを組み合わせたプロダクト固有のコンポーネント</div>
+</div>
+
+<!-- InspectionCard -->
+<section id="comp-inspection-card">
+  <h2>InspectionCard</h2>
+  <p class="sub-desc">検査項目1件を表示するカード</p>
+  <div class="comp-card">
+    <div class="comp-preview" style="gap:16px;align-items:stretch">
+      <div style="background:#fafafa;border:1px solid #e0e0e0;border-radius:12px;padding:16px;box-shadow:0px 1px 3px rgba(0,0,0,0.1);width:260px;cursor:pointer">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><span style="font-size:14px;font-weight:500">配筋検査</span><span style="background:#c1d7ff;color:#0048cc;font-size:11px;padding:3px 10px;border-radius:9999px">実施中</span></div>
+        <div style="font-size:12px;color:#757575;margin-bottom:8px">A棟 3F</div>
+        <div class="progress-track" style="background:#eeeeee;margin-bottom:8px"><div class="progress-fill" style="width:60%;background:#005aff"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:#9e9e9e"><span>田中</span><span>2026-03-19</span></div>
+      </div>
+      <div style="background:#fafafa;border:1px solid #e0e0e0;border-radius:12px;padding:16px;box-shadow:0px 1px 3px rgba(0,0,0,0.1);width:260px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><span style="font-size:14px;font-weight:500">型枠検査</span><span style="background:#ccebdc;color:#1a6742;font-size:11px;padding:3px 10px;border-radius:9999px">OK</span></div>
+        <div style="font-size:12px;color:#757575;margin-bottom:8px">B棟 1F</div>
+        <div class="progress-track" style="background:#eeeeee;margin-bottom:8px"><div class="progress-fill" style="width:100%;background:#2CAC6E"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:#9e9e9e"><span>鈴木</span><span>2026-03-18</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- InspectionRow -->
+<section id="comp-inspection-row">
+  <h2>InspectionRow</h2>
+  <p class="sub-desc">検査結果テーブルの1行（PC管理画面向け）</p>
+  <div class="comp-card">
+    <p style="font-size:12px;color:#9e9e9e;margin-bottom:8px">Table コンポーネント内で使用。モバイルでは InspectionCard に切り替え。</p>
+  </div>
+</section>
+
+<!-- DashboardWidget -->
+<section id="comp-dashboard-widget">
+  <h2>DashboardWidget</h2>
+  <p class="sub-desc">ダッシュボードのKPIカード</p>
+  <div class="comp-card">
+    <div class="comp-preview" style="gap:16px;align-items:stretch">
+      <div style="background:#fafafa;border:1px solid #e0e0e0;border-radius:12px;padding:16px;box-shadow:0px 1px 3px rgba(0,0,0,0.1);width:200px">
+        <div style="font-size:11px;font-weight:500;color:#9e9e9e;margin-bottom:4px">検査完了率</div>
+        <div style="display:flex;align-items:baseline;gap:4px"><span style="font-size:28px;font-weight:700">75</span><span style="font-size:14px;color:#9e9e9e">%</span></div>
+        <span style="background:#ccebdc;color:#1a6742;font-size:10px;padding:2px 6px;border-radius:4px">+5%</span>
+        <div class="progress-track" style="background:#eeeeee;margin-top:8px"><div class="progress-fill" style="width:75%;background:#005aff"></div></div>
+      </div>
+      <div style="background:#fafafa;border:1px solid #e0e0e0;border-radius:12px;padding:16px;box-shadow:0px 1px 3px rgba(0,0,0,0.1);width:200px">
+        <div style="font-size:11px;font-weight:500;color:#9e9e9e;margin-bottom:4px">本日の検査</div>
+        <div style="display:flex;align-items:baseline;gap:4px"><span style="font-size:28px;font-weight:700">12</span><span style="font-size:14px;color:#9e9e9e">件</span></div>
+      </div>
+      <div style="background:#fafafa;border:1px solid #e0e0e0;border-radius:12px;padding:16px;box-shadow:0px 1px 3px rgba(0,0,0,0.1);width:200px">
+        <div style="font-size:11px;font-weight:500;color:#9e9e9e;margin-bottom:4px">是正未対応</div>
+        <div style="display:flex;align-items:baseline;gap:4px"><span style="font-size:28px;font-weight:700">3</span><span style="font-size:14px;color:#9e9e9e">件</span></div>
+        <span style="background:#ffd5d5;color:#993232;font-size:10px;padding:2px 6px;border-radius:4px">-2件</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+  </main>
+  <footer style="text-align:center;padding:32px;font-size:12px;color:var(--page-text-muted);border-top:1px solid var(--page-border)">
+    SynQ Design System — Updated 2026-03-19
+  </footer>
+</div>
+
+<script>
+// Theme toggle
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.dataset.theme === 'dark';
+  html.dataset.theme = isDark ? '' : 'dark';
+  document.getElementById('themeIcon').textContent = isDark ? 'dark_mode' : 'light_mode';
+  document.getElementById('themeLabel').textContent = isDark ? 'Dark' : 'Light';
+  localStorage.setItem('ds-theme', isDark ? 'light' : 'dark');
+}
+// Restore saved theme
+(function() {
+  const saved = localStorage.getItem('ds-theme');
+  if (saved === 'dark') {
+    document.documentElement.dataset.theme = 'dark';
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('themeIcon').textContent = 'light_mode';
+      document.getElementById('themeLabel').textContent = 'Light';
+    });
+  }
+})();
+
+// Sidebar nav
+function toggleGroup(btn) { btn.closest('.nav-group').classList.toggle('collapsed'); }
+const navItems = document.querySelectorAll('.nav-item');
+const sections = [];
+navItems.forEach(item => { const id = item.getAttribute('href').slice(1); const el = document.getElementById(id); if (el) sections.push({ id, el, link: item }); });
+function updateActiveNav() { const st = window.scrollY + 120; let cur = sections[0]; for (const s of sections) { if (s.el.offsetTop <= st) cur = s; } navItems.forEach(n => n.classList.remove('active')); if (cur) cur.link.classList.add('active'); }
+window.addEventListener('scroll', updateActiveNav);
+window.addEventListener('load', updateActiveNav);
+navItems.forEach(item => { item.addEventListener('click', e => { e.preventDefault(); const el = document.getElementById(item.getAttribute('href').slice(1)); if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); item.closest('.nav-group')?.classList.remove('collapsed'); } }); });
+</script>
+</body>
+</html>
