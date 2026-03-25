@@ -1,0 +1,151 @@
+{
+  "name": "RemoteMediaDetailModal",
+  "description": "写真/動画の全画面詳細表示モーダル。ヘッダー（タイトル+ページネーション+閉じる）、アクションバー（やりとり/ダウンロード/共有/削除）、メディアビューア、フッター（ファイルサイズ+操作コントロール）を内包。",
+  "category": "product",
+  "composedOf": ["Backdrop", "Text", "Button", "RemoteVideoPlayerControls"],
+  "_figmaSource": "SR-PRO > photoDetailModal (node 24901:386278, 25958:207497)",
+
+  "structure": {
+    "overlay": {
+      "description": "半透明オーバーレイ（Backdrop使用）",
+      "bg": "rgba(0,0,0,0.5)",
+      "padding": "32px"
+    },
+    "container": {
+      "description": "モーダル本体",
+      "bg": "#000000",
+      "borderRadius": "6px",
+      "overflow": "clip",
+      "width": "100%",
+      "height": "100%",
+      "layout": "flex-col"
+    },
+    "header": {
+      "description": "3カラムヘッダー（タイトル / ページネーション / 閉じる）",
+      "bg": "{bg.surface}",
+      "borderBottom": "1px solid {border.default}",
+      "padding": "16px 12px",
+      "layout": "flex, align-items center",
+      "left": {
+        "description": "タイトル（「写真」or「録画」）",
+        "flex": "1 0 0",
+        "typography": "{typography.bodyLg}(16px)",
+        "fontWeight": "bold",
+        "color": "{text.primary}"
+      },
+      "center": {
+        "description": "ページネーション",
+        "flex": "1 0 0",
+        "layout": "flex, gap 8px, align-items center, justify-content center",
+        "prevIcon": "chevron_left, 24px, {text.primary}",
+        "counter": "{typography.bodyMd}(14px), {text.primary}",
+        "nextIcon": "chevron_right, 24px, {text.primary}"
+      },
+      "right": {
+        "description": "閉じるボタン",
+        "flex": "1 0 0",
+        "layout": "flex, justify-content flex-end",
+        "closeIcon": "close, 24px, {text.primary}"
+      }
+    },
+    "actionBar": {
+      "description": "メディアアクションボタン群",
+      "bg": "{bg.surface}",
+      "padding": "12px",
+      "layout": "flex, gap 16px, align-items center",
+      "actionButton": {
+        "description": "アクションボタン（アイコン+テキスト）",
+        "layout": "flex, gap 4px, align-items center",
+        "icon": "20px, {text.tertiary}",
+        "text": "{typography.bodyMd}(14px), {text.tertiary}",
+        "cursor": "pointer"
+      },
+      "divider": {
+        "description": "削除前の区切り線",
+        "width": "1px",
+        "height": "20px",
+        "bg": "{border.default}"
+      },
+      "actions": ["edit(やりとり)", "download(ダウンロード)", "share(共有)", "|", "delete(削除)"]
+    },
+    "mediaViewer": {
+      "description": "メディア表示エリア",
+      "flex": "1",
+      "bg": "#000000（動画） / #F0F1F2（写真）",
+      "layout": "flex, align-items center, justify-content center",
+      "image": "object-fit contain, max-width 100%, max-height 100%",
+      "drawingOverlay": "描画アノテーション（青パス #448AFF / 白パス #FFFFFF）"
+    },
+    "footer": {
+      "description": "フッター（ファイルサイズ + 写真操作コントロール）",
+      "bg": "{bg.surface}",
+      "height": "48px",
+      "padding": "16px 12px",
+      "layout": "flex, align-items center, justify-content space-between",
+      "fileSize": "{typography.bodyMd}(14px), {text.tertiary}",
+      "photoControls": {
+        "description": "写真操作（写真モード時のみ表示）",
+        "layout": "flex, gap 8px",
+        "icons": ["fullscreen_exit(24px)", "zoom_in(24px)", "zoom_out(24px)", "rotate_right(24px)"],
+        "color": "{text.primary}"
+      }
+    }
+  },
+
+  "props": {
+    "type": { "type": "enum", "values": ["photo", "video"], "required": true, "description": "メディアタイプ" },
+    "title": { "type": "string", "default": "'写真'", "description": "モーダルタイトル（写真 or 録画）" },
+    "mediaUrl": { "type": "string", "required": true, "description": "メディアURL" },
+    "currentIndex": { "type": "number", "required": true, "description": "現在のインデックス" },
+    "totalCount": { "type": "number", "required": true, "description": "総数" },
+    "fileSize": { "type": "string", "description": "ファイルサイズ表示（例: 8.0MB）" },
+    "onClose": { "type": "function", "description": "閉じるコールバック" },
+    "onPrevious": { "type": "function", "description": "前へ" },
+    "onNext": { "type": "function", "description": "次へ" },
+    "onComment": { "type": "function", "description": "やりとり" },
+    "onDownload": { "type": "function", "description": "ダウンロード" },
+    "onShare": { "type": "function", "description": "共有" },
+    "onDelete": { "type": "function", "description": "削除" },
+    "onZoomIn": { "type": "function", "description": "写真モードのみ: ズームイン" },
+    "onZoomOut": { "type": "function", "description": "写真モードのみ: ズームアウト" },
+    "onRotate": { "type": "function", "description": "写真モードのみ: 回転" },
+    "onFullscreen": { "type": "function", "description": "フルスクリーン切替" }
+  },
+
+  "_figmaColorMapping": {
+    "#000000": "Figma cl.background → Remote固有のメディアビューア背景（動画モード）",
+    "#F0F1F2": "Figma sf.rug → DS {bg.muted} に最寄り（写真モード）",
+    "#448AFF": "Figma dwg.path.blue → Remote固有の描画アノテーション色",
+    "rgba(0,0,0,0.5)": "モーダルオーバーレイ"
+  },
+
+  "accessibility": {
+    "overlay": "role=dialog, aria-modal=true, aria-label='メディア詳細'",
+    "closeButton": "aria-label='閉じる'",
+    "pagination": "aria-label='N / M 件目'",
+    "actionButtons": "各ボタンに aria-label",
+    "keyboard": "Escape=閉じる, ←→=前後ナビ"
+  },
+
+  "usage": {
+    "do": [
+      "アルバムの写真/動画カードクリック時にオーバーレイ表示",
+      "写真モード: フッターにズーム/回転コントロール表示",
+      "動画モード: RemoteVideoPlayerControls をメディアエリア下部に配置"
+    ],
+    "doNot": [
+      "通話履歴の写真/録画プレビューには使わない（インラインで表示）"
+    ]
+  },
+
+  "examples": [
+    {
+      "name": "写真詳細",
+      "code": "<RemoteMediaDetailModal type=\"photo\" title=\"写真\" mediaUrl=\"...\" currentIndex={18} totalCount={1974} fileSize=\"3.2MB\" />"
+    },
+    {
+      "name": "動画詳細",
+      "code": "<RemoteMediaDetailModal type=\"video\" title=\"録画\" mediaUrl=\"...\" currentIndex={5} totalCount={42} fileSize=\"8.0MB\" />"
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "name": "RemoteCallSummary",
+  "description": "通話のAI要約カード。トピックタイトル+箇条書き本文+タイムスタンプ+「詳細を見る」ボタン。",
+  "category": "product",
+  "composedOf": ["Text", "Button", "Divider"],
+  "_figmaSource": "SR-PRO > summarySection (node 31341:586261)",
+
+  "structure": {
+    "container": {
+      "description": "ボーダー付きカード",
+      "border": "1px solid #BDBDBD",
+      "borderRadius": "4px",
+      "padding": "16px",
+      "layout": "flex-col, align-items flex-end, width 100%"
+    },
+    "title": {
+      "description": "トピックタイトル",
+      "typography": "{typography.bodyMd}(14px)",
+      "fontWeight": "bold",
+      "color": "{text.primary}",
+      "width": "100%"
+    },
+    "bodyRow": {
+      "description": "箇条書き本文 + タイムスタンプの横並び",
+      "layout": "flex, gap 8px, align-items start, width 100%",
+      "bodyText": "{typography.bodySm}(12px), {text.primary}, flex 1",
+      "timestamp": "{typography.bodySm}(12px), {text.brand}, nowrap, flex-shrink 0"
+    },
+    "divider": {
+      "description": "区切り線",
+      "height": "1px",
+      "bg": "{border.default}",
+      "width": "100%"
+    },
+    "moreTopics": {
+      "description": "追加トピック数の表示",
+      "typography": "10px",
+      "color": "{text.tertiary}",
+      "textAlign": "center",
+      "width": "100%"
+    },
+    "detailButton": {
+      "description": "詳細を見るボタン（右寄せ）",
+      "component": "Button(primary)",
+      "height": "36px",
+      "padding": "0 16px",
+      "borderRadius": "2px",
+      "text": "「詳細を見る」, 12px bold, {text.inverse}",
+      "bg": "{bg.brand}",
+      "shadow": "{elevation.button}"
+    }
+  },
+
+  "props": {
+    "title": { "type": "string", "required": true, "description": "トピックタイトル（例: 音声確認と発話テスト）" },
+    "body": { "type": "string", "required": true, "description": "箇条書き本文" },
+    "timestamp": { "type": "string", "required": true, "description": "タイムスタンプ（例: 13:56）" },
+    "moreCount": { "type": "number", "default": 0, "description": "追加トピック数（0なら非表示）" },
+    "onDetailClick": { "type": "function", "description": "詳細を見るボタンクリック" }
+  },
+
+  "accessibility": {
+    "detailButton": "aria-label='要約の詳細を見る'"
+  },
+
+  "usage": {
+    "do": [
+      "RemoteCallHistoryDetail の要約セクション内に配置",
+      "AI要約が生成済みの場合のみ表示"
+    ],
+    "doNot": [
+      "要約がない通話には表示しない"
+    ]
+  },
+
+  "examples": [
+    {
+      "name": "基本",
+      "code": "<RemoteCallSummary title=\"音声確認と発話テスト\" body=\"・発声練習として「あいうえお」が読み上げられました。\" timestamp=\"13:56\" moreCount={2} />"
+    }
+  ]
+}

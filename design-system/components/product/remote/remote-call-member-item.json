@@ -1,0 +1,65 @@
+{
+  "name": "RemoteCallMemberItem",
+  "description": "通話相手リストの1行。アバター+名前+「選択」ボタン。ダークテーマ。",
+  "category": "product",
+  "composedOf": ["Avatar", "Text", "Button"],
+  "_figmaSource": "SR-PRO > callListMember (node 23356:79933)",
+
+  "structure": {
+    "container": {
+      "description": "リストアイテム",
+      "layout": "flex, align-items center, justify-content space-between",
+      "padding": "8px 16px 9px",
+      "borderBottom": "1px solid #C4C6CA"
+    },
+    "memberInfo": {
+      "description": "アバター+名前",
+      "layout": "flex, gap 8px, align-items center",
+      "avatar": "Avatar(md, 40px)",
+      "name": "{typography.bodyMd}(14px), #F3F8FF"
+    },
+    "selectButton": {
+      "description": "選択ボタン",
+      "component": "Button(primary)",
+      "height": "48px",
+      "padding": "0 16px",
+      "borderRadius": "2px",
+      "text": "「選択」, 14px bold, {text.inverse}"
+    }
+  },
+
+  "props": {
+    "name": { "type": "string", "required": true, "description": "メンバー名" },
+    "avatarText": { "type": "string", "description": "アバター表示テキスト（姓の先頭2文字）" },
+    "avatarColor": { "type": "string", "default": "'#DBF89D'", "description": "アバター背景色" },
+    "onSelect": { "type": "function", "description": "選択ボタンのコールバック" }
+  },
+
+  "_figmaColorMapping": {
+    "#C4C6CA": "Figma st.hover → リストアイテム区切り線",
+    "#F3F8FF": "Figma sf.hover → ダーク背景での名前テキスト色",
+    "#DBF89D": "アバター背景色（ユーザーごとに異なる）"
+  },
+
+  "accessibility": {
+    "container": "role=listitem",
+    "selectButton": "aria-label='[名前]を選択'"
+  },
+
+  "usage": {
+    "do": [
+      "RemoteCallMemberList 内のリストアイテムとして使用",
+      "最後のアイテムは borderBottom なし"
+    ],
+    "doNot": [
+      "スペース連絡先には使わない（RemoteContactCard を使う）"
+    ]
+  },
+
+  "examples": [
+    {
+      "name": "基本",
+      "code": "<RemoteCallMemberItem name=\"古垣 保範\" avatarText=\"古垣\" avatarColor=\"#DBF89D\" />"
+    }
+  ]
+}

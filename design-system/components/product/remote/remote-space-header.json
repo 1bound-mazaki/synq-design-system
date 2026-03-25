@@ -1,0 +1,82 @@
+{
+  "name": "RemoteSpaceHeader",
+  "description": "スペース詳細ページのヘッダーエリア。スペース名+通話ステータス+アクションボタン+スペースタブを内包。",
+  "category": "product",
+  "composedOf": ["Text", "Button", "Tabs", "Badge"],
+  "_figmaSource": "SR-PRO > Draft:SpaceHeader (node 23499:231010)",
+
+  "structure": {
+    "container": {
+      "description": "白背景、下ボーダー",
+      "bg": "{bg.surface}",
+      "borderBottom": "1px solid {border.default}",
+      "overflow": "clip"
+    },
+    "spaceInfo": {
+      "description": "タイトル+ステータス+ボタンの縦配置",
+      "padding": "16px",
+      "layout": "flex-col, gap 16px"
+    },
+    "titleRow": {
+      "description": "スペース名 + more_vert メニュー",
+      "layout": "flex, gap 8px, align-items center, width 100%",
+      "title": "{typography.headingSm}(24px), fontWeight bold, {text.primary}, ellipsis, 1行",
+      "moreMenu": "more_vert, 24px"
+    },
+    "callingStatus": {
+      "description": "通話ステータスピル（通話中/未使用）",
+      "bg": "#E1E2E4",
+      "borderRadius": "9999px",
+      "padding": "2px 8px 2px 2px",
+      "layout": "flex, gap 6px, align-items center",
+      "icon": "phone_in_talk, 16px, 白背景20px円内",
+      "text": "{typography.bodySm}(12px), {text.tertiary}"
+    },
+    "actionButtons": {
+      "description": "グループ通話 + 情報コピーボタン",
+      "layout": "flex, gap 16px, align-items center",
+      "primaryButton": "Button(primary), height 48px, call icon + 'グループ通話'",
+      "secondaryButton": "Button(altPrimary), height 48px, link icon + 'グループ通話情報コピー'"
+    },
+    "tabs": {
+      "description": "スペース内タブナビゲーション",
+      "items": ["連絡先", "アルバム", "通話履歴", "やりとり", "設定"],
+      "tabHeight": "48px",
+      "selectedStyle": "color {text.brand}(#005aff), border-bottom 2px solid {border.brand}",
+      "unselectedStyle": "color {text.tertiary}, no border",
+      "fontSize": "14px, fontWeight bold (both)"
+    }
+  },
+
+  "props": {
+    "spaceName": { "type": "string", "required": true, "description": "スペース名" },
+    "callingStatus": { "type": "string", "default": "'通話は利用されてません'", "description": "通話ステータステキスト" },
+    "activeTab": { "type": "enum", "values": ["contacts", "album", "callHistory", "talk", "settings"], "required": true },
+    "onTabChange": { "type": "function", "description": "タブ切替コールバック" },
+    "onGroupCall": { "type": "function", "description": "グループ通話ボタンクリック" },
+    "onCopyInfo": { "type": "function", "description": "情報コピーボタンクリック" },
+    "onMoreMenu": { "type": "function", "description": "もっとメニュークリック" }
+  },
+
+  "accessibility": {
+    "tabs": "role=tablist, 各タブ role=tab, aria-selected",
+    "callingStatus": "aria-live='polite'"
+  },
+
+  "usage": {
+    "do": [
+      "スペース詳細の全ページ（連絡先/アルバム/通話履歴/やりとり/設定）で共通使用",
+      "Breadcrumbs の直下、メインコンテンツの上に配置"
+    ],
+    "doNot": [
+      "スペース一覧やサイドバーでは使わない"
+    ]
+  },
+
+  "examples": [
+    {
+      "name": "基本",
+      "code": "<RemoteSpaceHeader spaceName=\"薬院大通り西地区第一種市街地再開発事業\" activeTab=\"talk\" />"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "name": "RemoteCallPrepHeader",
+  "description": "通話準備画面専用のダークヘッダー。SynQロゴ（ダークモード）+ログインリンクのみの簡素な構成。通常のRemoteHeaderとは異なる。",
+  "category": "product",
+  "composedOf": ["Text", "Link"],
+  "_figmaSource": "SR-PRO > HeaderCall (node 23356:79933)",
+
+  "structure": {
+    "container": {
+      "description": "ダークヘッダー",
+      "height": "56px",
+      "bg": "#000000",
+      "padding": "10px"
+    },
+    "inner": {
+      "description": "中央コンテナ",
+      "maxWidth": "1080px",
+      "margin": "0 auto",
+      "layout": "flex, align-items center, justify-content space-between"
+    },
+    "logo": {
+      "description": "SynQ ダークモードロゴ",
+      "width": "223px",
+      "height": "32px"
+    },
+    "loginLink": {
+      "description": "ログインリンク",
+      "typography": "{typography.bodyLg}(16px)",
+      "color": "{text.brand}(#005AFF)",
+      "cursor": "pointer"
+    }
+  },
+
+  "props": {
+    "onLoginClick": { "type": "function", "description": "ログインリンクのコールバック" }
+  },
+
+  "_figmaColorMapping": {
+    "#000000": "Figma cl.background → 通話系画面の全体背景色"
+  },
+
+  "accessibility": {
+    "container": "role=banner",
+    "logo": "aria-label='SynQ Remote'",
+    "loginLink": "role=link"
+  },
+
+  "usage": {
+    "do": [
+      "通話準備画面・ゲスト通話画面の上部に配置",
+      "ログイン前のゲストユーザー向け画面で使用"
+    ],
+    "doNot": [
+      "通常のスペース画面には使わない（RemoteHeader を使う）"
+    ]
+  },
+
+  "examples": [
+    {
+      "name": "基本",
+      "code": "<RemoteCallPrepHeader />"
+    }
+  ]
+}

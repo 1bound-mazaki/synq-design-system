@@ -1,0 +1,120 @@
+{
+  "name": "RemoteMessageItem",
+  "description": "やりとりスレッドのメッセージ1件。送信（右寄せ）/受信（左寄せ）、テキストバブル、写真/動画添付、スタンプ（リアクション）、既読カウントに対応。",
+  "category": "product",
+  "composedOf": ["Avatar", "Text"],
+  "_figmaSource": "SR-PRO > MessageItem (node 26908:385165)",
+
+  "structure": {
+    "container": {
+      "description": "メッセージ行（送信=右寄せ、受信=左寄せ）",
+      "layout": "flex, gap 8px",
+      "variants": {
+        "sent": "justify-content flex-end, padding-left 32px",
+        "received": "justify-content flex-start, padding-right 32px"
+      }
+    },
+    "avatar": {
+      "description": "受信メッセージのみ左端にアバター表示",
+      "component": "Avatar(md, 40px)",
+      "visibility": "受信時のみ表示"
+    },
+    "messageBody": {
+      "description": "メッセージ本体（バブル+メタ情報）",
+      "layout": "flex-col, gap 4px",
+      "alignItems": "送信=flex-end, 受信=flex-start"
+    },
+    "senderName": {
+      "description": "送信者名（受信メッセージのみ表示）",
+      "typography": "{typography.bodySm}(12px)",
+      "fontWeight": "bold",
+      "color": "{text.primary}"
+    },
+    "bubble": {
+      "description": "テキストバブル",
+      "bg": "#F8F8F9",
+      "borderRadius": {
+        "sent": "16px 16px 4px 16px（右下だけ小さい角丸）",
+        "received": "16px 16px 16px 4px（左下だけ小さい角丸）"
+      },
+      "padding": "12px 16px",
+      "text": "{typography.bodyLg}(16px), {text.primary}",
+      "maxWidth": "70%"
+    },
+    "mediaAttachment": {
+      "description": "写真/動画の添付",
+      "layout": "flex-wrap, gap 4px",
+      "image": "width 360px max, aspect auto, borderRadius 10px, object-fit cover",
+      "video": "同上"
+    },
+    "stamps": {
+      "description": "スタンプ（リアクション）一覧",
+      "layout": "flex, gap 4px, flex-wrap",
+      "stamp": {
+        "description": "絵文字+カウントのピル",
+        "bg": "#F8F8F9",
+        "borderRadius": "9999px",
+        "padding": "2px 8px",
+        "height": "28px",
+        "emoji": "22px",
+        "count": "{typography.bodySm}(12px), {text.primary}"
+      }
+    },
+    "meta": {
+      "description": "既読カウント + 時刻",
+      "layout": "flex, gap 8px, align-items center",
+      "readCount": "「既読 N」, {typography.bodySm}(12px), {text.tertiary}",
+      "time": "{typography.bodySm}(12px), {text.tertiary}"
+    }
+  },
+
+  "props": {
+    "direction": { "type": "enum", "values": ["sent", "received"], "required": true, "description": "メッセージ方向" },
+    "senderName": { "type": "string", "description": "送信者名（received 時のみ）" },
+    "senderAvatar": { "type": "string", "description": "送信者アバターURL（received 時のみ）" },
+    "body": { "type": "string", "description": "メッセージ本文" },
+    "media": { "type": "MediaAttachment[]", "default": "[]", "description": "添付メディア（{type: 'image'|'video', url}）" },
+    "stamps": { "type": "Stamp[]", "default": "[]", "description": "スタンプ（{emoji, count, users}）" },
+    "readCount": { "type": "number", "default": 0, "description": "既読数（0なら非表示）" },
+    "time": { "type": "string", "required": true, "description": "送信時刻（例: 14:32）" },
+    "onStampClick": { "type": "function", "description": "スタンプクリックのコールバック" }
+  },
+
+  "_figmaColorMapping": {
+    "#F8F8F9": "Figma sf.hover → DS {bg.muted}(#f5f5f5) に最寄り。バブル+スタンプ背景で共通使用"
+  },
+
+  "accessibility": {
+    "container": "role=listitem",
+    "bubble": "送信時 aria-label='自分のメッセージ', 受信時 aria-label='[送信者名]のメッセージ'",
+    "stamps": "各スタンプに aria-label='[絵文字名] N件'",
+    "readCount": "aria-label='既読 N人'"
+  },
+
+  "usage": {
+    "do": [
+      "やりとり詳細のメッセージスレッドで role=list コンテナ内に配置",
+      "時系列順（古い→新しい）で並べる",
+      "同一送信者の連続メッセージではアバター・名前は初回のみ表示"
+    ],
+    "doNot": [
+      "チャット機能（SynQ Knowledge の ChatBubble）には使わない",
+      "通話内メッセージには使わない"
+    ]
+  },
+
+  "examples": [
+    {
+      "name": "受信メッセージ（テキスト）",
+      "code": "<RemoteMessageItem direction=\"received\" senderName=\"田中太郎\" body=\"現場の状況を確認しました。問題ありません。\" time=\"14:32\" readCount={3} />"
+    },
+    {
+      "name": "送信メッセージ（写真付き）",
+      "code": "<RemoteMessageItem direction=\"sent\" body=\"写真をお送りします\" media={[{type:'image', url:'...'}]} time=\"14:35\" readCount={2} />"
+    },
+    {
+      "name": "スタンプ付き",
+      "code": "<RemoteMessageItem direction=\"received\" senderName=\"鈴木花子\" body=\"了解です\" stamps={[{emoji:'👍', count:3}]} time=\"14:40\" />"
+    }
+  ]
+}

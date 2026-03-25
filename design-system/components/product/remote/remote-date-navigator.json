@@ -1,0 +1,62 @@
+{
+  "name": "RemoteDateNavigator",
+  "description": "日付ナビゲーター。前日/翌日ボタンと中央の日付表示。通話履歴等で日付を切り替える。",
+  "category": "product",
+  "composedOf": ["Text", "Link"],
+  "_figmaSource": "SR-PRO > DateSelector (node 25809:401159)",
+
+  "structure": {
+    "container": {
+      "description": "横並び、左右端寄せ",
+      "layout": "flex, justify-content space-between, align-items center",
+      "padding": "0 9px",
+      "width": "100%"
+    },
+    "prevButton": {
+      "description": "前日ボタン（左矢印+テキスト）",
+      "layout": "flex, gap 2px, align-items center",
+      "icon": "arrow_back_ios, 16px, {text.brand}",
+      "text": "{typography.bodyMd}(14px), fontWeight bold, {text.brand}"
+    },
+    "dateDisplay": {
+      "description": "中央の日付表示",
+      "text": "{typography.bodyMd}(14px), fontWeight bold, {text.brand}"
+    },
+    "nextButton": {
+      "description": "翌日ボタン（テキスト+右矢印）",
+      "layout": "flex, gap 2px, align-items center",
+      "text": "{typography.bodyMd}(14px), fontWeight bold, {text.brand}",
+      "icon": "arrow_forward_ios, 16px, {text.brand}"
+    }
+  },
+
+  "props": {
+    "date": { "type": "string", "required": true, "description": "表示日付（例: 2024/12/5）" },
+    "onPrev": { "type": "function", "description": "前日ボタンクリック" },
+    "onNext": { "type": "function", "description": "翌日ボタンクリック" },
+    "onDateClick": { "type": "function | null", "default": null, "description": "日付クリック（カレンダー表示等）" }
+  },
+
+  "accessibility": {
+    "prevButton": "aria-label='前日に移動'",
+    "nextButton": "aria-label='翌日に移動'",
+    "dateDisplay": "aria-live='polite'"
+  },
+
+  "usage": {
+    "do": [
+      "通話履歴ページで日付切り替えに使う",
+      "ページ見出しの直下に配置する"
+    ],
+    "doNot": [
+      "月単位のナビゲーションには使わない（別のカレンダーUIを検討）"
+    ]
+  },
+
+  "examples": [
+    {
+      "name": "基本",
+      "code": "<RemoteDateNavigator date=\"2024/12/5\" onPrev={handlePrev} onNext={handleNext} />"
+    }
+  ]
+}

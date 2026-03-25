@@ -1,0 +1,85 @@
+{
+  "name": "RemoteGuestCallGraphic",
+  "description": "ゲスト通話の仕組みを視覚的に説明するイラストコンポーネント。ゲスト（1人）→矢印→対応者（複数/単数）のフロー図。グループ通話と個別通話の2バリアント。",
+  "category": "product",
+  "composedOf": ["Avatar", "Text", "Badge"],
+  "_figmaSource": "SR-PRO > GuestCallGraphic (node 23356:38365)",
+
+  "structure": {
+    "container": {
+      "description": "フロー図全体",
+      "layout": "flex, gap 24px, align-items center, justify-content center",
+      "padding": "24px"
+    },
+    "guestSide": {
+      "description": "ゲスト側（左）",
+      "layout": "flex-col, gap 8px, align-items center",
+      "avatar": "Avatar(md, 40px)",
+      "badge": {
+        "description": "「ゲスト」バッジ",
+        "bg": "#FFC400",
+        "borderRadius": "9999px",
+        "padding": "2px 8px",
+        "text": "10px, fontWeight bold, {text.primary}"
+      }
+    },
+    "arrow": {
+      "description": "矢印（呼び出し方向）",
+      "icon": "arrow_forward, 24px, {text.tertiary}",
+      "label": {
+        "group": "「全員を呼び出す」",
+        "single": "「相手を選択して呼び出す」"
+      },
+      "labelStyle": "{typography.bodySm}(12px), {text.tertiary}"
+    },
+    "responderSide": {
+      "description": "対応者側（右）",
+      "layout": "flex, gap 8px, align-items center",
+      "variants": {
+        "group": "Avatar x 4（呼び出し対応者複数）",
+        "single": "Avatar x 1（スペース参加者1人）"
+      },
+      "badge": {
+        "description": "「呼び出し対応者」or「スペース参加者」バッジ",
+        "bg": "#81BC0F",
+        "borderRadius": "9999px",
+        "padding": "2px 8px",
+        "text": "10px, fontWeight bold, {text.inverse}"
+      }
+    }
+  },
+
+  "props": {
+    "callType": { "type": "enum", "values": ["group", "single"], "required": true, "description": "通話タイプ（グループ/個別）" }
+  },
+
+  "_figmaColorMapping": {
+    "#FFC400": "Figma cl.fg.flashOn → ゲストバッジ色。DS該当なし",
+    "#81BC0F": "Figma success.sf → 呼び出し対応者バッジ色。DS該当なし"
+  },
+
+  "accessibility": {
+    "container": "role=img, aria-label='ゲスト通話の流れ: ゲストが対応者を呼び出します'"
+  },
+
+  "usage": {
+    "do": [
+      "ゲスト通話設定ページの各セクション内に配置",
+      "通話タイプの説明用イラストとして使用"
+    ],
+    "doNot": [
+      "実際の通話画面には使わない（説明用のみ）"
+    ]
+  },
+
+  "examples": [
+    {
+      "name": "グループ通話",
+      "code": "<RemoteGuestCallGraphic callType=\"group\" />"
+    },
+    {
+      "name": "個別通話",
+      "code": "<RemoteGuestCallGraphic callType=\"single\" />"
+    }
+  ]
+}

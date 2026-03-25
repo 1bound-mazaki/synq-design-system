@@ -1,0 +1,48 @@
+{
+  "name": "RemoteAlbumDateHeading",
+  "description": "アルバムの日付セクション見出し。グレー背景帯に日付テキスト。写真・動画グリッドの区切りに使用。",
+  "category": "product",
+  "composedOf": ["Text"],
+  "_figmaSource": "SR-PRO > DailyDivide (node 23390:89830)",
+
+  "structure": {
+    "container": {
+      "description": "全幅グレー背景帯",
+      "bg": "{bg.subtle}",
+      "padding": "4px 16px",
+      "width": "100%"
+    },
+    "dateText": {
+      "description": "日付テキスト",
+      "typography": "{typography.bodySm}(12px)",
+      "fontWeight": "bold",
+      "color": "{text.tertiary}"
+    }
+  },
+
+  "props": {
+    "date": { "type": "string", "required": true, "description": "日付テキスト（例: 2023年9月12日(火)）" }
+  },
+
+  "accessibility": {
+    "role": "heading",
+    "aria-level": "3"
+  },
+
+  "usage": {
+    "do": [
+      "アルバム写真/動画グリッドの日付グループ見出しとして使う",
+      "RemoteAlbumPhotoCard / RemoteAlbumVideoCard のグリッドの直前に配置"
+    ],
+    "doNot": [
+      "アルバム以外の日付区切りには使わない（一般的な Divider を使う）"
+    ]
+  },
+
+  "examples": [
+    {
+      "name": "基本",
+      "code": "<RemoteAlbumDateHeading date=\"2023年9月12日(火)\" />"
+    }
+  ]
+}

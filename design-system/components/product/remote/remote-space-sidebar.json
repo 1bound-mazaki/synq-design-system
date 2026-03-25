@@ -1,0 +1,64 @@
+{
+  "name": "RemoteSpaceSidebar",
+  "description": "スペース一覧の左サイドバー。検索バー + ピン留めスペース + 全スペースリストを表示。",
+  "category": "product",
+  "composedOf": ["Input", "Button", "RemoteSpaceCard"],
+  "_figmaSource": "SR-PRO > PcSideBar (node 28346:296225)",
+
+  "structure": {
+    "container": {
+      "description": "固定幅 300px、右ボーダー、縦スクロール",
+      "width": "300px",
+      "bg": "{bg.surface}",
+      "borderRight": "1px solid {border.default}",
+      "padding": "20px 16px",
+      "gap": "{space.12}",
+      "overflow": "auto"
+    },
+    "search": {
+      "description": "検索フィールド + 検索ボタンの横並び",
+      "input": "Input, placeholder='スペースを探す', height 36px, search アイコン付き",
+      "button": "Button(neutral), '検索', height 36px"
+    },
+    "pinnedSection": {
+      "description": "「ピン留め」セクション",
+      "header": "keep アイコン(14px, width:14px, margin-left:-2px) + 'ピン留め'({typography.labelSm}, {text.primary}), gap 2px",
+      "items": "RemoteSpaceCard[], isPinned=true"
+    },
+    "spacesSection": {
+      "description": "「スペース」セクション",
+      "header": "'スペース'({typography.labelSm}, {text.primary})",
+      "items": "RemoteSpaceCard[]"
+    }
+  },
+
+  "props": {
+    "pinnedSpaces": { "type": "RemoteSpaceCard[]", "required": true },
+    "spaces": { "type": "RemoteSpaceCard[]", "required": true },
+    "selectedSpaceId": { "type": "string | null", "default": null },
+    "onSearch": { "type": "function", "description": "検索実行" },
+    "onSpaceSelect": { "type": "function", "description": "スペース選択" }
+  },
+
+  "accessibility": {
+    "role": "navigation",
+    "aria-label": "スペース一覧"
+  },
+
+  "usage": {
+    "do": [
+      "PC版のスペーストップ画面で左カラムとして配置",
+      "ピン留めと全スペースを分けて表示"
+    ],
+    "doNot": [
+      "モバイル版では使わない（BottomNavigation 等を使う）"
+    ]
+  },
+
+  "examples": [
+    {
+      "name": "基本",
+      "code": "<RemoteSpaceSidebar\n  pinnedSpaces={[{id:'1', name:'福岡大名地下鉄'}]}\n  spaces={[{id:'2', name:'薬院大通り西地区'}]}\n  selectedSpaceId=\"1\"\n/>"
+    }
+  ]
+}

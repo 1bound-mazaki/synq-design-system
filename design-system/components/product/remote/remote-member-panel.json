@@ -1,0 +1,86 @@
+{
+  "name": "RemoteMemberPanel",
+  "description": "関係者一覧の折りたたみパネル。グループアイコン+人数ヘッダー、メンバー行（アバター+名前）、追加ボタンを内包。",
+  "category": "product",
+  "composedOf": ["Avatar", "Text", "Button"],
+  "_figmaSource": "SR-PRO > MemberPanel (node 26908:385165)",
+
+  "structure": {
+    "container": {
+      "description": "折りたたみ可能なボーダーパネル",
+      "border": "1px solid #C4C6CA",
+      "borderRadius": "6px",
+      "overflow": "clip"
+    },
+    "header": {
+      "description": "パネルヘッダー（クリックで展開/折りたたみ）",
+      "layout": "flex, gap 8px, align-items center, width 100%",
+      "padding": "12px 16px",
+      "bg": "{bg.surface}",
+      "cursor": "pointer",
+      "icon": "group, 20px, {text.tertiary}",
+      "label": "「関係者（N）」, {typography.bodyMd}(14px), fontWeight bold, {text.primary}",
+      "flex": "1",
+      "toggleIcon": "arrow_drop_up(展開時) / arrow_drop_down(折りたたみ時), 24px, {text.tertiary}"
+    },
+    "body": {
+      "description": "展開時のメンバーリスト",
+      "padding": "0 16px 12px",
+      "layout": "flex-col, gap 0"
+    },
+    "memberRow": {
+      "description": "メンバー1件",
+      "layout": "flex, gap 12px, align-items center",
+      "padding": "8px 0",
+      "borderBottom": "1px solid {border.default}（最後のメンバーは除く）",
+      "avatar": "Avatar(md, 40px)",
+      "name": "{typography.bodyMd}(14px), {text.primary}, flex 1",
+      "moreMenu": "more_vert, 20px, {text.tertiary}"
+    },
+    "addButton": {
+      "description": "「+ 追加する」ボタン",
+      "layout": "flex, gap 4px, align-items center",
+      "padding": "12px 0",
+      "icon": "person_add, 20px, {text.brand}",
+      "text": "{typography.bodyMd}(14px), fontWeight bold, {text.brand}",
+      "cursor": "pointer"
+    }
+  },
+
+  "props": {
+    "members": { "type": "Member[]", "required": true, "description": "メンバーリスト（{name, avatarUrl}）" },
+    "isExpanded": { "type": "boolean", "default": true, "description": "展開状態" },
+    "onToggle": { "type": "function", "description": "展開/折りたたみのコールバック" },
+    "onAddMember": { "type": "function", "description": "メンバー追加のコールバック" },
+    "onMemberMenu": { "type": "function", "description": "メンバーメニューのコールバック" }
+  },
+
+  "_figmaColorMapping": {
+    "#C4C6CA": "Figma st.muted → DS border.default に最寄り。外枠のみ固有色"
+  },
+
+  "accessibility": {
+    "container": "role=region, aria-label='関係者一覧'",
+    "header": "role=button, aria-expanded=true/false",
+    "memberList": "role=list",
+    "memberRow": "role=listitem",
+    "addButton": "aria-label='メンバーを追加'"
+  },
+
+  "usage": {
+    "do": [
+      "やりとり詳細ページの右サイドパネルまたはメッセージスレッドの上に配置",
+      "メンバー数をヘッダーに常に表示する"
+    ],
+    "doNot": [
+      "スペースの連絡先一覧には使わない（RemoteContactCard を使う）"
+    ]
+  },
+
+  "examples": [
+    {
+      "name": "基本（展開）",
+      "code": "<RemoteMemberPanel members={[{name: '田中太郎', avatarUrl: '...'}, {name: '鈴木花子', avatarUrl: '...'}]} isExpanded={true} />"
+    }
+  ]
+}

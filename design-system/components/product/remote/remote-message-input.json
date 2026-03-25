@@ -1,0 +1,105 @@
+{
+  "name": "RemoteMessageInput",
+  "description": "やりとり詳細のメッセージ入力エリア。テキストエリア+ファイル添付サムネイル+送信ボタン。画面下部に固定配置。",
+  "category": "product",
+  "composedOf": ["Text", "Button"],
+  "_figmaSource": "SR-PRO > MessageInput (node 26908:385165)",
+
+  "structure": {
+    "container": {
+      "description": "入力エリア全体（画面下部固定）",
+      "bg": "{bg.surface}",
+      "borderTop": "1px solid {border.default}",
+      "padding": "16px",
+      "layout": "flex-col, gap 12px"
+    },
+    "textarea": {
+      "description": "メッセージ入力テキストエリア",
+      "border": "1px solid {border.default}",
+      "borderRadius": "2px",
+      "padding": "12px",
+      "minHeight": "139px",
+      "resize": "vertical",
+      "typography": "{typography.bodyMd}(14px)",
+      "color": "{text.primary}",
+      "placeholder": "メッセージを入力…",
+      "placeholderColor": "{text.disabled}"
+    },
+    "attachments": {
+      "description": "添付ファイルサムネイル一覧",
+      "layout": "flex, gap 8px, flex-wrap",
+      "thumbnail": {
+        "description": "添付ファイル1件",
+        "size": "80px",
+        "borderRadius": "4px",
+        "objectFit": "cover",
+        "position": "relative"
+      },
+      "removeButton": {
+        "description": "削除ボタン（右上）",
+        "position": "absolute, top -6px, right -6px",
+        "size": "20px",
+        "bg": "{text.primary}",
+        "borderRadius": "9999px",
+        "icon": "close, 14px, {text.inverse}"
+      }
+    },
+    "actions": {
+      "description": "アクションバー（添付+送信）",
+      "layout": "flex, justify-content space-between, align-items center"
+    },
+    "attachButton": {
+      "description": "ファイル添付ボタン",
+      "icon": "attach_file, 24px, {text.tertiary}",
+      "cursor": "pointer"
+    },
+    "submitButton": {
+      "description": "コメント送信ボタン",
+      "component": "Button(altPrimary)",
+      "text": "「コメントする」",
+      "height": "40px",
+      "padding": "0 24px",
+      "borderRadius": "4px"
+    }
+  },
+
+  "props": {
+    "value": { "type": "string", "default": "''", "description": "入力テキスト" },
+    "attachments": { "type": "FileAttachment[]", "default": "[]", "description": "添付ファイル（{id, thumbnailUrl, name}）" },
+    "placeholder": { "type": "string", "default": "'メッセージを入力…'", "description": "プレースホルダーテキスト" },
+    "onSubmit": { "type": "function", "description": "送信のコールバック" },
+    "onAttach": { "type": "function", "description": "ファイル添付のコールバック" },
+    "onRemoveAttachment": { "type": "function", "description": "添付ファイル削除のコールバック" },
+    "onChange": { "type": "function", "description": "テキスト変更のコールバック" }
+  },
+
+  "accessibility": {
+    "textarea": "aria-label='メッセージ入力', role=textbox, aria-multiline=true",
+    "attachButton": "aria-label='ファイルを添付'",
+    "submitButton": "aria-label='コメントを送信'",
+    "removeButton": "aria-label='添付ファイルを削除'"
+  },
+
+  "usage": {
+    "do": [
+      "やりとり詳細ページの最下部に固定配置（position sticky/fixed）",
+      "テキスト未入力時は送信ボタンを disabled にする",
+      "添付ファイルがある場合はサムネイル一覧を表示"
+    ],
+    "doNot": [
+      "チャットUI（SynQ Knowledge の ChatInput）には使わない",
+      "通話中のメッセージ入力には使わない"
+    ]
+  },
+
+  "examples": [
+    {
+      "name": "空状態",
+      "code": "<RemoteMessageInput placeholder=\"メッセージを入力…\" />"
+    },
+    {
+      "name": "添付ファイル付き",
+      "code": "<RemoteMessageInput value=\"確認お願いします\" attachments={[{id:'1', thumbnailUrl:'...', name:'写真1.jpg'}]} />"
+    }
+  ]
+}

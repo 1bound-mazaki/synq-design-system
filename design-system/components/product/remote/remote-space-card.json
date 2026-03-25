@@ -1,0 +1,76 @@
+{
+  "name": "RemoteSpaceCard",
+  "description": "サイドバー内のスペース1件。選択状態で青い左ボーダーを表示。",
+  "category": "product",
+  "composedOf": ["Text"],
+  "_figmaSource": "SR-PRO > PcSpaceCard (node 19472:13051)",
+
+  "structure": {
+    "container": {
+      "description": "横並び、paddingY 8px、左寄せ",
+      "layout": "flex, align-items center, gap 4px",
+      "padding": "8px 4px 8px 0",
+      "height": "auto（テキスト行数に依存）"
+    },
+    "selectedIndicator": {
+      "description": "選択時のみ表示。左端に 2px 幅の青い縦線",
+      "width": "2px",
+      "height": "100%",
+      "bg": "{bg.brand}"
+    },
+    "pinIcon": {
+      "description": "ピン留め時のみ表示",
+      "icon": "keep（filled）",
+      "size": "14px",
+      "width": "14px",
+      "marginLeft": "-2px",
+      "color": "{text.primary}"
+    },
+    "name": {
+      "description": "スペース名。1行 ellipsis",
+      "typography": "{typography.bodyMd}",
+      "fontWeight": "bold",
+      "color": "{text.primary}"
+    }
+  },
+
+  "props": {
+    "name": { "type": "string", "required": true, "description": "スペース名" },
+    "isPinned": { "type": "boolean", "default": false, "description": "ピンアイコン表示" },
+    "isSelected": { "type": "boolean", "default": false, "description": "選択状態（左ボーダー表示）" },
+    "onClick": { "type": "function", "description": "クリック時のコールバック" }
+  },
+
+  "states": {
+    "default": { "bg": "transparent" },
+    "hover": { "bg": "{bg.muted}" },
+    "selected": { "leftBorder": "2px solid {bg.brand}" }
+  },
+
+  "accessibility": {
+    "role": "option",
+    "aria-selected": "isSelected",
+    "keyboard": "Enter/Space で選択"
+  },
+
+  "usage": {
+    "do": [
+      "RemoteSpaceSidebar 内でのみ使用する",
+      "選択中のスペースには isSelected=true を渡す"
+    ],
+    "doNot": [
+      "サイドバー以外の場所で単独使用しない"
+    ]
+  },
+
+  "examples": [
+    {
+      "name": "選択中+ピン留め",
+      "code": "<RemoteSpaceCard name=\"福岡大名地下鉄新駅建設工事\" isPinned isSelected />"
+    },
+    {
+      "name": "通常",
+      "code": "<RemoteSpaceCard name=\"薬院大通り西地区再開発\" />"
+    }
+  ]
+}

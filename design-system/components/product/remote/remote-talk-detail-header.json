@@ -1,0 +1,100 @@
+{
+  "name": "RemoteTalkDetailHeader",
+  "description": "やりとり詳細ページのヘッダー。戻るリンク+ステータスバッジ+タイトル+アクションアイコン群。",
+  "category": "product",
+  "composedOf": ["Text", "Badge", "Link"],
+  "_figmaSource": "SR-PRO > TalkDetailHeader (node 26908:385165)",
+
+  "structure": {
+    "container": {
+      "description": "白背景、下ボーダー、padding 16px",
+      "bg": "{bg.surface}",
+      "borderBottom": "1px solid {border.default}",
+      "padding": "16px",
+      "layout": "flex-col, gap 12px"
+    },
+    "backLink": {
+      "description": "「← やりとり一覧に戻る」テキストリンク",
+      "layout": "flex, gap 4px, align-items center",
+      "icon": "arrow_back, 16px",
+      "text": "{typography.bodyMd}(14px), {text.tertiary}",
+      "cursor": "pointer"
+    },
+    "titleRow": {
+      "description": "ステータスバッジ + タイトル + アクションの横並び",
+      "layout": "flex, gap 12px, align-items center, width 100%"
+    },
+    "statusBadge": {
+      "description": "対応ステータスピル（対応中/完了/未対応）",
+      "variants": {
+        "inProgress": "bg #81BC0F, {text.inverse}, 12px bold, borderRadius 9999px, padding 2px 12px",
+        "done": "bg {text.disabled}(#bdbdbd), {text.inverse}, 12px bold, borderRadius 9999px, padding 2px 12px",
+        "open": "bg {bg.error}(#FF5454), {text.inverse}, 12px bold, borderRadius 9999px, padding 2px 12px"
+      }
+    },
+    "title": {
+      "description": "やりとりタイトル",
+      "typography": "{typography.headingSm}(20px)",
+      "fontWeight": "regular",
+      "color": "{text.primary}",
+      "flex": "1 0 0",
+      "overflow": "hidden, text-overflow ellipsis, white-space nowrap"
+    },
+    "actions": {
+      "description": "アクションアイコン群（通話+リンクコピー+メニュー）",
+      "layout": "flex, gap 8px, align-items center, flex-shrink 0",
+      "iconButton": {
+        "description": "48x48角丸ボタン（ボーダー付き）",
+        "size": "48px",
+        "border": "1px solid {border.default}",
+        "borderRadius": "4px",
+        "bg": "{bg.surface}",
+        "icon": "24px, {text.primary}",
+        "items": ["call", "link"]
+      },
+      "moreMenu": "more_vert, 24px, {text.tertiary}, パディングなし"
+    }
+  },
+
+  "props": {
+    "title": { "type": "string", "required": true, "description": "やりとりタイトル（例: 現場A 点検の不具合対応）" },
+    "status": { "type": "enum", "values": ["inProgress", "done", "open"], "required": true, "description": "対応ステータス" },
+    "statusLabel": { "type": "string", "required": true, "description": "ステータス表示テキスト（例: 対応中）" },
+    "onBack": { "type": "function", "description": "戻るリンクのコールバック" },
+    "onCall": { "type": "function", "description": "通話ボタンのコールバック" },
+    "onCopyLink": { "type": "function", "description": "リンクコピーのコールバック" },
+    "onMoreMenu": { "type": "function", "description": "もっとメニューのコールバック" }
+  },
+
+  "_figmaColorMapping": {
+    "#81BC0F": "Figma success.sf → DS該当なし。Remote固有の「対応中」ステータス色",
+    "rgba(0,0,0,0.6)": "{text.tertiary}"
+  },
+
+  "accessibility": {
+    "backLink": "role=link, aria-label='やりとり一覧に戻る'",
+    "statusBadge": "role=status",
+    "actions": "各ボタンに aria-label（'通話開始', 'リンクをコピー', 'メニュー'）"
+  },
+
+  "usage": {
+    "do": [
+      "やりとり詳細ページの上部、RemoteSpaceHeader の下に配置",
+      "Breadcrumbs は使わず backLink で一覧に戻る導線を提供"
+    ],
+    "doNot": [
+      "やりとり一覧には使わない（RemoteTalkListItem を使う）"
+    ]
+  },
+
+  "examples": [
+    {
+      "name": "対応中",
+      "code": "<RemoteTalkDetailHeader title=\"現場A 点検の不具合対応\" status=\"inProgress\" statusLabel=\"対応中\" />"
+    },
+    {
+      "name": "完了",
+      "code": "<RemoteTalkDetailHeader title=\"設備自主検査の結果確認\" status=\"done\" statusLabel=\"完了\" />"
+    }
+  ]
+}

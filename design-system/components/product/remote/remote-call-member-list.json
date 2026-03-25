@@ -1,0 +1,66 @@
+{
+  "name": "RemoteCallMemberList",
+  "description": "通話準備画面の通話相手選択リスト。見出し+説明テキスト+スクロール可能なメンバーリストコンテナ。ダーク背景。",
+  "category": "product",
+  "composedOf": ["Text", "RemoteCallMemberItem"],
+  "_figmaSource": "SR-PRO > callMemberList (node 23356:79933)",
+
+  "structure": {
+    "container": {
+      "description": "リスト全体",
+      "flex": "1",
+      "layout": "flex-col, gap 16px"
+    },
+    "heading": {
+      "description": "「通話相手を選択」見出し",
+      "typography": "{typography.bodyMd}(14px)",
+      "fontWeight": "bold",
+      "color": "#FFFFFF"
+    },
+    "description": {
+      "description": "説明セクション",
+      "layout": "flex, gap 8px, align-items center",
+      "icon": "checklist, 24px, #FFFFFF",
+      "text": "{typography.bodyMd}(14px), rgba(255,255,255,0.6)"
+    },
+    "listContainer": {
+      "description": "メンバーリストのスクロール可能コンテナ",
+      "bg": "#212121",
+      "borderRadius": "12px",
+      "padding": "8px 0",
+      "flex": "1",
+      "overflowY": "auto"
+    }
+  },
+
+  "props": {
+    "members": { "type": "CallMember[]", "required": true, "description": "通話相手リスト" },
+    "onSelect": { "type": "function", "description": "メンバー選択のコールバック" }
+  },
+
+  "_figmaColorMapping": {
+    "#212121": "Figma cl.sf.rug → 通話系ダークテーマのカード背景"
+  },
+
+  "accessibility": {
+    "container": "role=region, aria-label='通話相手選択'",
+    "listContainer": "role=list"
+  },
+
+  "usage": {
+    "do": [
+      "通話準備画面の左カラム（flex:1）に配置",
+      "2カラムレイアウトで RemoteCallVideoPreview と並べる"
+    ],
+    "doNot": [
+      "スペースの連絡先一覧には使わない（RemoteContactCard を使う）"
+    ]
+  },
+
+  "examples": [
+    {
+      "name": "基本",
+      "code": "<RemoteCallMemberList members={[{name:'田中太郎', avatarText:'田中'}, {name:'鈴木花子', avatarText:'鈴木'}]} />"
+    }
+  ]
+}

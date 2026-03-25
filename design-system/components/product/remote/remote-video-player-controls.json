@@ -1,0 +1,90 @@
+{
+  "name": "RemoteVideoPlayerControls",
+  "description": "動画再生コントロールバー。再生/一時停止、再生時間、音量、フルスクリーン、メニュー、シークバーを内包。動画詳細モーダル下部に配置。",
+  "category": "product",
+  "composedOf": ["Text"],
+  "_figmaSource": "SR-PRO > videoPlayFooter (node 25958:207497)",
+
+  "structure": {
+    "container": {
+      "description": "半透明グラデーション背景のコントロールバー",
+      "position": "absolute, bottom 0, width 100%",
+      "background": "linear-gradient(transparent, rgba(0,0,0,0.6))",
+      "padding": "8px 12px 12px",
+      "layout": "flex-col, gap 4px"
+    },
+    "seekBar": {
+      "description": "シークバー（プログレスバー）",
+      "height": "3px",
+      "bg": "rgba(255,255,255,0.5)",
+      "borderRadius": "9999px",
+      "playedBar": {
+        "description": "再生済み部分",
+        "height": "3px",
+        "bg": "#FFFFFF",
+        "borderRadius": "9999px"
+      },
+      "thumb": {
+        "description": "つまみ（ドラッグ可能）",
+        "size": "12px",
+        "bg": "#FFFFFF",
+        "borderRadius": "50%",
+        "position": "再生済みバーの右端"
+      }
+    },
+    "controls": {
+      "description": "コントロールボタン行",
+      "layout": "flex, gap 12px, align-items center",
+      "playButton": "play_arrow / pause, 20px, {text.inverse}",
+      "currentTime": "{typography.bodySm}(12px), fontWeight bold, {text.inverse}",
+      "spacer": "flex: 1",
+      "volumeButton": "volume_up / volume_off, 20px, {text.inverse}",
+      "fullscreenButton": "fullscreen / fullscreen_exit, 20px, {text.inverse}",
+      "moreMenu": "more_vert, 20px, {text.inverse}"
+    }
+  },
+
+  "props": {
+    "isPlaying": { "type": "boolean", "default": false, "description": "再生中かどうか" },
+    "currentTime": { "type": "string", "required": true, "description": "現在の再生時間（例: 00:42）" },
+    "duration": { "type": "string", "required": true, "description": "総再生時間（例: 05:30）" },
+    "progress": { "type": "number", "default": 0, "description": "再生進捗（0〜1）" },
+    "isMuted": { "type": "boolean", "default": false, "description": "ミュート状態" },
+    "isFullscreen": { "type": "boolean", "default": false, "description": "フルスクリーン状態" },
+    "onPlayPause": { "type": "function", "description": "再生/一時停止" },
+    "onSeek": { "type": "function", "description": "シーク" },
+    "onVolumeToggle": { "type": "function", "description": "音量トグル" },
+    "onFullscreenToggle": { "type": "function", "description": "フルスクリーントグル" },
+    "onMore": { "type": "function", "description": "メニュー" }
+  },
+
+  "accessibility": {
+    "container": "role=toolbar, aria-label='動画再生コントロール'",
+    "playButton": "aria-label='再生' / '一時停止'",
+    "seekBar": "role=slider, aria-valuemin=0, aria-valuemax=100, aria-valuenow=[progress]",
+    "volumeButton": "aria-label='音量' / 'ミュート'",
+    "fullscreenButton": "aria-label='フルスクリーン' / 'フルスクリーン解除'"
+  },
+
+  "usage": {
+    "do": [
+      "RemoteMediaDetailModal (type=video) のメディアエリア下部にオーバーレイ配置",
+      "ホバー時にフェードイン、非操作時にフェードアウト"
+    ],
+    "doNot": [
+      "写真モードでは表示しない",
+      "動画一覧のサムネイルには使わない"
+    ]
+  },
+
+  "examples": [
+    {
+      "name": "再生中",
+      "code": "<RemoteVideoPlayerControls isPlaying={true} currentTime=\"00:42\" duration=\"05:30\" progress={0.13} />"
+    },
+    {
+      "name": "一時停止",
+      "code": "<RemoteVideoPlayerControls isPlaying={false} currentTime=\"02:15\" duration=\"05:30\" progress={0.42} />"
+    }
+  ]
+}

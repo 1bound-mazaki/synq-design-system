@@ -1,0 +1,80 @@
+{
+  "name": "RemoteTranscriptTimeline",
+  "description": "文字起こしタイムラインパネル。入退室イベント、写真サムネイルグリッド、ステータステキストを時系列で表示。RemoteAudioPlayerの右側に配置。",
+  "category": "product",
+  "composedOf": ["Text", "Avatar", "RemoteAlbumPhotoCard"],
+  "_figmaSource": "SR-PRO > timeline (node 31341:597649)",
+
+  "structure": {
+    "container": {
+      "description": "タイムラインパネル",
+      "flex": "1",
+      "padding": "0 16px",
+      "layout": "flex-col, gap 8px",
+      "overflowY": "auto"
+    },
+    "statusText": {
+      "description": "ステータステキスト（例: 文字起こし生成中...）",
+      "typography": "{typography.bodyMd}(14px)",
+      "color": "{text.tertiary}",
+      "textAlign": "center"
+    },
+    "participantEvent": {
+      "description": "入退室イベント1件",
+      "layout": "flex, gap 8px, align-items center",
+      "icon": {
+        "entry": "login, 24px, {text.brand}(#005AFF)",
+        "exit": "logout, 24px, #F9302C"
+      },
+      "text": {
+        "description": "「[名前]が入室/退室しました」",
+        "typography": "{typography.bodyMd}(14px), fontWeight bold",
+        "entryColor": "{text.brand}(#005AFF)（「入室」部分）",
+        "exitColor": "#F9302C（「退室」部分）"
+      },
+      "timestamp": "{typography.bodySm}(12px), {text.tertiary}"
+    },
+    "photoGrid": {
+      "description": "タイムライン内の写真サムネイルグリッド",
+      "layout": "flex-wrap, gap 4px",
+      "card": "RemoteAlbumPhotoCard 相当、min-width 116px, height 172px",
+      "expandButton": "right top 10px, 32x32px, 拡大アイコン"
+    }
+  },
+
+  "props": {
+    "events": { "type": "TimelineEvent[]", "required": true, "description": "タイムラインイベントリスト（{type: 'entry'|'exit'|'photo'|'status', ...}）" },
+    "status": { "type": "string", "description": "ステータステキスト（例: 文字起こし生成中...）" },
+    "onPhotoClick": { "type": "function", "description": "写真クリックのコールバック" },
+    "onTimestampClick": { "type": "function", "description": "タイムスタンプクリックで音声再生位置へジャンプ" }
+  },
+
+  "_figmaColorMapping": {
+    "#005AFF": "Figma sf.primary → DS {text.brand}/{bg.brand}。入室テキスト+アイコン色",
+    "#F9302C": "Figma sf.danger → DS {bg.error}(#FF5454)に最寄り。退室テキスト+アイコン色"
+  },
+
+  "accessibility": {
+    "container": "role=log, aria-label='文字起こしタイムライン'",
+    "participantEvent": "role=listitem",
+    "timestamp": "role=link（音声再生位置へジャンプ）"
+  },
+
+  "usage": {
+    "do": [
+      "AI議事録詳細の文字起こしセクションで RemoteAudioPlayer の右側に配置",
+      "flex-1 で残り幅を占有"
+    ],
+    "doNot": [
+      "やりとりのメッセージスレッドには使わない（RemoteMessageItem を使う）",
+      "通話履歴の入退室ログには使わない（RemoteCallHistoryDetail を使う）"
+    ]
+  },
+
+  "examples": [
+    {
+      "name": "基本",
+      "code": "<RemoteTranscriptTimeline events={[{type:'entry', name:'田中太郎', time:'13:29'}, {type:'photo', photos:[...]}, {type:'exit', name:'田中太郎', time:'14:15'}]} status=\"文字起こし生成中...\" />"
+    }
+  ]
+}

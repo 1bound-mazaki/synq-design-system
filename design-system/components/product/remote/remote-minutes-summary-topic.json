@@ -1,0 +1,67 @@
+{
+  "name": "RemoteMinutesSummaryTopic",
+  "description": "AI議事録の要約トピック1ブロック。トピック見出し+箇条書きリスト（各項目にタイムスタンプリンク付き）。RemoteCallSummary（カード型）の展開詳細版。",
+  "category": "product",
+  "composedOf": ["Text", "Link"],
+  "_figmaSource": "SR-PRO > summarySection/topic (node 31341:597649)",
+
+  "structure": {
+    "container": {
+      "description": "トピックブロック",
+      "layout": "flex-col, gap 8px"
+    },
+    "heading": {
+      "description": "トピック見出し",
+      "typography": "{typography.bodyLg}(16px)",
+      "fontWeight": "bold",
+      "color": "{text.primary}"
+    },
+    "bulletList": {
+      "description": "箇条書きリスト",
+      "listStyle": "disc",
+      "marginLeft": "21px",
+      "layout": "flex-col, gap 4px"
+    },
+    "bulletItem": {
+      "description": "箇条書き1項目",
+      "layout": "flex, gap 10px, align-items start",
+      "text": "{typography.bodyMd}(14px), {text.primary}, flex 1",
+      "timestamp": {
+        "description": "タイムスタンプリンク（クリックで音声再生位置へジャンプ）",
+        "typography": "{typography.bodyMd}(14px)",
+        "color": "{text.brand}(#005AFF)",
+        "cursor": "pointer",
+        "flexShrink": "0"
+      }
+    }
+  },
+
+  "props": {
+    "title": { "type": "string", "required": true, "description": "トピックタイトル（例: 音声確認と発話テスト）" },
+    "items": { "type": "SummaryItem[]", "required": true, "description": "箇条書き項目リスト（{text, timestamp}）" },
+    "onTimestampClick": { "type": "function", "description": "タイムスタンプクリックのコールバック（音声再生位置へジャンプ）" }
+  },
+
+  "accessibility": {
+    "heading": "role=heading, aria-level=3",
+    "bulletList": "role=list",
+    "timestamp": "role=link, aria-label='[時刻]の再生位置へジャンプ'"
+  },
+
+  "usage": {
+    "do": [
+      "AI議事録詳細の要約セクションで複数トピックを縦に配置（gap 16px）",
+      "タイムスタンプリンクから RemoteAudioPlayer の再生位置と連動"
+    ],
+    "doNot": [
+      "通話履歴のサマリーカードには使わない（RemoteCallSummary を使う）"
+    ]
+  },
+
+  "examples": [
+    {
+      "name": "基本",
+      "code": "<RemoteMinutesSummaryTopic title=\"音声確認と発話テスト\" items={[{text:'発声練習として「あいうえお」が読み上げられました。', timestamp:'13:56'}, {text:'音声品質の確認が行われました。', timestamp:'14:02'}]} />"
+    }
+  ]
+}

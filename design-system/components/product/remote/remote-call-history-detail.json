@@ -1,0 +1,101 @@
+{
+  "name": "RemoteCallHistoryDetail",
+  "description": "通話履歴の詳細カード。ステータスバッジ+時間範囲ヘッダー、入退室ログ、撮影写真/録画グリッド、AI要約を内包する大型カード。",
+  "category": "product",
+  "composedOf": ["Badge", "Text", "RemoteCallSummary"],
+  "_figmaSource": "SR-PRO > CallHistoryTile (node 25809:401769)",
+
+  "structure": {
+    "container": {
+      "description": "角丸16pxのカード",
+      "bg": "{bg.surface}",
+      "border": "1px solid {border.default}",
+      "borderRadius": "16px",
+      "overflow": "clip",
+      "width": "100%"
+    },
+    "header": {
+      "description": "ステータスバッジ + 時間範囲",
+      "layout": "flex, gap 10px, align-items center",
+      "padding": "16px",
+      "badge": {
+        "description": "未応答/終了済ピルバッジ（RemoteCallHistoryItem と同仕様）",
+        "outstanding": "bg {bg.error}(#FF5454), {text.inverse}, 12px bold, pill",
+        "closed": "bg {text.disabled}(#bdbdbd), {text.inverse}, 12px bold, pill"
+      },
+      "timeRange": "{typography.bodyMd}(14px), fontWeight bold, {text.primary}"
+    },
+    "divider": {
+      "description": "ヘッダーとコンテンツの区切り線",
+      "height": "1px",
+      "bg": "{border.default}"
+    },
+    "contents": {
+      "description": "カード本体のコンテンツ領域",
+      "layout": "flex-col, gap 8px",
+      "padding": "16px"
+    },
+    "entryExitSection": {
+      "description": "入退室ログセクション",
+      "heading": "「入退室」, {typography.bodyMd}, fontWeight bold, {text.primary}",
+      "list": {
+        "layout": "flex-col, gap 8px, paddingLeft 16px",
+        "item": {
+          "description": "入退室1件",
+          "layout": "flex, gap 8px, align-items center",
+          "icon": "login(24px) または logout(24px)",
+          "text": "「[名前]が入室/退室しました」, {typography.bodyMd}, fontWeight bold",
+          "entryColor": "{text.brand}(#0048cc) — 「入室」部分",
+          "exitColor": "#F9302C — 「退室」部分",
+          "timestamp": "{typography.bodySm}(12px), {text.tertiary}"
+        }
+      }
+    },
+    "photoSection": {
+      "description": "撮影された写真セクション",
+      "heading": "「撮影された写真」, {typography.bodyMd}, fontWeight bold",
+      "grid": "flex-wrap, gap 4px, 各サムネイル flex:1 0 0, min-width 146px, aspect 4:3"
+    },
+    "videoSection": {
+      "description": "撮影された録画セクション",
+      "heading": "「撮影された録画」, {typography.bodyMd}, fontWeight bold",
+      "grid": "写真セクションと同一レイアウト"
+    },
+    "summarySection": {
+      "description": "AI要約セクション",
+      "heading": "「要約」, {typography.bodyMd}, fontWeight bold",
+      "component": "RemoteCallSummary"
+    }
+  },
+
+  "props": {
+    "status": { "type": "enum", "values": ["outstanding", "closed"], "required": true },
+    "timeRange": { "type": "string", "required": true, "description": "時間範囲（例: 13時29分 〜 14時15分）" },
+    "entryExitEvents": { "type": "ParticipantEvent[]", "required": true, "description": "入退室イベントリスト" },
+    "photos": { "type": "string[]", "default": "[]", "description": "撮影写真URLリスト" },
+    "videos": { "type": "string[]", "default": "[]", "description": "撮影録画URLリスト" },
+    "summary": { "type": "RemoteCallSummary | null", "default": null, "description": "AI要約データ" }
+  },
+
+  "accessibility": {
+    "container": "role=article, aria-label='通話履歴詳細'",
+    "entryExitList": "role=list"
+  },
+
+  "usage": {
+    "do": [
+      "通話履歴ページで RemoteDateNavigator の下に gap 16px で縦に積む",
+      "複数の通話がある日は同一構造のカードを繰り返す"
+    ],
+    "doNot": [
+      "スペーストップの通話履歴サマリーには使わない（RemoteCallHistoryItem を使う）"
+    ]
+  },
+
+  "examples": [
+    {
+      "name": "基本",
+      "code": "<RemoteCallHistoryDetail status=\"outstanding\" timeRange=\"13時29分 〜 14時15分\" entryExitEvents={events} photos={photoUrls} summary={summaryData} />"
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "name": "RemoteContactCard",
+  "description": "連絡先1件。アバター + 名前・メール + 通話ボタン。スペーストップでは3カラムグリッド、連絡先一覧では1カラムリストで配置。",
+  "category": "product",
+  "composedOf": ["Avatar", "Text", "IconButton"],
+  "_figmaSource": "SR-PRO > spacetop-ContactList (node 25779:354674)",
+
+  "structure": {
+    "container": {
+      "description": "横並び、flex-wrap、min-width 200px",
+      "layout": "flex, align-items center"
+    },
+    "avatar": {
+      "description": "ユーザー写真。丸形 40px",
+      "component": "Avatar(md, 40px, image)",
+      "marginRight": "{space.16}"
+    },
+    "info": {
+      "description": "名前 + メールアドレスの縦配置",
+      "name": "{typography.bodyMd}, fontWeight bold, {text.primary}, ellipsis",
+      "email": "{typography.bodyMd}, {text.tertiary}, ellipsis",
+      "layout": "flex-col, padding 8px, flex 1, overflow hidden"
+    },
+    "callButton": {
+      "description": "通話発信ボタン。青ボーダーの正方形",
+      "size": "36px",
+      "icon": "call（filled）, 24px",
+      "iconColor": "{bg.brand}",
+      "border": "1px solid {border.brand}",
+      "borderRadius": "{component.radiusSm}",
+      "bg": "{bg.surface}"
+    }
+  },
+
+  "props": {
+    "name": { "type": "string", "required": true, "description": "連絡先名" },
+    "email": { "type": "string", "required": true, "description": "メールアドレス" },
+    "avatarSrc": { "type": "string | null", "default": null, "description": "アバター画像URL" },
+    "onCall": { "type": "function", "description": "通話ボタンクリック" }
+  },
+
+  "states": {
+    "default": {},
+    "hover": { "callButton": { "bg": "{bg.brandSubtle}" } }
+  },
+
+  "accessibility": {
+    "callButton": "aria-label='[名前]に通話'",
+    "avatar": "alt='[名前]のアバター'"
+  },
+
+  "usage": {
+    "do": [
+      "スペーストップでは 3カラムグリッド（gap 16px）で配置",
+      "連絡先一覧ページでは 1カラム縦リスト（border-bottom 区切り）で配置",
+      "RemoteSectionHeading と組み合わせて「連絡先」セクションを構成"
+    ],
+    "doNot": [
+      "スペーストップのサマリーで1カラム縦リストにしない（3カラムグリッドを使う）"
+    ]
+  },
+
+  "examples": [
+    {
+      "name": "基本（グリッド配置）",
+      "code": "<RemoteContactCard name=\"結城隆臣\" email=\"some.email@sample.com\" avatarSrc=\"/img/user.jpg\" />"
+    },
+    {
+      "name": "リスト配置（連絡先一覧）",
+      "code": "<div style=\"border-bottom:1px solid {border.default}\"><RemoteContactCard name=\"結城隆臣\" email=\"some.email@sample.com\" /></div>"
+    }
+  ]
+}

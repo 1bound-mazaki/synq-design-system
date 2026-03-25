@@ -1,0 +1,87 @@
+{
+  "name": "RemoteAlbumVideoCard",
+  "description": "アルバム動画カード。タイトル+編集/DLオーバーレイ、メタデータ（再生時間+ファイルサイズ）オーバーレイ付きサムネイル。3カラムグリッドで配置。",
+  "category": "product",
+  "composedOf": ["Text", "IconButton"],
+  "_figmaSource": "SR-PRO > photoL_1:1 (node 28347:316143)",
+
+  "structure": {
+    "container": {
+      "description": "フレキシブル幅、最小240px",
+      "layout": "flex: 1 0 0, min-width 240px, position relative",
+      "overflow": "clip"
+    },
+    "thumbnail": {
+      "description": "1:1正方形動画サムネイル",
+      "height": "360px",
+      "aspectRatio": "1:1",
+      "objectFit": "cover"
+    },
+    "titleOverlay": {
+      "description": "左上オーバーレイ。録画タイトル + 編集アイコン",
+      "position": "absolute, top 0, left 0",
+      "bg": "rgba(0,0,0,0.38)",
+      "padding": "4px 8px",
+      "layout": "flex, gap 10px, align-items center",
+      "titleText": "{typography.bodyMd}(14px), {text.inverse}, nowrap",
+      "editIcon": "edit, 14px, {text.inverse}"
+    },
+    "downloadIcon": {
+      "description": "右上ダウンロードボタン",
+      "position": "absolute, top 8px, right 8px",
+      "icon": "download, 24px, {text.inverse}"
+    },
+    "metaOverlay": {
+      "description": "左下メタデータ。再生時間 + ファイルサイズ",
+      "position": "absolute, bottom 0, left 0",
+      "bg": "rgba(0,0,0,0.38)",
+      "padding": "4px 8px",
+      "layout": "flex, gap 8px, align-items center",
+      "duration": "schedule 14px + テキスト({typography.labelSm}, 10px, {text.inverse}), gap 2px",
+      "fileSize": "database 14px + テキスト({typography.labelSm}, 10px, {text.inverse}), gap 2px"
+    },
+    "deleteIcon": {
+      "description": "右下削除ボタン",
+      "position": "absolute, bottom 8px, right 8px",
+      "icon": "delete, 24px, {text.inverse}"
+    }
+  },
+
+  "props": {
+    "src": { "type": "string", "required": true, "description": "動画サムネイル画像URL" },
+    "title": { "type": "string", "required": true, "description": "録画タイトル（例: 21時30分の録画）" },
+    "duration": { "type": "string", "required": true, "description": "再生時間（例: 1分未満）" },
+    "fileSize": { "type": "string", "required": true, "description": "ファイルサイズ（例: 45.1MB）" },
+    "onEdit": { "type": "function", "description": "編集ボタンクリック" },
+    "onDownload": { "type": "function", "description": "ダウンロードボタンクリック" },
+    "onDelete": { "type": "function", "description": "削除ボタンクリック" }
+  },
+
+  "states": {
+    "default": {},
+    "hover": { "cursor": "pointer" }
+  },
+
+  "accessibility": {
+    "editIcon": "aria-label='タイトルを編集'",
+    "downloadIcon": "aria-label='動画をダウンロード'",
+    "deleteIcon": "aria-label='動画を削除'"
+  },
+
+  "usage": {
+    "do": [
+      "RemoteAlbumDateHeading と組み合わせて日付セクション内に配置",
+      "3カラム flex-wrap グリッド（gap 5px 4px）で配置"
+    ],
+    "doNot": [
+      "写真の表示には使わない（RemoteAlbumPhotoCard を使う）"
+    ]
+  },
+
+  "examples": [
+    {
+      "name": "基本",
+      "code": "<RemoteAlbumVideoCard src=\"/img/video-thumb.jpg\" title=\"21時30分の録画\" duration=\"1分未満\" fileSize=\"45.1MB\" />"
+    }
+  ]
+}

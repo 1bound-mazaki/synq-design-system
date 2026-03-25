@@ -1,0 +1,63 @@
+{
+  "name": "RemoteAlbumPhotoCard",
+  "description": "アルバム写真サムネイルカード。1:1正方形、左下に名前ラベルオーバーレイ。4カラムグリッドで配置。",
+  "category": "product",
+  "composedOf": ["Text"],
+  "_figmaSource": "SR-PRO > photoM_1:1 (node 23390:89830)",
+
+  "structure": {
+    "container": {
+      "description": "フレキシブル幅、最小160px",
+      "layout": "flex: 1 0 0, min-width 160px, position relative",
+      "overflow": "clip"
+    },
+    "thumbnail": {
+      "description": "1:1正方形サムネイル",
+      "height": "180px",
+      "aspectRatio": "1:1",
+      "objectFit": "cover"
+    },
+    "nameLabel": {
+      "description": "左下オーバーレイの名前ラベル",
+      "position": "absolute, bottom 0, left 0",
+      "bg": "rgba(0,0,0,0.38)",
+      "padding": "4px 8px",
+      "text": "{typography.labelSm}(10px), {text.inverse}, nowrap"
+    }
+  },
+
+  "props": {
+    "src": { "type": "string", "required": true, "description": "写真画像URL" },
+    "name": { "type": "string", "required": true, "description": "撮影者名" },
+    "alt": { "type": "string", "default": "''", "description": "画像の代替テキスト" },
+    "onClick": { "type": "function", "description": "クリック時のコールバック（拡大表示等）" }
+  },
+
+  "states": {
+    "default": {},
+    "hover": { "opacity": "0.85", "cursor": "pointer" }
+  },
+
+  "accessibility": {
+    "role": "img",
+    "alt": "写真の説明テキスト"
+  },
+
+  "usage": {
+    "do": [
+      "RemoteAlbumDateHeading と組み合わせて日付セクション内に配置",
+      "4カラム flex-wrap グリッド（gap 5px 4px）で配置",
+      "最終行の空きは空のスペーサー要素で列幅を均等に保つ"
+    ],
+    "doNot": [
+      "動画の表示には使わない（RemoteAlbumVideoCard を使う）"
+    ]
+  },
+
+  "examples": [
+    {
+      "name": "基本",
+      "code": "<RemoteAlbumPhotoCard src=\"/img/photo.jpg\" name=\"結城隆臣\" />"
+    }
+  ]
+}

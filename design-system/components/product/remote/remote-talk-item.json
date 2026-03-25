@@ -1,0 +1,67 @@
+{
+  "name": "RemoteTalkItem",
+  "description": "トーク（課題）通知1件。タイトル + 時刻 + 未読ドット。",
+  "category": "product",
+  "composedOf": ["Text", "Badge"],
+  "_figmaSource": "SR-PRO > spacetop-IssueNotificationList (node 25787:357036)",
+
+  "structure": {
+    "container": {
+      "description": "横並び、下ボーダー、padding 8px",
+      "layout": "flex, gap 8px, align-items center",
+      "borderBottom": "1px solid {border.default}"
+    },
+    "content": {
+      "description": "タイトル + 時刻の縦配置",
+      "layout": "flex-col, gap 10px, flex 1",
+      "title": "{typography.bodyMd}, fontWeight bold, {text.primary}, ellipsis, 1行",
+      "time": "{typography.labelSm}, fontWeight bold, {text.primary}"
+    },
+    "unreadDot": {
+      "description": "未読時のみ表示。シアンの円形ドット",
+      "size": "12px",
+      "bg": "{status.inProgress.color}",
+      "borderRadius": "9999px",
+      "_figmaColor": "info.sf #1BAEBC → {status.inProgress.color}"
+    }
+  },
+
+  "props": {
+    "title": { "type": "string", "required": true, "description": "トークのタイトル" },
+    "time": { "type": "string", "required": true, "description": "最終更新時刻" },
+    "isUnread": { "type": "boolean", "default": false, "description": "未読ドット表示" },
+    "onClick": { "type": "function", "description": "クリック時のコールバック" }
+  },
+
+  "states": {
+    "default": {},
+    "hover": { "bg": "{bg.muted}" },
+    "unread": { "dot": "12px シアンドット表示" }
+  },
+
+  "accessibility": {
+    "role": "listitem",
+    "unreadDot": "aria-label='未読'"
+  },
+
+  "usage": {
+    "do": [
+      "トークセクションでリスト表示する",
+      "RemoteSectionHeading と組み合わせて「トーク」セクションを構成"
+    ],
+    "doNot": [
+      "トーク詳細の表示には使わない（別画面へ遷移）"
+    ]
+  },
+
+  "examples": [
+    {
+      "name": "未読あり",
+      "code": "<RemoteTalkItem title=\"現場B ~~の不具合対応\" time=\"18:30\" isUnread />"
+    },
+    {
+      "name": "既読",
+      "code": "<RemoteTalkItem title=\"配筋検査の進捗確認\" time=\"15:00\" />"
+    }
+  ]
+}

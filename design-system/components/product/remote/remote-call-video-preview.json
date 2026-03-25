@@ -1,0 +1,79 @@
+{
+  "name": "RemoteCallVideoPreview",
+  "description": "通話準備画面のビデオプレビューエリア。カメラ映像プレビュー+マイク/カメラONOFFトグルボタン+中央メッセージ。ダークテーマ。",
+  "category": "product",
+  "composedOf": ["Text"],
+  "_figmaSource": "SR-PRO > videoview (node 23356:79933)",
+
+  "structure": {
+    "container": {
+      "description": "ビデオプレビューエリア",
+      "aspectRatio": "520 / 294",
+      "bg": "#212121",
+      "borderRadius": "12px",
+      "padding": "20px",
+      "position": "relative",
+      "overflow": "clip"
+    },
+    "overlayMessage": {
+      "description": "中央プレースホルダーメッセージ",
+      "position": "absolute, top 50%, left 50%, transform translate(-50%,-50%)",
+      "bg": "rgba(0,0,0,0.38)",
+      "borderRadius": "4px",
+      "padding": "9px 8px",
+      "text": "「通話にはまだ参加してません」, {typography.bodyMd}(14px), fontWeight bold, #FFFFFF"
+    },
+    "controlButtons": {
+      "description": "マイク/カメラON/OFFトグルボタン群（下部中央）",
+      "position": "absolute, bottom 20px, left 50%, transform translateX(-50%)",
+      "layout": "flex, gap 12px",
+      "button": {
+        "size": "44px",
+        "borderRadius": "9999px",
+        "icon": "24px, #FFFFFF",
+        "variants": {
+          "off": "bg #F50057（cl.sf.hangUp）",
+          "on": "bg #424242（cl.sf.callControl）"
+        }
+      }
+    }
+  },
+
+  "props": {
+    "videoStream": { "type": "MediaStream | null", "default": null, "description": "カメラ映像ストリーム" },
+    "isMicOn": { "type": "boolean", "default": true, "description": "マイクON/OFF" },
+    "isCameraOn": { "type": "boolean", "default": true, "description": "カメラON/OFF" },
+    "message": { "type": "string", "default": "'通話にはまだ参加してません'", "description": "プレースホルダーメッセージ" },
+    "onMicToggle": { "type": "function", "description": "マイクトグル" },
+    "onCameraToggle": { "type": "function", "description": "カメラトグル" }
+  },
+
+  "_figmaColorMapping": {
+    "#212121": "Figma cl.sf.rug → ダークテーマのカード背景",
+    "#F50057": "Figma cl.sf.hangUp → マイク/カメラOFFボタン",
+    "#424242": "Figma cl.sf.callControl → マイク/カメラONボタン"
+  },
+
+  "accessibility": {
+    "container": "role=region, aria-label='ビデオプレビュー'",
+    "micButton": "aria-label='マイク ON/OFF', aria-pressed=true/false",
+    "cameraButton": "aria-label='カメラ ON/OFF', aria-pressed=true/false"
+  },
+
+  "usage": {
+    "do": [
+      "通話準備画面の右カラムに配置",
+      "カメラ映像がない場合はプレースホルダーメッセージを表示"
+    ],
+    "doNot": [
+      "通話中画面には使わない（別コンポーネント）"
+    ]
+  },
+
+  "examples": [
+    {
+      "name": "カメラOFF",
+      "code": "<RemoteCallVideoPreview isMicOn={false} isCameraOn={false} />"
+    }
+  ]
+}

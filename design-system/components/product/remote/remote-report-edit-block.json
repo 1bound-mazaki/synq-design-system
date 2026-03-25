@@ -1,0 +1,85 @@
+{
+  "name": "RemoteReportEditBlock",
+  "description": "報告書編集の1フィールドブロック。灰色背景カード内にラベル入力（320px）+値入力（全幅）を縦積み。ラベル・値ともに編集可能。テキスト値と箇条書きリスト値の2バリアント。",
+  "category": "product",
+  "composedOf": ["Input", "Text"],
+  "_figmaSource": "SR-PRO > EditForm (node 31359:363272)",
+
+  "structure": {
+    "container": {
+      "description": "灰色背景のフィールドブロック",
+      "bg": "#F8F8F9",
+      "width": "748px",
+      "padding": "16px 8px",
+      "layout": "flex-col, gap 8px"
+    },
+    "labelInput": {
+      "description": "フィールド名入力（ラベル自体が編集可能）",
+      "width": "320px",
+      "height": "48px",
+      "bg": "{bg.surface}",
+      "border": "1px solid {border.default}",
+      "borderRadius": "2px",
+      "padding": "12px",
+      "typography": "{typography.bodyMd}(14px)",
+      "fontWeight": "bold",
+      "color": "{text.primary}"
+    },
+    "valueInput": {
+      "description": "値入力（テキストまたは箇条書き）",
+      "width": "100%",
+      "minHeight": "48px",
+      "bg": "{bg.surface}",
+      "border": "1px solid {border.default}",
+      "borderRadius": "2px",
+      "padding": "12px",
+      "typography": "{typography.bodyMd}(14px)",
+      "color": "{text.primary}",
+      "variants": {
+        "text": "単一テキスト入力（1行または複数行）",
+        "list": "箇条書きリスト（list-disc、marginLeft 21px）"
+      }
+    }
+  },
+
+  "props": {
+    "label": { "type": "string", "required": true, "description": "フィールド名（例: 工事内容、作業日時）" },
+    "value": { "type": "string | string[]", "required": true, "description": "値（テキストまたは箇条書き配列）" },
+    "valueType": { "type": "enum", "values": ["text", "list"], "default": "text", "description": "値の表示タイプ" },
+    "onLabelChange": { "type": "function", "description": "ラベル変更のコールバック" },
+    "onValueChange": { "type": "function", "description": "値変更のコールバック" }
+  },
+
+  "_figmaColorMapping": {
+    "#F8F8F9": "Figma cv.gray / sf.hill → DS {bg.muted} に最寄り"
+  },
+
+  "accessibility": {
+    "labelInput": "aria-label='フィールド名'",
+    "valueInput": "aria-label='フィールド値'",
+    "container": "role=group, aria-label=[label]"
+  },
+
+  "usage": {
+    "do": [
+      "報告書編集ページで縦に複数ブロックを gap 16px で配置",
+      "ラベル・値ともに編集可能な場合に使用",
+      "箇条書き値の場合は valueType='list' を指定"
+    ],
+    "doNot": [
+      "通常のフォーム入力には使わない（FormField + Input を使う）",
+      "ラベルが固定の場合には使わない"
+    ]
+  },
+
+  "examples": [
+    {
+      "name": "テキスト値",
+      "code": "<RemoteReportEditBlock label=\"工事内容\" value=\"外壁補修工事\" valueType=\"text\" />"
+    },
+    {
+      "name": "箇条書き値",
+      "code": "<RemoteReportEditBlock label=\"作業者氏名\" value={['田中太郎', '鈴木花子', '佐藤次郎']} valueType=\"list\" />"
+    }
+  ]
+}

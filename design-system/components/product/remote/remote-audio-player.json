@@ -1,0 +1,98 @@
+{
+  "name": "RemoteAudioPlayer",
+  "description": "通話録音の再生プレイヤー。波形ビジュアル+コントロールバー（10秒戻し/再生/10秒送り/時刻/音量）+プログレスバーを内包。",
+  "category": "product",
+  "composedOf": ["Text"],
+  "_figmaSource": "SR-PRO > player (node 31341:597649)",
+
+  "structure": {
+    "container": {
+      "description": "プレイヤー全体",
+      "width": "520px",
+      "height": "390px",
+      "bg": "#F8F8F9",
+      "borderRadius": "4px",
+      "position": "relative",
+      "overflow": "clip"
+    },
+    "waveform": {
+      "description": "中央の波形ビジュアライゼーション",
+      "position": "absolute, inset 0",
+      "layout": "flex, align-items center, justify-content center",
+      "icon": "graphic_eq, 48px, {text.tertiary}"
+    },
+    "controlBar": {
+      "description": "下部コントロールバー",
+      "position": "absolute, bottom 16px, left 16px, right 16px",
+      "bg": "rgba(0,0,0,0.38)",
+      "borderRadius": "4px",
+      "padding": "16px",
+      "layout": "flex-col, gap 8px"
+    },
+    "controls": {
+      "description": "再生コントロール行",
+      "layout": "flex, gap 16px, align-items center",
+      "rewindButton": "replay_10, 24px, {text.inverse}",
+      "playButton": "play_arrow / pause, 24px, {text.inverse}",
+      "forwardButton": "forward_10, 24px, {text.inverse}",
+      "currentTime": "{typography.bodyMd}(14px), fontWeight bold, {text.inverse}, width 100px",
+      "spacer": "flex: 1",
+      "volumeButton": "volume_up / volume_off, 24px, {text.inverse}"
+    },
+    "progressBar": {
+      "description": "プログレスバー",
+      "height": "4px",
+      "bg": "#FFFFFF",
+      "borderRadius": "4px",
+      "playedBar": {
+        "height": "4px",
+        "bg": "{bg.brand}(#005AFF)",
+        "borderRadius": "4px"
+      }
+    }
+  },
+
+  "props": {
+    "audioUrl": { "type": "string", "required": true, "description": "音声ファイルURL" },
+    "isPlaying": { "type": "boolean", "default": false, "description": "再生中かどうか" },
+    "currentTime": { "type": "string", "required": true, "description": "現在の再生時間（例: 00:42:15）" },
+    "duration": { "type": "string", "required": true, "description": "総再生時間" },
+    "progress": { "type": "number", "default": 0, "description": "再生進捗（0〜1）" },
+    "onPlayPause": { "type": "function", "description": "再生/一時停止" },
+    "onRewind": { "type": "function", "description": "10秒戻し" },
+    "onForward": { "type": "function", "description": "10秒送り" },
+    "onSeek": { "type": "function", "description": "シーク" },
+    "onVolumeToggle": { "type": "function", "description": "音量トグル" }
+  },
+
+  "_figmaColorMapping": {
+    "rgba(0,0,0,0.38)": "Figma cl.background → コントロールバー背景",
+    "#005AFF": "Figma st.primary → DS {bg.brand}。プログレスバー進捗色"
+  },
+
+  "accessibility": {
+    "container": "role=region, aria-label='音声プレイヤー'",
+    "playButton": "aria-label='再生' / '一時停止'",
+    "rewindButton": "aria-label='10秒戻す'",
+    "forwardButton": "aria-label='10秒進める'",
+    "progressBar": "role=slider, aria-valuemin=0, aria-valuemax=100, aria-valuenow=[progress]"
+  },
+
+  "usage": {
+    "do": [
+      "AI議事録詳細の文字起こしセクションで、タイムラインパネルの左側に配置",
+      "520px固定幅で使用"
+    ],
+    "doNot": [
+      "動画再生には使わない（RemoteVideoPlayerControls を使う）",
+      "モバイルでは別レイアウトを検討"
+    ]
+  },
+
+  "examples": [
+    {
+      "name": "再生中",
+      "code": "<RemoteAudioPlayer audioUrl=\"...\" isPlaying={true} currentTime=\"00:12:30\" duration=\"00:45:15\" progress={0.28} />"
+    }
+  ]
+}

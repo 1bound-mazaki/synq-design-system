@@ -1,0 +1,74 @@
+{
+  "name": "RemoteTalkListItem",
+  "description": "やりとり（課題）リスト1件。タイトル+オプションの未読カウントバッジ。やりとり一覧ページで使用。",
+  "category": "product",
+  "composedOf": ["Text", "Badge"],
+  "_figmaSource": "SR-PRO > IssueList item (node 26908:383130)",
+
+  "structure": {
+    "container": {
+      "description": "横並び、下ボーダー、高さ53px",
+      "layout": "flex, gap 8px, align-items center",
+      "height": "53px",
+      "padding": "0 8px",
+      "borderBottom": "1px solid {border.default}",
+      "width": "100%"
+    },
+    "title": {
+      "description": "やりとりタイトル",
+      "typography": "{typography.bodyMd}(14px)",
+      "fontWeight": "bold",
+      "color": "{text.primary}",
+      "flex": "1 0 0",
+      "overflow": "hidden, text-overflow ellipsis, white-space nowrap"
+    },
+    "countBadge": {
+      "description": "未読カウントバッジ（0の場合は非表示）",
+      "bg": "{status.inProgress.color}(#1baebc)",
+      "border": "2px solid {bg.surface}(white)",
+      "borderRadius": "9999px",
+      "padding": "0 6px",
+      "height": "18px",
+      "text": "{typography.bodySm}(12px), fontWeight bold, {text.inverse}",
+      "flexShrink": "0"
+    }
+  },
+
+  "props": {
+    "title": { "type": "string", "required": true, "description": "やりとりタイトル（例: 現場A 点検）" },
+    "unreadCount": { "type": "number", "default": 0, "description": "未読数（0なら非表示）" },
+    "onClick": { "type": "function", "description": "クリック時のコールバック" }
+  },
+
+  "states": {
+    "default": {},
+    "hover": { "bg": "{bg.muted}" }
+  },
+
+  "accessibility": {
+    "role": "listitem",
+    "countBadge": "aria-label='未読[N]件'"
+  },
+
+  "usage": {
+    "do": [
+      "やりとり一覧ページでリスト表示する",
+      "最初のアイテムには border-top も追加",
+      "Pagination と組み合わせて使う"
+    ],
+    "doNot": [
+      "スペーストップのトークサマリーには使わない（RemoteTalkItem を使う）"
+    ]
+  },
+
+  "examples": [
+    {
+      "name": "未読あり",
+      "code": "<RemoteTalkListItem title=\"現場A 点検\" unreadCount={4} />"
+    },
+    {
+      "name": "未読なし",
+      "code": "<RemoteTalkListItem title=\"現場B ~~の不具合対応\" />"
+    }
+  ]
+}

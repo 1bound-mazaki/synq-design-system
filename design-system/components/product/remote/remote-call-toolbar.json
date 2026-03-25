@@ -1,0 +1,151 @@
+{
+  "name": "RemoteCallToolbar",
+  "description": "通話画面のツールバー。通話コントロール（終了/ビデオ/マイク/画面共有）、カメラコントロール（シャッター/録画）、機能メニュー（チャット/アルバム/参加者/通話設定）の3セクション。デバイス別（Android/iOS/PC）×レイアウト（portrait/landscape）×状態（default/recording）のバリアント。ダークテーマ。",
+  "category": "product",
+  "composedOf": ["Text"],
+  "_figmaSource": [
+    "SR-PRO > CallToolBar (node 23356:76911)",
+    "v1.0-UI-STANDARD-LIBRARY > CallToolBar (node 458:1169)"
+  ],
+
+  "structure": {
+    "container": {
+      "description": "ツールバー外枠",
+      "bg": "#000000",
+      "layout": {
+        "pc-portrait": "flex-col, width 260px, padding 16px 8px, gap 12px",
+        "mobile-portrait": "flex-col, width 100%(viewport), padding 16px 8px, gap 12px",
+        "mobile-landscape": "flex-row, width 182px, height 100%(container), padding 8px 16px, gap 12px",
+        "pc-landscape": "flex-col, width 260px, padding 16px 8px, gap 12px"
+      }
+    },
+    "callControlBar": {
+      "description": "通話コントロールバー（終了/ビデオ/マイク/画面共有）",
+      "bg": "#212121",
+      "borderRadius": "6px",
+      "padding": "8px",
+      "layout": {
+        "portrait-pc": "flex, gap 8px, justify-content center（横並び）",
+        "mobile-landscape": "flex-col, width 68px, gap 8px（縦並び）"
+      },
+      "buttons": {
+        "size": "44px",
+        "borderRadius": "9999px",
+        "icon": "24px, #FFFFFF",
+        "items": [
+          { "icon": "call_end", "bg": "#F50057", "label": "通話終了" },
+          { "icon": "videocam / videocam_off", "bg": "#424242 / #F50057", "label": "ビデオ" },
+          { "icon": "mic / mic_off", "bg": "#424242 / #F50057", "label": "マイク" },
+          { "icon": "screen_share", "bg": "#424242", "label": "画面共有", "note": "PC のみ表示" }
+        ]
+      }
+    },
+    "cameraControlBar": {
+      "description": "カメラコントロール（シャッター+録画）",
+      "layout": "flex, gap 8px, height 68px",
+      "shutterButton": {
+        "description": "写真撮影ボタン",
+        "size": "56px",
+        "border": "3px solid #FFFFFF",
+        "borderRadius": "9999px",
+        "innerBg": "#FFFFFF",
+        "innerBorderRadius": "22px",
+        "icon": "photo_camera, 24px, #000000"
+      },
+      "recordButton": {
+        "description": "録画ボタン",
+        "size": "56px",
+        "border": "3px solid #FFFFFF",
+        "borderRadius": "9999px",
+        "bg": "transparent",
+        "states": {
+          "inactive": "内部に 24x24px 白丸（border-radius 9999px）",
+          "recording": "内部が bg #F50057、中央に 20x20px 白い角丸四角（border-radius 4px）"
+        }
+      }
+    },
+    "functionMenu": {
+      "description": "機能メニュー（2×2グリッド）",
+      "layout": "grid, grid-template-columns repeat(2, 1fr), gap 0",
+      "button": {
+        "size": "66x62px",
+        "padding": "8px 0",
+        "layout": "flex-col, gap 4px, align-items center, justify-content center",
+        "icon": "24px, #FFFFFF",
+        "label": "12px, regular, #FFFFFF"
+      },
+      "items": [
+        { "icon": "chat", "label": "チャット" },
+        { "icon": "photo_library", "label": "アルバム" },
+        { "icon": "group", "label": "参加者" },
+        { "icon": "settings_phone", "label": "通話設定" }
+      ]
+    }
+  },
+
+  "props": {
+    "device": { "type": "enum", "values": ["android", "iOS", "PC"], "default": "PC", "description": "デバイスタイプ" },
+    "mode": { "type": "enum", "values": ["portrait", "landscape"], "default": "portrait", "description": "レイアウトモード" },
+    "isMicOn": { "type": "boolean", "default": true, "description": "マイクON/OFF" },
+    "isCameraOn": { "type": "boolean", "default": true, "description": "カメラON/OFF" },
+    "isScreenSharing": { "type": "boolean", "default": false, "description": "画面共有中（PCのみ）" },
+    "isRecording": { "type": "boolean", "default": false, "description": "録画中" },
+    "onHangUp": { "type": "function", "description": "通話終了" },
+    "onMicToggle": { "type": "function", "description": "マイクON/OFF" },
+    "onCameraToggle": { "type": "function", "description": "カメラON/OFF" },
+    "onScreenShare": { "type": "function", "description": "画面共有（PCのみ）" },
+    "onShutter": { "type": "function", "description": "写真撮影" },
+    "onRecord": { "type": "function", "description": "録画開始/停止" },
+    "onChatOpen": { "type": "function", "description": "チャットを開く" },
+    "onAlbumOpen": { "type": "function", "description": "アルバムを開く" },
+    "onMembersOpen": { "type": "function", "description": "参加者一覧を開く" },
+    "onSettingsOpen": { "type": "function", "description": "通話設定を開く" }
+  },
+
+  "_figmaColorMapping": {
+    "#000000": "cl.background → ツールバー背景",
+    "#212121": "cl.sf.rug → コントロールバーパネル背景",
+    "#F50057": "cl.sf.hangUp / cl.sf.record → 通話終了/OFF状態/録画中",
+    "#424242": "cl.sf.callControl → ON状態コントロールボタン",
+    "#FFFFFF": "cl.st.solid / cl.fg.default / cl.sf.shutter → ボーダー/アイコン/テキスト/シャッター"
+  },
+
+  "accessibility": {
+    "container": "role=toolbar, aria-label='通話コントロール'",
+    "hangUpButton": "aria-label='通話を終了する'",
+    "micButton": "aria-label='マイク ON/OFF', aria-pressed=true/false",
+    "cameraButton": "aria-label='カメラ ON/OFF', aria-pressed=true/false",
+    "screenShareButton": "aria-label='画面共有 ON/OFF', aria-pressed=true/false",
+    "shutterButton": "aria-label='写真を撮影'",
+    "recordButton": "aria-label='録画 開始/停止', aria-pressed=true/false"
+  },
+
+  "usage": {
+    "do": [
+      "PC: 通話画面の右サイドバー（width 260px）として配置",
+      "モバイル portrait: 画面下部に横幅100%で配置",
+      "モバイル landscape: 画面右端に縦幅100%・横幅182pxで配置",
+      "ビデオ/マイクOFF時は bg を #F50057 に変更しアイコンを *_off に変更",
+      "録画中は RecordButton 内部を赤背景+白い角丸四角に変更"
+    ],
+    "doNot": [
+      "通話準備画面には使わない（RemoteCallVideoPreview を使う）",
+      "画面共有ボタンはモバイルでは非表示（PC のみ）"
+    ]
+  },
+
+  "examples": [
+    {
+      "name": "PC デフォルト",
+      "code": "<RemoteCallToolbar device=\"PC\" mode=\"portrait\" isMicOn={true} isCameraOn={true} />"
+    },
+    {
+      "name": "PC 録画中",
+      "code": "<RemoteCallToolbar device=\"PC\" isRecording={true} />"
+    },
+    {
+      "name": "モバイル横向き・マイクOFF",
+      "code": "<RemoteCallToolbar device=\"android\" mode=\"landscape\" isMicOn={false} />"
+    }
+  ]
+}

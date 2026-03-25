@@ -1,0 +1,83 @@
+{
+  "name": "RemoteCallDeviceSelector",
+  "description": "通話準備画面のマイク/カメラデバイス選択。デバイスアイコン+セレクトボックス+エラーテキスト。ダークテーマ。",
+  "category": "product",
+  "composedOf": ["Text", "Select"],
+  "_figmaSource": "SR-PRO > settingMicCamera (node 26255:179611)",
+
+  "structure": {
+    "container": {
+      "description": "デバイス選択1件",
+      "flex": "1",
+      "layout": "flex-col, gap 4px"
+    },
+    "selectorRow": {
+      "description": "アイコン+セレクトボックスの横並び",
+      "layout": "flex, gap 8px, align-items center"
+    },
+    "icon": {
+      "description": "デバイスアイコン",
+      "size": "24px",
+      "color": "#FFFFFF"
+    },
+    "selectBox": {
+      "description": "デバイス選択ドロップダウン",
+      "flex": "1",
+      "border": "1px solid #424242",
+      "borderRadius": "2px",
+      "padding": "12px",
+      "bg": "transparent",
+      "typography": "{typography.bodyMd}(14px)",
+      "color": "#FFFFFF",
+      "dropdownIcon": "arrow_drop_down, 24px",
+      "states": {
+        "default": "border #424242（cl.sf.callControl）",
+        "error": "border #F9302C（st.danger）"
+      }
+    },
+    "errorText": {
+      "description": "エラーメッセージ（権限エラー時）",
+      "typography": "{typography.bodyMd}(14px)",
+      "color": "#F9302C"
+    }
+  },
+
+  "props": {
+    "type": { "type": "enum", "values": ["mic", "camera"], "required": true, "description": "デバイスタイプ" },
+    "value": { "type": "string", "description": "選択中のデバイス名" },
+    "options": { "type": "DeviceOption[]", "default": "[]", "description": "デバイス選択肢" },
+    "error": { "type": "string", "description": "エラーメッセージ（例: マイクの利用を許可してください）" },
+    "onChange": { "type": "function", "description": "デバイス変更のコールバック" }
+  },
+
+  "_figmaColorMapping": {
+    "#424242": "Figma cl.sf.callControl → セレクトボックスのデフォルトボーダー",
+    "#F9302C": "Figma fg.danger / st.danger → エラー時のボーダー+テキスト色"
+  },
+
+  "accessibility": {
+    "selectBox": "aria-label='マイクを選択' / 'カメラを選択'",
+    "errorText": "role=alert"
+  },
+
+  "usage": {
+    "do": [
+      "通話準備画面で2つ横並び（mic + camera）、gap 16px",
+      "権限が拒否されている場合は error を表示"
+    ],
+    "doNot": [
+      "通常の設定画面には使わない（ダークテーマ専用）"
+    ]
+  },
+
+  "examples": [
+    {
+      "name": "正常状態",
+      "code": "<RemoteCallDeviceSelector type=\"mic\" value=\"既定-マイク\" options={[...]} />"
+    },
+    {
+      "name": "エラー状態",
+      "code": "<RemoteCallDeviceSelector type=\"camera\" error=\"カメラの利用を許可してください\" />"
+    }
+  ]
+}

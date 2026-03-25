@@ -1,0 +1,59 @@
+{
+  "name": "RemoteSectionHeading",
+  "description": "セクション見出し + 「もっとみる >」リンク。連絡先・アルバム・通話履歴・トーク等のセクションヘッダーとして共通使用。",
+  "category": "product",
+  "composedOf": ["Text", "Link"],
+  "_figmaSource": "SR-PRO > heading (node 30273:558925)",
+
+  "structure": {
+    "container": {
+      "description": "横並び、左右端寄せ",
+      "layout": "flex, justify-content space-between, align-items center",
+      "height": "36px"
+    },
+    "title": {
+      "description": "セクション名",
+      "typography": "{typography.bodyMd}",
+      "fontWeight": "bold",
+      "color": "{text.primary}"
+    },
+    "moreLink": {
+      "description": "詳細ページへのリンク",
+      "layout": "flex, gap 2px, align-items center",
+      "text": "'もっとみる', {typography.bodyMd}, fontWeight bold, {text.brand}",
+      "icon": "arrow_forward_ios, 16px, {text.brand}"
+    }
+  },
+
+  "props": {
+    "title": { "type": "string", "required": true, "description": "セクション名（例: 連絡先、アルバム写真、通話履歴）" },
+    "moreLabel": { "type": "string", "default": "もっとみる", "description": "リンクのテキスト" },
+    "onMoreClick": { "type": "function | null", "default": null, "description": "「もっとみる」クリック。null の場合はリンク非表示" }
+  },
+
+  "accessibility": {
+    "title": "role=heading, aria-level=3",
+    "moreLink": "aria-label='[title]をもっとみる'"
+  },
+
+  "usage": {
+    "do": [
+      "スペーストップの各セクション（連絡先/アルバム/通話履歴/トーク）の見出しに使う",
+      "詳細ページがない場合は onMoreClick=null でリンクを非表示にする"
+    ],
+    "doNot": [
+      "ページ全体のタイトルには使わない（RemoteSpaceHeader のタイトルを使う）"
+    ]
+  },
+
+  "examples": [
+    {
+      "name": "リンク付き",
+      "code": "<RemoteSectionHeading title=\"連絡先\" onMoreClick={handleMore} />"
+    },
+    {
+      "name": "リンクなし",
+      "code": "<RemoteSectionHeading title=\"スペース設定\" />"
+    }
+  ]
+}

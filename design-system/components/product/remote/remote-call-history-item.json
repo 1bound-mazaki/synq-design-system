@@ -1,0 +1,82 @@
+{
+  "name": "RemoteCallHistoryItem",
+  "description": "通話履歴1件。ステータスバッジ（未応答/終了済）+ 日時 + 参加者 + オプションのサムネイル。",
+  "category": "product",
+  "composedOf": ["Badge", "Text"],
+  "_figmaSource": "SR-PRO > spacetop-callhistoryList (node 28346:296257)",
+
+  "structure": {
+    "container": {
+      "description": "横並び、下ボーダー、paddingY 8px",
+      "layout": "flex, gap 10px, align-items start",
+      "borderBottom": "1px solid {border.default}"
+    },
+    "content": {
+      "description": "ステータス + 日時 + 参加者の縦配置",
+      "layout": "flex-col, gap 10px, flex 1",
+      "titleRow": {
+        "description": "ステータスバッジ + 日時の横並び",
+        "badge": "ピル型、12px bold、白文字",
+        "dateRange": "{typography.bodyMd}, fontWeight bold, {text.primary}"
+      },
+      "participants": "{typography.bodyMd}, {text.primary}"
+    },
+    "thumbnail": {
+      "description": "通話中のキャプチャ画像（オプション）",
+      "maxWidth": "80px",
+      "aspectRatio": "1:1",
+      "objectFit": "cover"
+    }
+  },
+
+  "props": {
+    "status": {
+      "type": "enum",
+      "values": ["outstanding", "closed"],
+      "required": true,
+      "description": "通話ステータス"
+    },
+    "dateRange": { "type": "string", "required": true, "description": "日時範囲（例: 5月15日 13時29分 〜 14時15分）" },
+    "participants": { "type": "string", "required": true, "description": "参加者テキスト" },
+    "thumbnail": { "type": "string | null", "default": null, "description": "サムネイル画像URL" }
+  },
+
+  "variants": {
+    "outstanding": {
+      "description": "未応答",
+      "badge": { "bg": "{bg.error}", "text": "{text.inverse}", "label": "未応答" },
+      "_figmaColor": "sf.danger #F9302C → {bg.error}"
+    },
+    "closed": {
+      "description": "終了済",
+      "badge": { "bg": "{text.disabled}", "text": "{text.inverse}", "label": "終了済" },
+      "_figmaColor": "fg.subtle rgba(0,0,0,0.38) → {text.disabled}"
+    }
+  },
+
+  "accessibility": {
+    "role": "listitem",
+    "badge": "aria-label='ステータス: [未応答/終了済]'"
+  },
+
+  "usage": {
+    "do": [
+      "通話履歴セクションでリスト表示する",
+      "RemoteSectionHeading と組み合わせて「通話履歴」セクションを構成"
+    ],
+    "doNot": [
+      "3件以上表示する場合は「もっとみる」リンクで詳細ページへ遷移"
+    ]
+  },
+
+  "examples": [
+    {
+      "name": "未応答",
+      "code": "<RemoteCallHistoryItem status=\"outstanding\" dateRange=\"5月15日 13時29分 〜 14時15分\" participants=\"今田貴明, 深山行和, 他3名が通話しました\" thumbnail=\"/img/capture.jpg\" />"
+    },
+    {
+      "name": "終了済",
+      "code": "<RemoteCallHistoryItem status=\"closed\" dateRange=\"5月15日 13時29分 〜 14時15分\" participants=\"今田貴明, 深山行和, 他3名が通話しました\" />"
+    }
+  ]
+}

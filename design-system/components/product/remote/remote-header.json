@@ -1,0 +1,77 @@
+{
+  "name": "RemoteHeader",
+  "description": "SynQ Remote 専用のダークブルーヘッダー。ユーザー情報、ニュースティッカー、管理・発着信履歴ボタンを配置。",
+  "category": "product",
+  "composedOf": ["Avatar", "Text"],
+  "_figmaSource": "SR-PRO > Header (node 28346:296296)",
+
+  "structure": {
+    "container": {
+      "description": "全幅、中央寄せ、padding 12px",
+      "bg": "{remote.headerBg}",
+      "maxWidth": "343px（内部コンテナ）"
+    },
+    "userInfo": {
+      "description": "Avatar(xs, 24px) + ユーザー名テキスト",
+      "avatar": "24px, 丸形, 背景色付きイニシャル",
+      "nameText": "{typography.bodySm}, {text.inverse}"
+    },
+    "newsTicker": {
+      "description": "リリース情報のスクロール表示エリア",
+      "bg": "{remote.headerSunken}",
+      "text": "{typography.bodySm}, {text.inverse}",
+      "borderRadius": "5px",
+      "height": "24px",
+      "navIcons": "arrow_back / arrow_forward, 16px, {text.inverse}"
+    },
+    "actions": {
+      "description": "アイコン + ラベルの縦配置ボタン",
+      "items": ["管理（admin_panel_settings）", "発着信履歴（history）"],
+      "iconSize": "20px",
+      "labelText": "{typography.labelSm}, {text.inverse}",
+      "layout": "flex-col, gap 2px, center"
+    }
+  },
+
+  "tokens": {
+    "bg": "{remote.headerBg}",
+    "height": "56px",
+    "padding": "{space.12}",
+    "textColor": "{text.inverse}",
+    "_figmaColorMapping": {
+      "sf.summit (#003198)": "remote.headerBg — Remote専用。DSプリミティブに該当なし",
+      "sf.summit.sunken (#001F66)": "remote.headerSunken — ニュースティッカー背景"
+    }
+  },
+
+  "props": {
+    "userName": { "type": "string", "required": true, "description": "ログインユーザー名" },
+    "userInitials": { "type": "string", "required": true, "description": "アバターのイニシャル（2文字）" },
+    "newsText": { "type": "string | null", "default": null, "description": "ニュースティッカーのテキスト" },
+    "onAdminClick": { "type": "function", "description": "管理ボタンクリック" },
+    "onHistoryClick": { "type": "function", "description": "発着信履歴ボタンクリック" }
+  },
+
+  "accessibility": {
+    "role": "banner",
+    "newsTicker": "role=marquee（ライブリージョン）",
+    "actions": "各ボタンに aria-label"
+  },
+
+  "usage": {
+    "do": [
+      "SynQ Remote の全画面で共通ヘッダーとして使う",
+      "ニュースがない場合は newsTicker を非表示にする"
+    ],
+    "doNot": [
+      "Inspection / Knowledge の画面には使わない（共通 Header を使う）"
+    ]
+  },
+
+  "examples": [
+    {
+      "name": "基本",
+      "code": "<RemoteHeader userName=\"佐竹 智洋\" userInitials=\"佐竹\" newsText=\"リリース内容...\" />"
+    }
+  ]
+}

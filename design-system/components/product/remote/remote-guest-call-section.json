@@ -1,0 +1,93 @@
+{
+  "name": "RemoteGuestCallSection",
+  "description": "ゲスト通話設定のアコーディオンセクション。セクションヘッダー（タイトル+トグル）+通話図解+呼び出し対応者設定+URL発行を内包。グループ通話/個別通話の2パターン。",
+  "category": "product",
+  "composedOf": ["Text", "Button", "RemoteGuestCallGraphic", "Avatar"],
+  "_figmaSource": "SR-PRO > Phone List (node 23356:38365)",
+
+  "structure": {
+    "container": {
+      "description": "セクション全体（Divider間に配置）",
+      "layout": "flex-col, gap 10px"
+    },
+    "header": {
+      "description": "アコーディオンヘッダー（タイトル+トグル）",
+      "layout": "flex, align-items center, justify-content space-between",
+      "padding": "16px 0",
+      "cursor": "pointer",
+      "title": "{typography.headingSm}(20px), fontWeight regular, {text.primary}",
+      "toggleIcon": "expand_less(開) / expand_more(閉), 24px, {text.tertiary}"
+    },
+    "graphic": {
+      "description": "通話フロー図解",
+      "component": "RemoteGuestCallGraphic(callType)"
+    },
+    "memberSettings": {
+      "description": "呼び出し対応者設定カード（グループ通話のみ）",
+      "bg": "#F8F8F9",
+      "borderRadius": "4px",
+      "padding": "16px",
+      "layout": "flex-col, gap 12px",
+      "heading": "「ゲスト呼び出し対応者」, {typography.bodyLg}(16px), fontWeight bold, {text.primary}",
+      "emptyState": {
+        "text": "「設定されていません」, {typography.bodyMd}(14px), {text.tertiary}",
+        "button": "Button(primary, sm), 「変更する」, h 36px"
+      },
+      "configuredState": {
+        "memberList": "Avatar(sm, 32px) + 名前(14px) の横並びリスト",
+        "button": "Button(primary, sm), 「変更する」, h 36px"
+      }
+    },
+    "urlSection": {
+      "description": "通話URL発行セクション",
+      "bg": "#F8F8F9",
+      "borderRadius": "4px",
+      "padding": "16px",
+      "layout": "flex-col, gap 12px",
+      "description_text": "「ゲストが呼び出し対応者を指定して通話するためのURLを発行することができます」, {typography.bodyMd}(14px), {text.primary}",
+      "button": "Button(primary, lg), 「通話URLを発行する」, h 48px"
+    }
+  },
+
+  "props": {
+    "callType": { "type": "enum", "values": ["group", "single"], "required": true, "description": "通話タイプ" },
+    "title": { "type": "string", "required": true, "description": "セクションタイトル（例: グループ通話、個別通話）" },
+    "isOpen": { "type": "boolean", "default": true, "description": "アコーディオン展開状態" },
+    "members": { "type": "Member[]", "default": "[]", "description": "呼び出し対応者リスト（グループ通話のみ）" },
+    "onToggle": { "type": "function", "description": "アコーディオントグルのコールバック" },
+    "onChangeMembers": { "type": "function", "description": "対応者変更のコールバック（グループ通話のみ）" },
+    "onIssueUrl": { "type": "function", "description": "URL発行のコールバック" }
+  },
+
+  "_figmaColorMapping": {
+    "#F8F8F9": "Figma cv.gray → DS {bg.muted} に最寄り。設定カード背景"
+  },
+
+  "accessibility": {
+    "header": "role=button, aria-expanded=true/false, aria-controls=section-content",
+    "memberSettings": "role=region, aria-label='呼び出し対応者設定'",
+    "urlSection": "role=region, aria-label='通話URL発行'"
+  },
+
+  "usage": {
+    "do": [
+      "ゲスト通話設定ページで Divider の間に配置",
+      "グループ通話セクションには memberSettings を表示、個別通話セクションでは非表示",
+      "両セクションとも urlSection を表示"
+    ],
+    "doNot": [
+      "通話設定以外のページには使わない"
+    ]
+  },
+
+  "examples": [
+    {
+      "name": "グループ通話（未設定）",
+      "code": "<RemoteGuestCallSection callType=\"group\" title=\"グループ通話\" isOpen={true} members={[]} />"
+    },
+    {
+      "name": "個別通話",
+      "code": "<RemoteGuestCallSection callType=\"single\" title=\"個別通話\" isOpen={true} />"
+    }
+  ]
+}

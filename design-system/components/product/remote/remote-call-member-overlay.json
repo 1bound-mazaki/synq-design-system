@@ -1,0 +1,97 @@
+{
+  "name": "RemoteCallMemberOverlay",
+  "description": "通話画面の左上に表示される参加者オーバーレイ。参加者アバター群（発話中インジケーター付き）+参加者数ボタン+画面共有ステータスラベル。",
+  "category": "product",
+  "composedOf": ["Avatar", "Text"],
+  "_figmaSource": "SR-PRO > CallTopFunction (node 23356:76915)",
+
+  "structure": {
+    "container": {
+      "description": "左上オーバーレイエリア",
+      "position": "absolute, top 12px, left 12px",
+      "layout": "flex, gap 8px, align-items flex-start"
+    },
+    "memberAvatars": {
+      "description": "参加者アバター横並び",
+      "layout": "flex, gap 6px",
+      "avatar": {
+        "size": "40px",
+        "borderRadius": "9999px",
+        "shadow": "0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px rgba(0,0,0,0.14), 0px 1px 10px rgba(0,0,0,0.12)",
+        "states": {
+          "default": "ボーダーなし",
+          "speaking": "border 2px solid #005AFF + 右上にtalkIndicator"
+        }
+      },
+      "talkIndicator": {
+        "description": "発話中アイコンバッジ（右上）",
+        "position": "absolute, top -2px, right -2px",
+        "size": "16px",
+        "bg": "#005AFF",
+        "borderRadius": "9999px",
+        "icon": "graphic_eq, 12px, #FFFFFF"
+      }
+    },
+    "memberCountButton": {
+      "description": "参加者数表示ボタン",
+      "size": "40px",
+      "bg": "#FFFFFF",
+      "border": "1px solid rgba(0,0,0,0.12)",
+      "borderRadius": "9999px",
+      "layout": "flex-col, align-items center, justify-content center",
+      "icon": "group, 16px, rgba(0,0,0,0.6)",
+      "count": "12px, rgba(0,0,0,0.6)"
+    },
+    "shareStatusLabel": {
+      "description": "画面共有ステータスラベル",
+      "bg": "rgba(0,0,0,0.5)",
+      "borderRadius": "6px",
+      "padding": "2px 4px",
+      "text": "{typography.bodySm}(12px), #FFFFFF"
+    }
+  },
+
+  "props": {
+    "members": { "type": "CallMember[]", "required": true, "description": "参加者リスト（name, avatar, isSpeaking）" },
+    "maxVisibleAvatars": { "type": "number", "default": 3, "description": "表示するアバターの最大数" },
+    "isScreenSharing": { "type": "boolean", "default": false, "description": "画面共有ステータスの表示" },
+    "shareLabel": { "type": "string", "default": "'あなたの画面を共有中'", "description": "画面共有ラベル" },
+    "onMembersOpen": { "type": "function", "description": "参加者数ボタンクリック" }
+  },
+
+  "_figmaColorMapping": {
+    "#005AFF": "Figma sf.primary → 発話中ボーダー+インジケーターバッジ背景",
+    "rgba(0,0,0,0.5)": "Figma半透明黒 → 画面共有ステータス背景",
+    "rgba(0,0,0,0.12)": "Figma st.default → 参加者数ボタンボーダー",
+    "rgba(0,0,0,0.6)": "Figma fg.muted → 参加者数アイコン/テキスト"
+  },
+
+  "accessibility": {
+    "container": "role=region, aria-label='通話参加者'",
+    "memberAvatar": "aria-label='{name}（{speaking ? 発話中 : 参加中}）'",
+    "memberCountButton": "aria-label='参加者一覧を開く（{count}人）'",
+    "shareStatusLabel": "role=status"
+  },
+
+  "usage": {
+    "do": [
+      "通話画面の左上（カメラ映像上）にオーバーレイとして配置",
+      "発話中のメンバーは青ボーダー+音声アイコンで強調"
+    ],
+    "doNot": [
+      "通話以外の画面で使わない",
+      "アバター表示は最大3つまで、それ以上は参加者数ボタンで表示"
+    ]
+  },
+
+  "examples": [
+    {
+      "name": "3人参加+画面共有中",
+      "code": "<RemoteCallMemberOverlay members={[{name:'田中', isSpeaking:true}, {name:'佐々木'}, {name:'鈴木'}]} isScreenSharing={true} />"
+    },
+    {
+      "name": "2人参加",
+      "code": "<RemoteCallMemberOverlay members={[{name:'田中'}, {name:'佐々木', isSpeaking:true}]} />"
+    }
+  ]
+}
