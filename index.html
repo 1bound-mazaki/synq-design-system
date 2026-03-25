@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SynQ Design System</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700" rel="stylesheet">
+<style>
+:root {
+  --text-primary: #212121;
+  --text-secondary: #616161;
+  --text-brand: #0048cc;
+  --bg-default: #f5f5f5;
+  --bg-surface: #fafafa;
+  --border-default: #e0e0e0;
+  --radius-lg: 12px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Inter', 'Noto Sans JP', sans-serif;
+  background: var(--bg-default);
+  color: var(--text-primary);
+  line-height: 1.6;
+  padding: 48px 24px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+h1 { font-size: 32px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 8px; }
+.subtitle { font-size: 14px; color: var(--text-secondary); margin-bottom: 32px; }
+h2 { font-size: 20px; font-weight: 600; margin-bottom: 12px; margin-top: 32px; }
+.card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  margin-bottom: 8px;
+  text-decoration: none;
+  display: block;
+  transition: box-shadow 0.15s;
+}
+.card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.card-title { font-size: 16px; font-weight: 500; color: var(--text-brand); margin-bottom: 4px; }
+.card-desc { font-size: 14px; color: var(--text-secondary); }
+.updated { font-size: 12px; color: var(--text-secondary); margin-top: 48px; text-align: center; }
+</style>
+</head>
+<body>
+<h1>SynQ Design System</h1>
+<p class="subtitle">Token Reference</p>
+<h2>Design Tokens</h2>
+<a class="card" href="design-system/docs/token-reference.html"><div class="card-title">token-reference</div><div class="card-desc">カラーパレット、タイポグラフィ、スペーシング、エレベーションのビジュアルリファレンス</div></a>
+<p class="updated">Last updated: 2026-03-25 08:51 UTC</p>
+</body></html>
